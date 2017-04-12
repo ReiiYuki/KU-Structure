@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class BeamCollector : MonoBehaviour {
 
-    public GameObject memberPrefab,textPrefab;
+    public GameObject memberPrefab,textPrefab,nodePrefab;
 
-    public List<GameObject> members;
+    public List<GameObject> members, nodes;
 
     float currentPoint = 0;
 	// Use this for initialization
 	void Start () {
         members = new List<GameObject>();
+        nodes = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
