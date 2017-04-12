@@ -9,6 +9,7 @@ public class BeamCollector : MonoBehaviour {
     public List<GameObject> members, nodes;
 
     float currentPoint = 0;
+
 	// Use this for initialization
 	void Start () {
         members = new List<GameObject>();
@@ -45,6 +46,9 @@ public class BeamCollector : MonoBehaviour {
         numberText.GetComponent<TextMesh>().color = Color.white;
         numberText.transform.SetParent(member.transform);
 
+        if (members.Count == 0) CreateNode(member.transform, currentPoint);
+        CreateNode(member.transform, currentPoint + span);
+
         currentPoint += span;
 
         member.transform.SetParent(transform); 
@@ -76,5 +80,14 @@ public class BeamCollector : MonoBehaviour {
     {
         if (x % 2 == 0) return new Color(169 / 255f, 169 / 255f, 169 / 255f);
         return new Color(112 / 255f, 128 / 255f, 144 / 255f);
+    }
+
+    public void CreateNode(Transform parent,float position)
+    {
+        GameObject node = Instantiate(nodePrefab, new Vector3(position, 0.5f), Quaternion.identity);
+        node.GetComponent<NodeProperty>().number = nodes.Count;
+        node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
+        node.transform.SetParent(parent);
+        nodes.Add(node);
     }
 }
