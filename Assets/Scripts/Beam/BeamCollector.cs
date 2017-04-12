@@ -36,6 +36,6 @@ public class BeamCollector : MonoBehaviour {
 
     public void AddMomentum(int node,float momentum)
     {
-    }
         Debug.Log("Add Momentum { " + "Momentum : " + momentum + " node : " + node + "} ");
+    }
 }
