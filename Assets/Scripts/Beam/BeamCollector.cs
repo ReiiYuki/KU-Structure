@@ -22,19 +22,30 @@ public class BeamCollector : MonoBehaviour {
     public void AddMember(float span,int type)
     {
         Debug.Log("Add Member { "+"Span : "+span+" Type : "+type+" }");
+
         GameObject member = Instantiate(memberPrefab, Vector3.zero, Quaternion.identity);
+
         LineRenderer line = member.GetComponent<LineRenderer>();
         line.startColor = GetColor(members.Count);
         line.endColor = GetColor(members.Count);
         line.SetPositions(new Vector3[] { new Vector3(currentPoint, 0), new Vector3(currentPoint + span, 0) });
+
         MemberProperty property = member.GetComponent<MemberProperty>();
         property.type = type;
         property.length = span;
         property.number = members.Count;
+
         GameObject lengthText = Instantiate(textPrefab, new Vector3(currentPoint + span / 2f, -0.5f), Quaternion.identity);
         lengthText.GetComponent<TextMesh>().text = span + " m.";
         lengthText.transform.SetParent(member.transform);
+
+        GameObject numberText = Instantiate(textPrefab, new Vector3(currentPoint + span / 2f, 0,-1f), Quaternion.identity);
+        numberText.GetComponent<TextMesh>().text = members.Count + "";
+        numberText.GetComponent<TextMesh>().color = Color.white;
+        numberText.transform.SetParent(member.transform);
+
         currentPoint += span;
+
         member.transform.SetParent(transform); 
         members.Add(member);
 
