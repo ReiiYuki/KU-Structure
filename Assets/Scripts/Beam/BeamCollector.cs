@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BeamCollector : MonoBehaviour {
 
-    public GameObject memberPrefab;
+    public GameObject memberPrefab,textPrefab;
 
     public List<GameObject> members;
 
@@ -31,9 +31,13 @@ public class BeamCollector : MonoBehaviour {
         property.type = type;
         property.length = span;
         property.number = members.Count;
+        GameObject lengthText = Instantiate(textPrefab, new Vector3(currentPoint + span / 2f, -0.5f), Quaternion.identity);
+        lengthText.GetComponent<TextMesh>().text = span + " m.";
+        lengthText.transform.SetParent(member.transform);
         currentPoint += span;
         member.transform.SetParent(transform); 
         members.Add(member);
+
     }
 
     public void AddSupport(int type,int node)
