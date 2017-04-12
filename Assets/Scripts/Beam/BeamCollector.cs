@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class BeamCollector : MonoBehaviour {
 
+    public GameObject memberPrefab;
+
+    public List<GameObject> members;
+
+    float currentPoint = 0;
 	// Use this for initialization
 	void Start () {
-		
+        members = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
@@ -14,9 +19,20 @@ public class BeamCollector : MonoBehaviour {
 		
 	}
 
-    public void AddMember(float span,float type)
+    public void AddMember(float span,int type)
     {
         Debug.Log("Add Member { "+"Span : "+span+" Type : "+type+" }");
+        GameObject member = Instantiate(memberPrefab, Vector3.zero, Quaternion.identity);
+        LineRenderer line = member.GetComponent<LineRenderer>();
+        line.startColor = GetColor(members.Count);
+        line.endColor = GetColor(members.Count);
+        line.SetPositions(new Vector3[] { new Vector3(currentPoint, 0), new Vector3(currentPoint + span, 0) });
+        MemberProperty property = member.GetComponent<MemberProperty>();
+        property.type = type;
+        property.length = span;
+        property.number = members.Count;
+        currentPoint += span;
+        members.Add(member);
     }
 
     public void AddSupport(int type,int node)
@@ -37,5 +53,11 @@ public class BeamCollector : MonoBehaviour {
     public void AddMomentum(int node,float momentum)
     {
         Debug.Log("Add Momentum { " + "Momentum : " + momentum + " node : " + node + "} ");
+    }
+
+    public Color GetColor(int x)
+    {
+        if (x % 2 == 0) return new Color(169 / 255f, 169 / 255f, 169 / 255f);
+        return new Color(112 / 255f, 128 / 255f, 144 / 255f);
     }
 }
