@@ -7,6 +7,11 @@ public class CameraZoomer : MonoBehaviour {
     public float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
     public float orthoZoomSpeed = 0.5f;        // The rate of change of the orthographic size in orthographic mode.
 
+    float cameraDistanceMax = 20f;
+    float cameraDistanceMin = 5f;
+    float cameraDistance = 10f;
+    float scrollSpeed = 3;
+
     Camera camera;
 
     void Start()
@@ -40,13 +45,11 @@ public class CameraZoomer : MonoBehaviour {
             // Make sure the orthographic size never drops below zero.
             camera.orthographicSize = Mathf.Max(camera.orthographicSize, 0.1f);
         }
-        if (Input.GetAxis("Mouse ScrollWheel") > 0) // forward
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
-            Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize - 1, 6);
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0) // back
-        {
-            Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize - 1, 1);
+            cameraDistance += Input.GetAxis("Mouse ScrollWheel") * scrollSpeed;
+            cameraDistance = Mathf.Clamp(cameraDistance, cameraDistanceMin, cameraDistanceMax);
+            camera.orthographicSize = cameraDistance;
         }
     }
 }
