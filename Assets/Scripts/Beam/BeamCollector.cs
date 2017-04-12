@@ -31,7 +31,8 @@ public class BeamCollector : MonoBehaviour {
         property.type = type;
         property.length = span;
         property.number = members.Count;
-        currentPoint += span; 
+        currentPoint += span;
+        member.transform.SetParent(transform); 
         members.Add(member);
     }
 
