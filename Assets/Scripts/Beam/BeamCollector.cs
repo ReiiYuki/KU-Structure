@@ -31,7 +31,7 @@ public class BeamCollector : MonoBehaviour {
         property.type = type;
         property.length = span;
         property.number = members.Count;
-        currentPoint += span;
+        currentPoint += span; 
         members.Add(member);
     }
 
