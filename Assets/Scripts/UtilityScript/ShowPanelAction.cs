@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShowMemberBox : MonoBehaviour {
+public class ShowPanelAction : MonoBehaviour {
+
 
     public GameObject panel;
 
