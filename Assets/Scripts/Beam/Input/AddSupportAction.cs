@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AddSupportAction : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public GameObject typeDropdown, nodeDropdown;
+
+	public void AddSupport()
+    {
+        int type = typeDropdown.GetComponent<Dropdown>().value;
+        int node = nodeDropdown.GetComponent<Dropdown>().value;
+        GameObject.FindObjectOfType<BeamCollector>().AddSupport(type, node);
+    }
+
 }
