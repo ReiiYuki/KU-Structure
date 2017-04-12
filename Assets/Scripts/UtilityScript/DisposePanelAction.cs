@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClosePanel : MonoBehaviour {
+public class DisposePanelAction : MonoBehaviour {
 
-	public void Close()
+	public void Dispose()
     {
         transform.parent.gameObject.SetActive(false);
     }
+
 }
