@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BeamCollector : MonoBehaviour {
 
-    public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab;
+    public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab,momentumPrefab;
 
     public List<GameObject> members, nodes;
 
@@ -83,6 +83,17 @@ public class BeamCollector : MonoBehaviour {
     public void AddMomentum(int node,float momentum)
     {
         Debug.Log("Add Momentum { " + "Momentum : " + momentum + " node : " + node + "} ");
+
+        GameObject selectNode = nodes[node];
+        GameObject momentumObj = Instantiate(momentumPrefab, selectNode.transform.position-new Vector3(-0.5f,0.5f,1f), Quaternion.identity);
+
+        momentumObj.GetComponentInChildren<TextMesh>().text = momentum + " N.m";
+        momentumObj.GetComponent<MomentumProperty>().node = node;
+        momentumObj.GetComponent<MomentumProperty>().momentum = momentum;
+        momentumObj.GetComponent<MomentumProperty>().UpdateDirection();
+        selectNode.GetComponent<NodeProperty>().momentum = momentumObj.GetComponent<MomentumProperty>();
+
+        momentumObj.transform.SetParent(selectNode.transform);
     }
 
     public Color GetColor(int x)

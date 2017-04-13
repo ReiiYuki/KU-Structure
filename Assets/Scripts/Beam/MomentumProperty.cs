@@ -9,6 +9,6 @@ public class MomentumProperty : MonoBehaviour {
 
     public void UpdateDirection()
     {
-        if (momentum < 0) transform.localScale = new Vector2(0.1f, 0.1f);
+        if (momentum < 0) transform.GetChild(0).localScale = new Vector2(-0.1f,- 0.1f);
     } 
 }
