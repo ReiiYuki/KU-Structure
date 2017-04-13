@@ -5,6 +5,7 @@ using UnityEngine;
 public class BeamCollector : MonoBehaviour {
 
     public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab,momentumPrefab,uniformLoadPrefab;
+    public GameObject[] supportPrefabs;
 
     public List<GameObject> members, nodes;
 
