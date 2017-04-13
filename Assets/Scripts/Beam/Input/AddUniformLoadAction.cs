@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class AddUniformLoadAction : MonoBehaviour {
 
-    public GameObject loadText, elementDropdown;
+    public GameObject loadText, elementInput;
 
     public void AddUniformLoad()
     {
         float load = float.Parse(loadText.GetComponent<Text>().text);
-        int element = elementDropdown.GetComponent<Dropdown>().value;
+        int element = elementInput.GetComponent<LoadInputValue>().index;
         GameObject.FindObjectOfType<BeamCollector>().AddUniformLoad(element, load);
     }
 }

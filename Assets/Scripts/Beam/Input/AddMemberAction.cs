@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class AddMemberAction : MonoBehaviour {
 
-    public GameObject spanText, typeDropdown;
+    public GameObject spanText, propertyInput;
 
 	public void AddMember()
     {
         float span = float.Parse(spanText.GetComponent<Text>().text);
-        int type = typeDropdown.GetComponent<Dropdown>().value;
+        int type = propertyInput.GetComponent<LoadInputValue>().index;
         GameObject.FindObjectOfType<BeamCollector>().AddMember(span, type);
     }
 }

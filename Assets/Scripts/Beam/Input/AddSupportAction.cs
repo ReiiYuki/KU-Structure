@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AddSupportAction : MonoBehaviour {
 
-    public GameObject typeDropdown, nodeDropdown;
+    public GameObject typeInput, nodeInput;
 
 	public void AddSupport()
     {
-        int type = typeDropdown.GetComponent<Dropdown>().value;
-        int node = nodeDropdown.GetComponent<Dropdown>().value;
+        int type = typeInput.GetComponent<LoadInputValue>().index;
+        int node = nodeInput.GetComponent<LoadInputValue>().index;
         GameObject.FindObjectOfType<BeamCollector>().AddSupport(type, node);
     }
 

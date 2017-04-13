@@ -6,7 +6,7 @@ public class DisposePanelAction : MonoBehaviour {
 
 	public void Dispose()
     {
-        transform.parent.gameObject.SetActive(false);
+        transform.parent.parent.gameObject.SetActive(false);
     }
 
 }

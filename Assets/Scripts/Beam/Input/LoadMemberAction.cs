@@ -14,14 +14,13 @@ public class LoadMemberAction : MonoBehaviour {
 	void LoadMember()
     {
         Debug.Log("Load Member is working");
-        List<GameObject> memebers = GameObject.FindObjectOfType<BeamCollector>().members;
-        Dropdown memberDropdown = GetComponent<Dropdown>();
-        memberDropdown.ClearOptions();
-        foreach (GameObject member in memebers)
+        List<GameObject> members = GameObject.FindObjectOfType<BeamCollector>().members;
+        string[] data = new string[members.Count];
+        for (int i = 0;i< members.Count;i++)
         {
-            memberDropdown.options.Add(new Dropdown.OptionData() { text = member.GetComponent<MemberProperty>().number+"" });
+            data[i] = members[i].GetComponent<MemberProperty>().number+"";
         }
-        memberDropdown.RefreshShownValue();
+        GetComponent<LoadInputValue>().UpdateData(data);
     }
 
 }
