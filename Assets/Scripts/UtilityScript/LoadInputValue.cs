@@ -36,4 +36,11 @@ public class LoadInputValue : MonoBehaviour {
             GetComponent<Text>().text = list[index];
         }
     }
+
+    public void UpdateData(string[] data)
+    {
+        list = data;
+        index = 0;
+        GetComponent<Text>().text = list[index];
+    }
 }
