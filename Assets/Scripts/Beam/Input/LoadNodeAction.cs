@@ -14,13 +14,11 @@ public class LoadNodeAction : MonoBehaviour {
     {
         Debug.Log("Load Node is working");
         List<GameObject> nodes = GameObject.FindObjectOfType<BeamCollector>().nodes;
-        Dropdown nodeDropdown = GetComponent<Dropdown>();
-        nodeDropdown.ClearOptions();
-        foreach (GameObject node in nodes)
+        string[] data = new string[nodes.Count];
+        for (int i = 0; i < nodes.Count; i++)
         {
-            nodeDropdown.options.Add(new Dropdown.OptionData() { text = node.GetComponent<NodeProperty>().number + "" });
+            data[i] = nodes[i].GetComponent<NodeProperty>().number + "";
         }
-        nodeDropdown.RefreshShownValue();
-        Debug.Log("refresh Success");
+        GetComponent<LoadInputValue>().UpdateData(data);
     }
 }
