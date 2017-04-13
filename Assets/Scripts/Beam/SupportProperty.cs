@@ -4,6 +4,5 @@ using UnityEngine;
 
 public class SupportProperty : MonoBehaviour {
 
-    public int m, dy;
-
+    public int m, dy,node;
 }

@@ -61,6 +61,24 @@ public class BeamCollector : MonoBehaviour {
     public void AddSupport(int type,int node)
     {
         Debug.Log("Add Support { " + "type : " + type + " Node : " + node + " }");
+
+        GameObject selectedNode = nodes[node];
+        GameObject support;
+        if (type == 0)
+        {
+            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.25f, 0.75f), Quaternion.identity);
+            support.transform.Rotate(new Vector3(0, 0,-90f));
+        }
+        else
+        {
+            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 1.35f), Quaternion.identity);
+        }
+
+        selectedNode.GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
+        selectedNode.GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+        support.GetComponent<SupportProperty>().node = node;
+
+        support.transform.SetParent(selectedNode.transform);
     }
 
     public void AddPointLoad(int node, float load)
