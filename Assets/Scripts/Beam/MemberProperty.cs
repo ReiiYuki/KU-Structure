@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MemberProperty : MonoBehaviour {
-    public float length;
+    public float length,origin;
     public int number,type;
+    public UniformLoadProperty uniformLoad;
 
     float[] E = { 1 };
     float[] I = { 1 };
