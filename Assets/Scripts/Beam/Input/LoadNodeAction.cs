@@ -21,5 +21,6 @@ public class LoadNodeAction : MonoBehaviour {
             nodeDropdown.options.Add(new Dropdown.OptionData() { text = node.GetComponent<NodeProperty>().number + "" });
         }
         nodeDropdown.RefreshShownValue();
+        Debug.Log("refresh Success");
     }
 }

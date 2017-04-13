@@ -85,7 +85,7 @@ public class BeamCollector : MonoBehaviour {
         Debug.Log("Add Momentum { " + "Momentum : " + momentum + " node : " + node + "} ");
 
         GameObject selectNode = nodes[node];
-        GameObject momentumObj = Instantiate(momentumPrefab, selectNode.transform.position-new Vector3(-0.5f,0.5f,1f), Quaternion.identity);
+        GameObject momentumObj = Instantiate(momentumPrefab, selectNode.transform.position-new Vector3(0,0.75f,0f), Quaternion.identity);
 
         momentumObj.GetComponentInChildren<TextMesh>().text = momentum + " N.m";
         momentumObj.GetComponent<MomentumProperty>().node = node;
@@ -104,7 +104,7 @@ public class BeamCollector : MonoBehaviour {
 
     public void CreateNode(Transform parent,float position)
     {
-        GameObject node = Instantiate(nodePrefab, new Vector3(position, 0.5f), Quaternion.identity);
+        GameObject node = Instantiate(nodePrefab, new Vector3(position, 0.75f), Quaternion.identity);
         node.GetComponent<NodeProperty>().number = nodes.Count;
         node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
         node.transform.SetParent(parent);
