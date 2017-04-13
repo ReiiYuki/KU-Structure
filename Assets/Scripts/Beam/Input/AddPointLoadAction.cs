@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class AddPointLoadAction : MonoBehaviour {
 
-    public GameObject nodeDropdown, loadText;
+    public GameObject nodeInput, loadText;
 
     public void AddPointLoad()
     {
-        int node = nodeDropdown.GetComponent<Dropdown>().value;
+        int node = nodeInput.GetComponent<LoadInputValue>().index;
         float load = float.Parse(loadText.GetComponent<Text>().text);
         GameObject.FindObjectOfType<BeamCollector>().AddPointLoad(node, load);
     }
