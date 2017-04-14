@@ -16,6 +16,11 @@ namespace AssemblyCSharp
 		public void remove(Shape shape){
 			shapes.Remove (shape);
 		}
+		public void draw(){
+			foreach(Shape s in shapes){
+				s.draw ();
+			}
+		}
 	}
 }
 
