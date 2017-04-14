@@ -27,7 +27,9 @@ public class BeamAnalyzer : MonoBehaviour {
             df[index++] = node.GetComponent<NodeProperty>().dy;
             df[index++] = node.GetComponent<NodeProperty>().m;
         }
-        Debug.Log(df);
+        string dfStr = "";
+        foreach (float i in df) dfStr += (i + " ");
+        Debug.Log("Degree of Freedom = "+dfStr);
     }
 
     public void ResetAnalyzer()
