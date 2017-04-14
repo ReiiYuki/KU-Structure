@@ -41,6 +41,7 @@ public class LoadInputValue : MonoBehaviour {
     {
         list = data;
         index = 0;
-        GetComponent<Text>().text = list[index];
+        if (list.Length == 0) GetComponent<Text>().text = "None";
+        else GetComponent<Text>().text = list[index];
     }
 }
