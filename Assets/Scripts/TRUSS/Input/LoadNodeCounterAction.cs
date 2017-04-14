@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LoadNodeCounterAction : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
+	void OnEnable() {
         GetComponent<Text>().text = ""+GameObject.FindObjectOfType<TRUSSCollector>().nodes.Count;
 	}
 
