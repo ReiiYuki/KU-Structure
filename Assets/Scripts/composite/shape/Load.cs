@@ -5,9 +5,9 @@ namespace AssemblyCSharp
 	public class Load : Shape
 	{
 		private Node node;
-		private double loadX;
-		private double loadY;
-		public Load (Node node,double loadX, double loadY)
+		private float loadX;
+		private float loadY;
+		public Load (Node node,float loadX, float loadY)
 		{
 			this.node = node;
 			this.x = node.getX ();

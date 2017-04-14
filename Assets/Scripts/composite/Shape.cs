@@ -4,13 +4,13 @@ namespace AssemblyCSharp
 {
 	public abstract class Shape
 	{
-		protected int x;
-		protected int y;
-		public int getX()
+		protected float x;
+		protected float y;
+		public float getX()
 		{
 			return x;
 		}
-		public int getY()
+		public float getY()
 		{
 			return y;
 		}

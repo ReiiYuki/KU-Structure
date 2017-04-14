@@ -5,7 +5,7 @@ namespace AssemblyCSharp
 	public class Node : Shape
 	{
 		private String name;
-		public Node (int x,int y, string name)
+		public Node (float x,float y, string name)
 		{
 			this.name = name;
 			this.x = x;
