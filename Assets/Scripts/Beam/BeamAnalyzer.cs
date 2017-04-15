@@ -50,8 +50,15 @@ public class BeamAnalyzer : MonoBehaviour {
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
-            float[,] kVal = GenerateK(member.GetComponent<MemberProperty>().number);
+
             int[] index = { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            string indexStr = "";
+            foreach (int i in index)
+                indexStr += i + " ";
+            Debug.Log("index = " + indexStr);
+
+            float[,] kVal = GenerateK(member.GetComponent<MemberProperty>().number);
+            
             kList.Add(new k(index, kVal));
         }
     }
@@ -94,6 +101,15 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         Debug.Log("k = \n"+kStr);
         return k;
+    }
+
+    public List<int> FindAvailableDF()
+    {
+        List<int> availableIndex = new List<int>();
+        foreach (int index in df)
+            if (index == 0)
+                availableIndex.Add(index);
+        return availableIndex;
     }
 
     public void ResetAnalyzer()
