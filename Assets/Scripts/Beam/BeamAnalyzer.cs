@@ -10,9 +10,9 @@ public class BeamAnalyzer : MonoBehaviour {
     List<k> kList;
     struct k
     {
-        public int[] index;
+        public List<int> index;
         public float[,] k_val;
-        public k(int[] index,float[,] k_val)
+        public k(List<int> index,float[,] k_val)
         {
             this.index = index;
             this.k_val = k_val;
@@ -28,9 +28,10 @@ public class BeamAnalyzer : MonoBehaviour {
     {
         GenerateDegreeOfFreedom();
         GenerateAllK();
+        GenerateS();
     }
 
-    public void GenerateDegreeOfFreedom()
+    void GenerateDegreeOfFreedom()
     {
         df = new float[collector.nodes.Count*2];
         int index = 0;
@@ -44,14 +45,14 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log("Degree of Freedom = "+dfStr);
     }
 
-    public void GenerateAllK()
+    void GenerateAllK()
     {
         kList = new List<k>();
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
 
-            int[] index = { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            List<int> index = new List<int>(){ property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
             string indexStr = "";
             foreach (int i in index)
                 indexStr += i + " ";
@@ -63,7 +64,7 @@ public class BeamAnalyzer : MonoBehaviour {
         }
     }
 
-    public float[,] GenerateK(int member)
+    float[,] GenerateK(int member)
     {
         float E = collector.members[member].GetComponent<MemberProperty>().GetE();
         float I = collector.members[member].GetComponent<MemberProperty>().GetI();
@@ -103,12 +104,52 @@ public class BeamAnalyzer : MonoBehaviour {
         return k;
     }
 
-    public List<int> FindAvailableDF()
+    void GenerateS()
+    {
+        List<int> availableIndex = FindAvailableDF();
+        float[,] S = new float[availableIndex.Count, availableIndex.Count];
+        for (int i = 0;i<availableIndex.Count;i++)
+        {
+            for (int j = 0;j<availableIndex.Count;j++)
+            {
+                S[i, j] = 0;
+                foreach (k kVal in kList)
+                {
+                    S[i, j] += FindKValueByIndex(kVal,availableIndex[i], availableIndex[j]);
+                }
+            }
+        }
+
+        string sStr = "";
+        for (int i = 0; i < availableIndex.Count; i++)
+        {
+            for (int j = 0; j < availableIndex.Count; j++)
+                sStr += S[i, j] + " ";
+            sStr += "\n";
+        }
+
+        Debug.Log("S = " + sStr);
+    }
+
+    float FindKValueByIndex(k kTarget,int x,int y)
+    {
+        int kIndexX = kTarget.index.IndexOf(x);
+        int kIndexY = kTarget.index.IndexOf(y);
+        if (kIndexX < 0 || kIndexY < 0) return 0;
+        return kTarget.k_val[kIndexX, kIndexY];
+    }
+
+    List<int> FindAvailableDF()
     {
         List<int> availableIndex = new List<int>();
-        foreach (int index in df)
-            if (index == 0)
-                availableIndex.Add(index);
+        for (int i = 0;i<df.Length;i++)
+            if (df[i] == 1)
+                availableIndex.Add(i);
+
+        string indexStr = "";
+        foreach (int i in availableIndex)
+            indexStr += i + " ";
+        Debug.Log("Available Index = " + indexStr);
         return availableIndex;
     }
 
