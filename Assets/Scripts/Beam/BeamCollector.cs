@@ -115,6 +115,8 @@ public class BeamCollector : MonoBehaviour {
         uniformLoad.GetComponentInChildren<TextMesh>().text = load + " N/m.";
         selectedElement.GetComponent<MemberProperty>().uniformLoad = uniformLoad.GetComponent< UniformLoadProperty>();
 
+        uniformLoad.GetComponent<UniformLoadProperty>().Inverse();
+
         uniformLoad.transform.SetParent(selectedElement.transform);
     }
 
