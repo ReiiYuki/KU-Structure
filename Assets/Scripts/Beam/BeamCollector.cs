@@ -98,6 +98,8 @@ public class BeamCollector : MonoBehaviour {
         pointLoad.GetComponent<PointLoadProperty>().node = node;
         selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
 
+        pointLoad.GetComponent<PointLoadProperty>().Inverse();
+
         pointLoad.transform.SetParent(selectNode.transform);
     }
 
