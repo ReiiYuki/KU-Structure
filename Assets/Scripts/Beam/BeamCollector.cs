@@ -98,6 +98,8 @@ public class BeamCollector : MonoBehaviour {
         pointLoad.GetComponent<PointLoadProperty>().node = node;
         selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
 
+        pointLoad.GetComponent<PointLoadProperty>().Inverse();
+
         pointLoad.transform.SetParent(selectNode.transform);
     }
 
@@ -114,6 +116,8 @@ public class BeamCollector : MonoBehaviour {
         uniformLoad.GetComponent<UniformLoadProperty>().element = element;
         uniformLoad.GetComponentInChildren<TextMesh>().text = load + " N/m.";
         selectedElement.GetComponent<MemberProperty>().uniformLoad = uniformLoad.GetComponent< UniformLoadProperty>();
+
+        uniformLoad.GetComponent<UniformLoadProperty>().Inverse();
 
         uniformLoad.transform.SetParent(selectedElement.transform);
     }
