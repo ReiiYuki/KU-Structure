@@ -7,6 +7,17 @@ public class BeamAnalyzer : MonoBehaviour {
     BeamCollector collector;
 
     float[] df;
+    List<k> kList;
+    struct k
+    {
+        public int[] index;
+        public float[,] k_val;
+        public k(int[] index,float[,] k_val)
+        {
+            this.index = index;
+            this.k_val = k_val;
+        }
+    }
 
     private void Start()
     {
@@ -35,9 +46,13 @@ public class BeamAnalyzer : MonoBehaviour {
 
     public void GenerateAllK()
     {
+        kList = new List<k>();
         foreach (GameObject member in collector.members)
         {
-            GenerateK(member.GetComponent<MemberProperty>().number);
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            float[,] kVal = GenerateK(member.GetComponent<MemberProperty>().number);
+            int[] index = { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            kList.Add(new k(index, kVal));
         }
     }
 

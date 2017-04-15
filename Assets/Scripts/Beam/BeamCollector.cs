@@ -49,7 +49,9 @@ public class BeamCollector : MonoBehaviour {
         numberText.transform.SetParent(member.transform);
 
         if (members.Count == 0) CreateNode(member.transform, currentPoint);
+        property.node1 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
         CreateNode(member.transform, currentPoint + span);
+        property.node2 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
 
         currentPoint += span;
 
