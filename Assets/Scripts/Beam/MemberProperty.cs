@@ -7,8 +7,8 @@ public class MemberProperty : MonoBehaviour {
     public int number,type;
     public UniformLoadProperty uniformLoad;
 
-    float[] E = { 1 };
-    float[] I = { 1 };
+    float[] E = { 1 , 30 ,29000};
+    float[] I = { 1 , 4.8f*Mathf.Pow(10,-3),510};
 
     public float GetI()
     {
