@@ -49,7 +49,9 @@ public class BeamCollector : MonoBehaviour {
         numberText.transform.SetParent(member.transform);
 
         if (members.Count == 0) CreateNode(member.transform, currentPoint);
+        property.node1 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
         CreateNode(member.transform, currentPoint + span);
+        property.node2 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
 
         currentPoint += span;
 
@@ -68,6 +70,10 @@ public class BeamCollector : MonoBehaviour {
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.25f, 0.75f), Quaternion.identity);
             support.transform.Rotate(new Vector3(0, 0,-90f));
+        }
+        else if (type == 3)
+        {
+            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
         }
         else
         {

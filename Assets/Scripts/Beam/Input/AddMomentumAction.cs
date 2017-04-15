@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class AddMomentumAction : MonoBehaviour {
 
-    public GameObject nodeDropdown, momentumText;
+    public GameObject nodeInput, momentumText;
 
     public void AddMomentum()
     {
-        int node = nodeDropdown.GetComponent<Dropdown>().value;
+        int node = nodeInput.GetComponent<LoadInputValue>().index;
         float momentum = float.Parse(momentumText.GetComponent<Text>().text);
         GameObject.FindObjectOfType<BeamCollector>().AddMomentum(node, momentum);
     }
