@@ -100,15 +100,15 @@ public class TRUSSCollector : MonoBehaviour {
 
 		// add load X
 		if (loadX != 0) {
-			GameObject pointLoadX = Instantiate (pointLoadPrefabX, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x-1), (nodes [node].transform.position.y)), Quaternion.identity);
-			pointLoadX.transform.Rotate (new Vector3 (0, 0, 90));
+			GameObject pointLoadX = Instantiate (pointLoadPrefabX, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x+1.75f), (nodes [node].transform.position.y)), Quaternion.identity);
+			pointLoadX.transform.Rotate (new Vector3 (0, 0, -90));
 			pointLoadX.GetComponentInChildren<TextMesh> ().text = loadX + " N.";
 			pointLoadX.GetComponent<TrussPointLoadProperty> ().loadX = loadX;
 			pointLoadX.GetComponent<TrussPointLoadProperty> ().loadY = 0;
 			pointLoadX.GetComponent<TrussPointLoadProperty> ().node = node;
 			selectNode.GetComponent<NodeProperty> ().pointLoad = pointLoadX.GetComponent<PointLoadProperty> ();
 
-			//pointLoadX.GetComponent<PointLoadProperty> ().Inverse ();
+			pointLoadX.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadX.transform.SetParent (selectNode.transform);
 		}
@@ -122,10 +122,9 @@ public class TRUSSCollector : MonoBehaviour {
 			pointLoadY.GetComponent<TrussPointLoadProperty> ().node = node;
 			selectNode.GetComponent<NodeProperty> ().pointLoad = pointLoadY.GetComponent<PointLoadProperty> ();
 
-			//pointLoadY.GetComponent<PointLoadProperty> ().Inverse ();
+			pointLoadY.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadY.transform.SetParent (selectNode.transform);
-			Debug.Log ("in");
 		}
     }
 
