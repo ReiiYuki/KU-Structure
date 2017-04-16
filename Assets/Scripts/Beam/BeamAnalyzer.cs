@@ -182,14 +182,20 @@ public class BeamAnalyzer : MonoBehaviour {
             MemberProperty property = member.GetComponent<MemberProperty>();
             List<int> index = new List<int>(){ property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
             float[] piVal = new float[4];
-            if (property.node1.pointLoad)
-                piVal[0] = -1*property.node1.pointLoad.load;
-            if (property.node1.momentum)
-                piVal[1] = property.node1.momentum.momentum;
-            if (property.node2.pointLoad)
-                piVal[2] = -1*property.node2.pointLoad.load;
-            if (property.node2.momentum)
-                piVal[3] = property.node2.momentum.momentum;
+            if (property.node1.support)
+            {
+                if (property.node1.pointLoad)
+                    piVal[0] = -1 * property.node1.pointLoad.load;
+                if (property.node1.momentum)
+                    piVal[1] = property.node1.momentum.momentum;
+            }
+            if (property.node2.support)
+            {
+                if (property.node2.pointLoad)
+                    piVal[2] = -1 * property.node2.pointLoad.load;
+                if (property.node2.momentum)
+                    piVal[3] = property.node2.momentum.momentum;
+            }
             pi.Add(new IndexArray(index, piVal));
         }
 

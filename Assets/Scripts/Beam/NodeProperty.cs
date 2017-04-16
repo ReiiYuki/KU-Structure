@@ -8,5 +8,5 @@ public class NodeProperty : MonoBehaviour {
     public float m, dy;
     public PointLoadProperty pointLoad;
     public MomentumProperty momentum;
-
+    public SupportProperty support;
 }

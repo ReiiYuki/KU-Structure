@@ -82,6 +82,7 @@ public class BeamCollector : MonoBehaviour {
 
         selectedNode.GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
         selectedNode.GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+        selectedNode.GetComponent<NodeProperty>().support = support.GetComponent<SupportProperty>();
         support.GetComponent<SupportProperty>().node = node;
 
         support.transform.SetParent(selectedNode.transform);
