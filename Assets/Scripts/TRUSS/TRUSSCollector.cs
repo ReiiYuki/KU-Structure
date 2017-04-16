@@ -6,7 +6,7 @@ public class TRUSSCollector : MonoBehaviour {
 	
 	public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab,momentumPrefab,uniformLoadPrefab;
     public List<GameObject> nodes,members;
-
+	public GameObject[] supportPrefabs;
 	// Use this for initialization
 	void Start () {
         this.nodes = new List<GameObject>();
@@ -69,7 +69,29 @@ public class TRUSSCollector : MonoBehaviour {
     public void AddSupport(int type,int node)
     {
         Debug.Log("Add Support { type : " + type + " node : " + node + " }");
-    }
+
+		GameObject selectedNode = nodes[node];
+		GameObject support;
+		if (type == 0)
+		{
+			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.25f, 0.75f), Quaternion.identity);
+			support.transform.Rotate(new Vector3(0, 0,-90f));
+		}
+		else if (type == 3)
+		{
+			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
+		}
+		else
+		{
+			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 1.35f), Quaternion.identity);
+		}
+
+		selectedNode.GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
+		selectedNode.GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+		support.GetComponent<SupportProperty>().node = node;
+
+		support.transform.SetParent(selectedNode.transform);
+	}
 
     public void AddPointLoad(int node,float loadX,float loadY)
     {
