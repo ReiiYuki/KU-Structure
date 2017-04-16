@@ -50,8 +50,10 @@ public class BeamCollector : MonoBehaviour {
 
         if (members.Count == 0) CreateNode(member.transform, currentPoint);
         property.node1 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
+        property.node1.GetComponent<NodeProperty>().rightMember = property;
         CreateNode(member.transform, currentPoint + span);
         property.node2 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
+        property.node2.GetComponent<NodeProperty>().leftMember = property;
 
         currentPoint += span;
 
