@@ -101,8 +101,9 @@ public class TRUSSCollector : MonoBehaviour {
 		GameObject pointLoad = Instantiate(pointLoadPrefab, selectNode.transform.position + new Vector3((nodes[node].transform.position.x + 3),( nodes[node].transform.position.y) + 3), Quaternion.identity);
 
 		pointLoad.GetComponentInChildren<TextMesh>().text = loadX + " N.";
-		pointLoad.GetComponent<PointLoadProperty>().load = loadX;
-		pointLoad.GetComponent<PointLoadProperty>().node = node;
+		pointLoad.GetComponent<TrussPointLoadProperty>().loadX = loadX;
+		pointLoad.GetComponent<TrussPointLoadProperty> ().loadY = loadY;
+		pointLoad.GetComponent<TrussPointLoadProperty>().node = node;
 		selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
 
 		pointLoad.GetComponent<PointLoadProperty>().Inverse();
