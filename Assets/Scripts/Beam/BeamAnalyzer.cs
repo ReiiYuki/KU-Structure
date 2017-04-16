@@ -6,10 +6,10 @@ public class BeamAnalyzer : MonoBehaviour {
 
     BeamCollector collector;
 
-    float[] df;
+    float[] df,qf;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> pi,qf;
+    List<IndexArray> pi,qfi;
     IndexArray pf,p;
 
     struct IndexArray
@@ -174,7 +174,7 @@ public class BeamAnalyzer : MonoBehaviour {
         return availableIndex;
     }
 
-    public void GeneratePi()
+    void GeneratePi()
     {
         pi = new List<IndexArray>();
         foreach (GameObject member in collector.members)
@@ -211,7 +211,7 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(piStr);
     }
 
-    public void GenerateP()
+    void GenerateP()
     {
         List<int> availableIndex = FindAvailableDF();
         float[] pVal = new float[availableIndex.Count];
@@ -233,10 +233,50 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(pStr);
     }
 
-    public void GenerateQF()
+    void GenerateQF()
     {
-        qf = new List<IndexArray>();
-        
+        qfi = new List<IndexArray>();
+        foreach (PointLoadProperty pointLoad in collector.pointLoads)
+        {
+            if (!collector.nodes[pointLoad.node].GetComponent<NodeProperty>().support)
+            {
+                float l1 = GetLengthOfPointLoad(pointLoad.node, false);
+                float l2 = GetLengthOfPointLoad(pointLoad.node, true);
+                int node1 = GetEndNodeIndex(pointLoad.node, false);
+                int node2 = GetEndNodeIndex(pointLoad.node, true);
+                Debug.Log("L1 = " + l1 + " L2 = " + l2+" Node1 = "+node1+" Node2= "+node2);
+            }
+        }
+    }
+
+    int GetEndNodeIndex(int node,bool isRight)
+    {
+        if (isRight)
+        {
+            if (node == collector.nodes.Count - 1) return node;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return node;
+            return GetEndNodeIndex(node + 1, isRight);
+        }else
+        {
+            if (node == 0) return node;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return node;
+            return GetEndNodeIndex(node - 1, isRight);
+        }
+    }
+
+    float GetLengthOfPointLoad(int node,bool isRight) 
+    {
+        if (isRight)
+        {
+            if (node == collector.nodes.Count) return 0;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
+            return collector.nodes[node].GetComponent<NodeProperty>().rightMember.length + GetLengthOfPointLoad(node + 1, isRight);
+        }else
+        {
+            if (node < 0) return 0;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
+            return collector.nodes[node].GetComponent<NodeProperty>().leftMember.length + GetLengthOfPointLoad(node - 1, isRight);
+        }
     }
 
     public void GeneratePF()
