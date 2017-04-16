@@ -236,6 +236,8 @@ public class BeamAnalyzer : MonoBehaviour {
     void GenerateQF()
     {
         qfi = new List<IndexArray>();
+        qf = new float[collector.nodes.Count * 2];
+        //Point Load Case
         foreach (PointLoadProperty pointLoad in collector.pointLoads)
         {
             if (!collector.nodes[pointLoad.node].GetComponent<NodeProperty>().support)
@@ -244,9 +246,29 @@ public class BeamAnalyzer : MonoBehaviour {
                 float l2 = GetLengthOfPointLoad(pointLoad.node, true);
                 int node1 = GetEndNodeIndex(pointLoad.node, false);
                 int node2 = GetEndNodeIndex(pointLoad.node, true);
-                Debug.Log("L1 = " + l1 + " L2 = " + l2+" Node1 = "+node1+" Node2= "+node2);
+                qf[node1 * 2] += pointLoad.load * Mathf.Pow(l2, 2) * (3 * l1 + l2) / Mathf.Pow(l1 + l2, 3)*-1f;
+                qf[node1 * 2 + 1] += pointLoad.load * l1 * Mathf.Pow(l2, 2) / Mathf.Pow(l1 + l2, 2)*-1f;
+                qf[node2 * 2] += pointLoad.load * Mathf.Pow(l1, 2) * (l1 + 3 * l2) / Mathf.Pow(l1 + l2, 3) * -1f;
+                qf[node2 * 2 + 1] += pointLoad.load * Mathf.Pow(l1, 2) * l2 / Mathf.Pow(l1 + l2, 2); 
             }
         }
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            float[] val = { qf[index[0]], qf[index[1]], qf[index[2]], qf[index[3]] };
+            qfi.Add(new IndexArray(index, val));
+        }
+        string qfiStr = "qfi = \n";
+        foreach (IndexArray qfiVal in qfi)
+        {
+            foreach (float qf in qfiVal.val)
+            {
+                qfiStr += qf + " ";
+            }
+            qfiStr += "\n";
+        }
+        Debug.Log(qfiStr);
     }
 
     int GetEndNodeIndex(int node,bool isRight)
