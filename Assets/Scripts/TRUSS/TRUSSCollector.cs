@@ -100,7 +100,7 @@ public class TRUSSCollector : MonoBehaviour {
 
 		// add load X
 		if (loadX != 0) {
-			GameObject pointLoadX = Instantiate (pointLoadPrefabX, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x), (nodes [node].transform.position.y)), Quaternion.identity);
+			GameObject pointLoadX = Instantiate (pointLoadPrefabX, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x-1), (nodes [node].transform.position.y)), Quaternion.identity);
 			pointLoadX.transform.Rotate (new Vector3 (0, 0, 90));
 			pointLoadX.GetComponentInChildren<TextMesh> ().text = loadX + " N.";
 			pointLoadX.GetComponent<TrussPointLoadProperty> ().loadX = loadX;
@@ -114,7 +114,7 @@ public class TRUSSCollector : MonoBehaviour {
 		}
 		// add Load Y
 		if (loadY != 0) {
-			GameObject pointLoadY = Instantiate (pointLoadPrefabY, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x + 1), (nodes [node].transform.position.y)), Quaternion.identity);
+			GameObject pointLoadY = Instantiate (pointLoadPrefabY, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x), (nodes [node].transform.position.y +1)), Quaternion.identity);
 
 			pointLoadY.GetComponentInChildren<TextMesh> ().text = loadY + " N.";
 			pointLoadY.GetComponent<TrussPointLoadProperty> ().loadX = 0;
