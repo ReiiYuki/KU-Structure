@@ -6,10 +6,10 @@ public class BeamAnalyzer : MonoBehaviour {
 
     BeamCollector collector;
 
-    float[] df,qf;
+    float[] df,qf,pi;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> pi,qfi;
+    List<IndexArray> qfi;
     IndexArray pf,p;
 
     struct IndexArray
@@ -176,37 +176,23 @@ public class BeamAnalyzer : MonoBehaviour {
 
     void GeneratePi()
     {
-        pi = new List<IndexArray>();
-        foreach (GameObject member in collector.members)
+        pi = new float[collector.nodes.Count*2];
+        foreach (GameObject node in collector.nodes)
         {
-            MemberProperty property = member.GetComponent<MemberProperty>();
-            List<int> index = new List<int>(){ property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
-            float[] piVal = new float[4];
-            if (property.node1.support)
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            if (property.support)
             {
-                if (property.node1.pointLoad)
-                    piVal[0] = -1 * property.node1.pointLoad.load;
-                if (property.node1.momentum)
-                    piVal[1] = property.node1.momentum.momentum;
+                if (property.pointLoad)
+                    pi[property.number * 2] = property.pointLoad.load;
+                if (property.momentum)
+                    pi[property.number * 2 + 1] = property.momentum.momentum;
             }
-            if (property.node2.support)
-            {
-                if (property.node2.pointLoad)
-                    piVal[2] = -1 * property.node2.pointLoad.load;
-                if (property.node2.momentum)
-                    piVal[3] = property.node2.momentum.momentum;
-            }
-            pi.Add(new IndexArray(index, piVal));
         }
 
-        string piStr = "pi = \n";
-        foreach (IndexArray piVal in pi)
+        string piStr = "pi = ";
+        foreach (float piVal in pi)
         {
-            foreach (float piValVal in piVal.val)
-            {
-                piStr += piValVal + " ";
-            }
-            piStr += "\n";
+            piStr += piVal + " ";
         }
         Debug.Log(piStr);
     }
@@ -217,13 +203,7 @@ public class BeamAnalyzer : MonoBehaviour {
         float[] pVal = new float[availableIndex.Count];
         for (int i = 0; i < availableIndex.Count; i++)
         {
-            pVal[i] = 0;
-            foreach (IndexArray piVal in pi)
-            {
-                int index = piVal.index.IndexOf(availableIndex[i]);
-                if (index >= 0)
-                    pVal[i] += piVal.val[index];
-            }
+            pVal[i] = pi[availableIndex[i]];
         }
         p = new IndexArray(availableIndex, pVal);
 
