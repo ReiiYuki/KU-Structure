@@ -246,10 +246,10 @@ public class BeamAnalyzer : MonoBehaviour {
                 float l2 = GetLengthOfPointLoad(pointLoad.node, true);
                 int node1 = GetEndNodeIndex(pointLoad.node, false);
                 int node2 = GetEndNodeIndex(pointLoad.node, true);
-                qf[node1 * 2] += pointLoad.load * Mathf.Pow(l2, 2) * (3 * l1 + l2) / Mathf.Pow(l1 + l2, 3)*-1f;
-                qf[node1 * 2 + 1] += pointLoad.load * l1 * Mathf.Pow(l2, 2) / Mathf.Pow(l1 + l2, 2)*-1f;
-                qf[node2 * 2] += pointLoad.load * Mathf.Pow(l1, 2) * (l1 + 3 * l2) / Mathf.Pow(l1 + l2, 3) * -1f;
-                qf[node2 * 2 + 1] += pointLoad.load * Mathf.Pow(l1, 2) * l2 / Mathf.Pow(l1 + l2, 2); 
+                qf[node1 * 2] += pointLoad.load * Mathf.Pow(l2, 2) * (3 * l1 + l2) / Mathf.Pow(l1 + l2, 3)*1f;
+                qf[node1 * 2 + 1] += pointLoad.load * l1 * Mathf.Pow(l2, 2) / Mathf.Pow(l1 + l2, 2)*1f;
+                qf[node2 * 2] += pointLoad.load * Mathf.Pow(l1, 2) * (l1 + 3 * l2) / Mathf.Pow(l1 + l2, 3) * 1f;
+                qf[node2 * 2 + 1] += pointLoad.load * Mathf.Pow(l1, 2) * l2 / Mathf.Pow(l1 + l2, 2)*-1f; 
             }
         }
         foreach (GameObject member in collector.members)
