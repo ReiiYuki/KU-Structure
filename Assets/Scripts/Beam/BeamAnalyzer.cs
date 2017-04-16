@@ -9,7 +9,7 @@ public class BeamAnalyzer : MonoBehaviour {
     float[] df;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qf,pi;
+    List<IndexArray> pi,qf;
     IndexArray pf,p;
 
     struct IndexArray
@@ -44,10 +44,10 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateDegreeOfFreedom();
         GenerateAllK();
         GenerateS();
-        GenerateQF();
-        GeneratePf();
         GeneratePi();
         GenerateP();
+        /*GenerateQF();
+        GeneratePF();*/
     }
 
     void GenerateDegreeOfFreedom()
@@ -174,85 +174,85 @@ public class BeamAnalyzer : MonoBehaviour {
         return availableIndex;
     }
 
-    public void GenerateQF()
+    public void GeneratePi()
     {
-        qf = new List<IndexArray>();
+        pi = new List<IndexArray>();
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
             List<int> index = new List<int>(){ property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
-            float[] qi = new float[4];
+            float[] piVal = new float[4];
             if (property.node1.pointLoad)
-                qi[0] = -1*property.node1.pointLoad.load;
+                piVal[0] = -1*property.node1.pointLoad.load;
             if (property.node1.momentum)
-                qi[1] = property.node1.momentum.momentum;
+                piVal[1] = property.node1.momentum.momentum;
             if (property.node2.pointLoad)
-                qi[2] = -1*property.node2.pointLoad.load;
+                piVal[2] = -1*property.node2.pointLoad.load;
             if (property.node2.momentum)
-                qi[3] = property.node2.momentum.momentum;
-            qf.Add(new IndexArray(index, qi));
+                piVal[3] = property.node2.momentum.momentum;
+            pi.Add(new IndexArray(index, piVal));
         }
 
-        string qfStr = "qf = \n";
-        foreach (IndexArray qi in qf)
+        string piStr = "pi = \n";
+        foreach (IndexArray piVal in pi)
         {
-            foreach (float qii in qi.val)
+            foreach (float piValVal in piVal.val)
             {
-                qfStr += qii + " ";
+                piStr += piValVal + " ";
             }
-            qfStr += "\n";
+            piStr += "\n";
         }
-        Debug.Log(qfStr);
+        Debug.Log(piStr);
     }
 
-    public void GeneratePf()
+    public void GenerateP()
     {
         List<int> availableIndex = FindAvailableDF();
-        float[] pfVal = new float[availableIndex.Count];
+        float[] pVal = new float[availableIndex.Count];
         for (int i = 0; i < availableIndex.Count; i++)
         {
-            pfVal[i] = 0;
-            foreach (IndexArray qfi in qf)
+            pVal[i] = 0;
+            foreach (IndexArray piVal in pi)
             {
-                int index = qfi.index.IndexOf(availableIndex[i]);
+                int index = piVal.index.IndexOf(availableIndex[i]);
                 if (index >= 0)
-                    pfVal[i] += qfi.val[index];
+                    pVal[i] += piVal.val[index];
             }
         }
-        pf = new IndexArray(availableIndex, pfVal);
+        p = new IndexArray(availableIndex, pVal);
 
-        string pfStr = "pf = ";
-        foreach (float i in pf.val)
-            pfStr += i + " ";
-        Debug.Log(pfStr);
+        string pStr = "p = ";
+        foreach (float i in p.val)
+            pStr += i + " ";
+        Debug.Log(pStr);
     }
 
-    public void GeneratePi()
+    public void GenerateQF()
     {
-        pi = new List<IndexArray>();
+        qf = new List<IndexArray>();
         //Uniform Load Case
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
             List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
-            float[] piVal = new float[4];
+            float[] pfVal = new float[4];
             if (property.uniformLoad)
             {
                 float dy = -1*property.uniformLoad.load*property.length/2;
                 float m = -1*property.uniformLoad.load * Mathf.Pow(property.length, 2) / 12;
-                piVal[0] = dy;
-                piVal[1] = m;
-                piVal[2] = dy;
-                piVal[3] = -1*m;
+                pfVal[0] = dy;
+                pfVal[1] = m;
+                pfVal[2] = dy;
+                pfVal[3] = -1*m;
             }else
             {
 
             }
-            pi.Add(new IndexArray(index, piVal));
+            qf.Add(new IndexArray(index, pfVal));
         }
     }
 
-    public void GenerateP()
+    public void GeneratePF()
     {
 
     }
