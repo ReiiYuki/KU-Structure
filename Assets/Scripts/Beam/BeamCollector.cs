@@ -71,7 +71,7 @@ public class BeamCollector : MonoBehaviour {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.25f, 0.75f), Quaternion.identity);
             support.transform.Rotate(new Vector3(0, 0,-90f));
         }
-        else if (type == 3)
+        else if (type == 3 || type == 4)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
         }
