@@ -52,7 +52,7 @@ public class TRUSSCollector : MonoBehaviour {
 		memberProperty.origin = node1X;
 
 		GameObject lengthText = Instantiate(textPrefab, new Vector3((node1X+node2X) / 2f, -0.5f), Quaternion.identity);
-		lengthText.GetComponent<TextMesh>().text = (node1X-node1X) + " m.";
+		lengthText.GetComponent<TextMesh>().text = (node2X-node1X) + " m.";
 		lengthText.transform.SetParent(member.transform);
 
 		GameObject numberText = Instantiate(textPrefab, new Vector3(node2X / 2f, 0,-1f), Quaternion.identity);
@@ -96,6 +96,18 @@ public class TRUSSCollector : MonoBehaviour {
     public void AddPointLoad(int node,float loadX,float loadY)
     {
         Debug.Log("Add Point Load { node : " + node + " loadX : " + loadX + " loadY : " + loadY + " }");
+
+		GameObject selectNode = nodes[node];
+		GameObject pointLoad = Instantiate(pointLoadPrefab, selectNode.transform.position + new Vector3((nodes[node].transform.position.x + 3),( nodes[node].transform.position.y) + 3), Quaternion.identity);
+
+		pointLoad.GetComponentInChildren<TextMesh>().text = loadX + " N.";
+		pointLoad.GetComponent<PointLoadProperty>().load = loadX;
+		pointLoad.GetComponent<PointLoadProperty>().node = node;
+		selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
+
+		pointLoad.GetComponent<PointLoadProperty>().Inverse();
+
+		pointLoad.transform.SetParent(selectNode.transform);
     }
 
 	public Color GetColor(int x)

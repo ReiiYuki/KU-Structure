@@ -13,5 +13,6 @@ public class AddTRUSSPointLoadAction : MonoBehaviour {
         float loadX = float.Parse(loadXText.GetComponent<Text>().text);
         float loadY = float.Parse(loadYText.GetComponent<Text>().text);
         GameObject.FindObjectOfType<TRUSSCollector>().AddPointLoad(node, loadX, loadY);
+		Debug.Log ("in");
     }
 }

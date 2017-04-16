@@ -1,12 +1,12 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace AssemblyCSharp
-{
-	public class RollerProperty
-	{
-		public RollerProperty ()
-		{
-		}
-	}
+public class RollerProperty : MonoBehaviour {
+
+	public int number;
+	public float m, dy;
+	public PointLoadProperty pointLoad;
+	public MomentumProperty momentum;
+
 }
-
