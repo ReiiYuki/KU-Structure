@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TRUSSCollector : MonoBehaviour {
 	
-	public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab,momentumPrefab,uniformLoadPrefab;
+	public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefabX,pointLoadPrefabY,momentumPrefab,uniformLoadPrefab;
     public List<GameObject> nodes,members;
 	public GameObject[] supportPrefabs;
 	// Use this for initialization
@@ -96,19 +96,37 @@ public class TRUSSCollector : MonoBehaviour {
     public void AddPointLoad(int node,float loadX,float loadY)
     {
         Debug.Log("Add Point Load { node : " + node + " loadX : " + loadX + " loadY : " + loadY + " }");
+		GameObject selectNode = nodes [node];
 
-		GameObject selectNode = nodes[node];
-		GameObject pointLoad = Instantiate(pointLoadPrefab, selectNode.transform.position + new Vector3((nodes[node].transform.position.x + 3),( nodes[node].transform.position.y) + 3), Quaternion.identity);
+		// add load X
+		if (loadX != 0) {
+			GameObject pointLoadX = Instantiate (pointLoadPrefabX, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x), (nodes [node].transform.position.y)), Quaternion.identity);
+			pointLoadX.transform.Rotate (new Vector3 (0, 0, 90));
+			pointLoadX.GetComponentInChildren<TextMesh> ().text = loadX + " N.";
+			pointLoadX.GetComponent<TrussPointLoadProperty> ().loadX = loadX;
+			pointLoadX.GetComponent<TrussPointLoadProperty> ().loadY = 0;
+			pointLoadX.GetComponent<TrussPointLoadProperty> ().node = node;
+			selectNode.GetComponent<NodeProperty> ().pointLoad = pointLoadX.GetComponent<PointLoadProperty> ();
 
-		pointLoad.GetComponentInChildren<TextMesh>().text = loadX + " N.";
-		pointLoad.GetComponent<TrussPointLoadProperty>().loadX = loadX;
-		pointLoad.GetComponent<TrussPointLoadProperty> ().loadY = loadY;
-		pointLoad.GetComponent<TrussPointLoadProperty>().node = node;
-		selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
+			//pointLoadX.GetComponent<PointLoadProperty> ().Inverse ();
 
-		pointLoad.GetComponent<PointLoadProperty>().Inverse();
+			pointLoadX.transform.SetParent (selectNode.transform);
+		}
+		// add Load Y
+		if (loadY != 0) {
+			GameObject pointLoadY = Instantiate (pointLoadPrefabY, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x + 1), (nodes [node].transform.position.y)), Quaternion.identity);
 
-		pointLoad.transform.SetParent(selectNode.transform);
+			pointLoadY.GetComponentInChildren<TextMesh> ().text = loadY + " N.";
+			pointLoadY.GetComponent<TrussPointLoadProperty> ().loadX = 0;
+			pointLoadY.GetComponent<TrussPointLoadProperty> ().loadY = loadY;
+			pointLoadY.GetComponent<TrussPointLoadProperty> ().node = node;
+			selectNode.GetComponent<NodeProperty> ().pointLoad = pointLoadY.GetComponent<PointLoadProperty> ();
+
+			//pointLoadY.GetComponent<PointLoadProperty> ().Inverse ();
+
+			pointLoadY.transform.SetParent (selectNode.transform);
+			Debug.Log ("in");
+		}
     }
 
 	public Color GetColor(int x)
