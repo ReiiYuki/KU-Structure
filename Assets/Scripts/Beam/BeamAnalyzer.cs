@@ -10,6 +10,7 @@ public class BeamAnalyzer : MonoBehaviour {
     List<IndexMatrix> k;
     IndexMatrix s;
     List<IndexArray> qf;
+    IndexArray pf;
 
     struct IndexArray
     {
@@ -44,6 +45,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateAllK();
         GenerateS();
         GenerateQF();
+        GeneratePf();
     }
 
     void GenerateDegreeOfFreedom()
@@ -199,6 +201,28 @@ public class BeamAnalyzer : MonoBehaviour {
             qfStr += "\n";
         }
         Debug.Log(qfStr);
+    }
+
+    public void GeneratePf()
+    {
+        List<int> availableIndex = FindAvailableDF();
+        float[] pfVal = new float[availableIndex.Count];
+        for (int i = 0; i < availableIndex.Count; i++)
+        {
+            pfVal[i] = 0;
+            foreach (IndexArray qfi in qf)
+            {
+                int index = qfi.index.IndexOf(availableIndex[i]);
+                if (index >= 0)
+                    pfVal[i] += qfi.val[index];
+            }
+        }
+        pf = new IndexArray(availableIndex, pfVal);
+
+        string pfStr = "pf = ";
+        foreach (float i in pf.val)
+            pfStr += i + " ";
+        Debug.Log(pfStr);
     }
 
     public void ResetAnalyzer()
