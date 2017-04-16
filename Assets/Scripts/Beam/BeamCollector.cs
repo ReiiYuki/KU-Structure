@@ -8,6 +8,7 @@ public class BeamCollector : MonoBehaviour {
     public GameObject[] supportPrefabs;
 
     public List<GameObject> members, nodes;
+    public List<PointLoadProperty> pointLoads;
 
     float currentPoint = 0;
 
@@ -15,6 +16,7 @@ public class BeamCollector : MonoBehaviour {
 	void Start () {
         members = new List<GameObject>();
         nodes = new List<GameObject>();
+        pointLoads = new List<PointLoadProperty>();
 	}
 	
 	// Update is called once per frame
@@ -50,8 +52,10 @@ public class BeamCollector : MonoBehaviour {
 
         if (members.Count == 0) CreateNode(member.transform, currentPoint);
         property.node1 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
+        property.node1.GetComponent<NodeProperty>().rightMember = property;
         CreateNode(member.transform, currentPoint + span);
         property.node2 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
+        property.node2.GetComponent<NodeProperty>().leftMember = property;
 
         currentPoint += span;
 
@@ -71,7 +75,7 @@ public class BeamCollector : MonoBehaviour {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.25f, 0.75f), Quaternion.identity);
             support.transform.Rotate(new Vector3(0, 0,-90f));
         }
-        else if (type == 3)
+        else if (type == 3 || type == 4)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
         }
@@ -82,6 +86,7 @@ public class BeamCollector : MonoBehaviour {
 
         selectedNode.GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
         selectedNode.GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+        selectedNode.GetComponent<NodeProperty>().support = support.GetComponent<SupportProperty>();
         support.GetComponent<SupportProperty>().node = node;
 
         support.transform.SetParent(selectedNode.transform);
@@ -101,6 +106,7 @@ public class BeamCollector : MonoBehaviour {
         pointLoad.GetComponent<PointLoadProperty>().Inverse();
 
         pointLoad.transform.SetParent(selectNode.transform);
+        pointLoads.Add(pointLoad.GetComponent<PointLoadProperty>());
     }
 
     public void AddUniformLoad(int element,float load)
