@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TRUSSCollector : MonoBehaviour {
-
+	
+	public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab,momentumPrefab,uniformLoadPrefab;
     public List<GameObject> nodes,members;
 
 	// Use this for initialization
@@ -20,11 +21,49 @@ public class TRUSSCollector : MonoBehaviour {
     public void AddNode(int x,int y)
     {
         Debug.Log("Add Node { x:" + x + " y : " + y + " }");
+
+		GameObject node = Instantiate(nodePrefab, new Vector3(x, y), Quaternion.identity);
+
+		node.GetComponent<NodeProperty>().number = nodes.Count;
+		node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
+
+		nodes.Add(node);
     }
 
     public void AddMember(int node1,int node2,int property)
     {
+		float node1X = nodes [node1].transform.position.x;
+		float node1Y = nodes [node1].transform.position.y;
+		float node2X = nodes [node2].transform.position.x;
+		float node2Y = nodes [node2].transform.position.y;
         Debug.Log("Add Member { node1 : " + node1 + " node2 : " + node2 + " property : " + property + " }");
+
+		GameObject member = Instantiate(memberPrefab, Vector3.zero, Quaternion.identity);
+
+		LineRenderer line = member.GetComponent<LineRenderer>();
+		line.startColor = GetColor(members.Count);
+		line.endColor = GetColor(members.Count);
+		line.SetPositions(new Vector3[] { new Vector3(node1X, node1Y), new Vector3(node2X, node2Y) });
+
+		MemberProperty memberProperty = member.GetComponent<MemberProperty>();
+		memberProperty.type = property;
+		memberProperty.length = node2X-node1X;
+		memberProperty.number = members.Count;
+		memberProperty.origin = node1X;
+
+		GameObject lengthText = Instantiate(textPrefab, new Vector3((node1X+node2X) / 2f, -0.5f), Quaternion.identity);
+		lengthText.GetComponent<TextMesh>().text = (node1X-node1X) + " m.";
+		lengthText.transform.SetParent(member.transform);
+
+		GameObject numberText = Instantiate(textPrefab, new Vector3(node2X / 2f, 0,-1f), Quaternion.identity);
+		numberText.GetComponent<TextMesh>().text = members.Count + "";
+		numberText.GetComponent<TextMesh>().color = Color.white;
+		numberText.transform.SetParent(member.transform);
+
+
+
+		member.transform.SetParent(transform); 
+		members.Add(member);
     }
 
     public void AddSupport(int type,int node)
@@ -36,4 +75,10 @@ public class TRUSSCollector : MonoBehaviour {
     {
         Debug.Log("Add Point Load { node : " + node + " loadX : " + loadX + " loadY : " + loadY + " }");
     }
+
+	public Color GetColor(int x)
+	{
+		if (x % 2 == 0) return new Color(169 / 255f, 169 / 255f, 169 / 255f);
+		return new Color(112 / 255f, 128 / 255f, 144 / 255f);
+	}
 }

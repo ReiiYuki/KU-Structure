@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AssemblyCSharp
 {
-	public class Member : Shape, MonoBehaviour
+	public class Member :  MonoBehaviour
 	{
 		private Node node1;
 		private Node node2;
@@ -15,7 +15,7 @@ namespace AssemblyCSharp
 			this.node2 = node2;
 			this.property = property;
 		}
-		public override void draw()
+		public void draw()
 		{
 			GameObject member = Instantiate(memberPrefab, Vector3.zero, Quaternion.identity);
 
