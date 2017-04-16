@@ -9,8 +9,8 @@ public class BeamAnalyzer : MonoBehaviour {
     float[] df;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qf;
-    IndexArray pf;
+    List<IndexArray> qf,pi;
+    IndexArray pf,p;
 
     struct IndexArray
     {
@@ -46,6 +46,8 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateS();
         GenerateQF();
         GeneratePf();
+        GeneratePi();
+        GenerateP();
     }
 
     void GenerateDegreeOfFreedom()
@@ -223,6 +225,36 @@ public class BeamAnalyzer : MonoBehaviour {
         foreach (float i in pf.val)
             pfStr += i + " ";
         Debug.Log(pfStr);
+    }
+
+    public void GeneratePi()
+    {
+        pi = new List<IndexArray>();
+        //Uniform Load Case
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            float[] piVal = new float[4];
+            if (property.uniformLoad)
+            {
+                float dy = -1*property.uniformLoad.load*property.length/2;
+                float m = -1*property.uniformLoad.load * Mathf.Pow(property.length, 2) / 12;
+                piVal[0] = dy;
+                piVal[1] = m;
+                piVal[2] = dy;
+                piVal[3] = -1*m;
+            }else
+            {
+
+            }
+            pi.Add(new IndexArray(index, piVal));
+        }
+    }
+
+    public void GenerateP()
+    {
+
     }
 
     public void ResetAnalyzer()
