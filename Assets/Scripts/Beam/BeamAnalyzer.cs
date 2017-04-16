@@ -10,7 +10,7 @@ public class BeamAnalyzer : MonoBehaviour {
     List<IndexMatrix> k;
     IndexMatrix s;
     List<IndexArray> qf;
-    IndexArray pf,p;
+    IndexArray pf,p,d;
 
     struct IndexArray
     {
@@ -48,6 +48,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateP();
         GenerateQF();
         GeneratePF();
+        GenerateD();
     }
 
     void GenerateDegreeOfFreedom()
@@ -279,11 +280,63 @@ public class BeamAnalyzer : MonoBehaviour {
         }
     }
 
-    public void GeneratePF()
+    void GeneratePF()
     {
-
+        List<int> availableIndex = FindAvailableDF();
+        float[] pfVal = new float[availableIndex.Count];
+        for (int i = 0; i < availableIndex.Count; i++)
+        {
+            foreach(IndexArray qfi in qf)
+            {
+                if (qfi.index.IndexOf(availableIndex[i]) >= 0)
+                {
+                    pfVal[i] += qfi.val[qfi.index.IndexOf(availableIndex[i])];
+                }
+            }
+        }
+        p = new IndexArray(availableIndex, pfVal);
+        string pStr = "p = ";
+        foreach (float pVal in p.val)
+            pStr += pVal + " ";
+        Debug.Log(pStr);
     }
 
+    void GenerateD()
+    {
+        List<int> availableIndex = FindAvailableDF();
+        float[] pdpf = new float[availableIndex.Count];
+        for (int i = 0; i < availableIndex.Count; i++) {
+            pdpf[i] = p.val[p.index.IndexOf(availableIndex[i])] - pf.val[pf.index.IndexOf(availableIndex[i])];
+        }
+        float[,] inverseS = new float[availableIndex.Count, availableIndex.Count];
+        for (int i = 0;i< availableIndex.Count; i++)
+        {
+            for (int j = 0;j< availableIndex.Count; j++)
+            {
+                inverseS[i,j] = 1f / s.k_val[i,j];
+            }
+        }
+        float[] dVal = new float[availableIndex.Count];
+        for (int i = 0;i< availableIndex.Count; i++)
+        {
+            float sum = 0;
+            for (int j = 0;j< availableIndex.Count; j++)
+            {
+                sum += inverseS[i, j] * pdpf[j];
+            }
+            dVal[i] = sum;
+        }
+        d = new IndexArray(availableIndex, dVal);
+
+        string dStr = "d = ";
+        foreach (float val in d.val)
+        {
+            dStr += val + " ";
+        }
+        Debug.Log(dStr);
+    }
+    
+    
     public void ResetAnalyzer()
     {
 
