@@ -6,10 +6,10 @@ public class BeamAnalyzer : MonoBehaviour {
 
     BeamCollector collector;
 
-    float[] df,qf,pi;
+    float[] df,pi;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qfi;
+    List<IndexArray> qf;
     IndexArray pf,p;
 
     struct IndexArray
@@ -215,8 +215,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
     void GenerateQF()
     {
-        qfi = new List<IndexArray>();
-        qf = new float[collector.nodes.Count * 2];
+        qf = new List<IndexArray>();
         //Point Load Case
         foreach (PointLoadProperty pointLoad in collector.pointLoads)
         {
@@ -226,29 +225,28 @@ public class BeamAnalyzer : MonoBehaviour {
                 float l2 = GetLengthOfPointLoad(pointLoad.node, true);
                 int node1 = GetEndNodeIndex(pointLoad.node, false);
                 int node2 = GetEndNodeIndex(pointLoad.node, true);
-                qf[node1 * 2] += pointLoad.load * Mathf.Pow(l2, 2) * (3 * l1 + l2) / Mathf.Pow(l1 + l2, 3)*1f;
-                qf[node1 * 2 + 1] += pointLoad.load * l1 * Mathf.Pow(l2, 2) / Mathf.Pow(l1 + l2, 2)*1f;
-                qf[node2 * 2] += pointLoad.load * Mathf.Pow(l1, 2) * (l1 + 3 * l2) / Mathf.Pow(l1 + l2, 3) * 1f;
-                qf[node2 * 2 + 1] += pointLoad.load * Mathf.Pow(l1, 2) * l2 / Mathf.Pow(l1 + l2, 2)*-1f; 
+                List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                float[] qfi = new float[4];
+                qfi[0] += pointLoad.load * Mathf.Pow(l2, 2) * (3 * l1 + l2) / Mathf.Pow(l1 + l2, 3) * 1f;
+                qfi[1] += pointLoad.load * l1 * Mathf.Pow(l2, 2) / Mathf.Pow(l1 + l2, 2) * 1f;
+                qfi[2] += pointLoad.load * Mathf.Pow(l1, 2) * (l1 + 3 * l2) / Mathf.Pow(l1 + l2, 3) * 1f;
+                qfi[3] += pointLoad.load * Mathf.Pow(l1, 2) * l2 / Mathf.Pow(l1 + l2, 2) * -1f;
+                qf.Add(new IndexArray(index, qfi));
             }
         }
-        foreach (GameObject member in collector.members)
+        
+        //TODO Uniform Load
+
+        string qfStr = "qf = \n";
+        foreach (IndexArray qfi in qf)
         {
-            MemberProperty property = member.GetComponent<MemberProperty>();
-            List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
-            float[] val = { qf[index[0]], qf[index[1]], qf[index[2]], qf[index[3]] };
-            qfi.Add(new IndexArray(index, val));
-        }
-        string qfiStr = "qfi = \n";
-        foreach (IndexArray qfiVal in qfi)
-        {
-            foreach (float qf in qfiVal.val)
+            foreach (float qfiVal in qfi.val)
             {
-                qfiStr += qf + " ";
+                qfStr += qfiVal + " ";
             }
-            qfiStr += "\n";
+            qfStr += "\n";
         }
-        Debug.Log(qfiStr);
+        Debug.Log(qfStr);
     }
 
     int GetEndNodeIndex(int node,bool isRight)
