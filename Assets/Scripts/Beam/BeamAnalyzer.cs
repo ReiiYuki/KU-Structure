@@ -7,8 +7,20 @@ public class BeamAnalyzer : MonoBehaviour {
     BeamCollector collector;
 
     float[] df;
-    List<IndexMatrix> k,q;
+    List<IndexMatrix> k;
     IndexMatrix s;
+    List<IndexArray> qf;
+
+    struct IndexArray
+    {
+        public List<int> index;
+        public float[] val;
+        public IndexArray(List<int> index,float[] val)
+        {
+            this.index = index;
+            this.val = val;
+        }
+    }
 
     struct IndexMatrix
     {
@@ -31,6 +43,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateDegreeOfFreedom();
         GenerateAllK();
         GenerateS();
+        GenerateQF();
     }
 
     void GenerateDegreeOfFreedom()
@@ -159,7 +172,33 @@ public class BeamAnalyzer : MonoBehaviour {
 
     public void GenerateQF()
     {
-        
+        qf = new List<IndexArray>();
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            List<int> index = new List<int>(){ property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            float[] qi = new float[4];
+            if (property.node1.pointLoad)
+                qi[0] = -1*property.node1.pointLoad.load;
+            if (property.node1.momentum)
+                qi[1] = property.node1.momentum.momentum;
+            if (property.node2.pointLoad)
+                qi[2] = -1*property.node2.pointLoad.load;
+            if (property.node2.momentum)
+                qi[3] = property.node2.momentum.momentum;
+            qf.Add(new IndexArray(index, qi));
+        }
+
+        string qfStr = "qf = \n";
+        foreach (IndexArray qi in qf)
+        {
+            foreach (float qii in qi.val)
+            {
+                qfStr += qii + " ";
+            }
+            qfStr += "\n";
+        }
+        Debug.Log(qfStr);
     }
 
     public void ResetAnalyzer()
