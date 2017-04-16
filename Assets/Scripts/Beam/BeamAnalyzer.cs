@@ -7,12 +7,14 @@ public class BeamAnalyzer : MonoBehaviour {
     BeamCollector collector;
 
     float[] df;
-    List<k> kList;
-    struct k
+    List<IndexMatrix> k,q;
+    IndexMatrix s;
+
+    struct IndexMatrix
     {
         public List<int> index;
         public float[,] k_val;
-        public k(List<int> index,float[,] k_val)
+        public IndexMatrix(List<int> index,float[,] k_val)
         {
             this.index = index;
             this.k_val = k_val;
@@ -47,7 +49,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
     void GenerateAllK()
     {
-        kList = new List<k>();
+        k = new List<IndexMatrix>();
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
@@ -60,7 +62,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
             float[,] kVal = GenerateK(member.GetComponent<MemberProperty>().number);
             
-            kList.Add(new k(index, kVal));
+            k.Add(new IndexMatrix(index, kVal));
         }
     }
 
@@ -113,12 +115,14 @@ public class BeamAnalyzer : MonoBehaviour {
             for (int j = 0;j<availableIndex.Count;j++)
             {
                 S[i, j] = 0;
-                foreach (k kVal in kList)
+                foreach (IndexMatrix ki in k)
                 {
-                    S[i, j] += FindKValueByIndex(kVal,availableIndex[i], availableIndex[j]);
+                    S[i, j] += FindKValueByIndex(ki,availableIndex[i], availableIndex[j]);
                 }
             }
         }
+
+        s = new IndexMatrix(availableIndex, S);
 
         string sStr = "";
         for (int i = 0; i < availableIndex.Count; i++)
@@ -131,7 +135,7 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log("S = " + sStr);
     }
 
-    float FindKValueByIndex(k kTarget,int x,int y)
+    float FindKValueByIndex(IndexMatrix kTarget,int x,int y)
     {
         int kIndexX = kTarget.index.IndexOf(x);
         int kIndexY = kTarget.index.IndexOf(y);
@@ -151,6 +155,11 @@ public class BeamAnalyzer : MonoBehaviour {
             indexStr += i + " ";
         Debug.Log("Available Index = " + indexStr);
         return availableIndex;
+    }
+
+    public void GenerateQF()
+    {
+        
     }
 
     public void ResetAnalyzer()
