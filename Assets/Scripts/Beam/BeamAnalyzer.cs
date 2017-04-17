@@ -71,27 +71,48 @@ public class BeamAnalyzer : MonoBehaviour {
     void GenerateAllK()
     {
         k = new List<IndexMatrix>();
-        foreach (GameObject member in collector.members)
+        List<int> index=new List<int>();
+        float length = 0;
+        int state = 0;
+        foreach (GameObject node in collector.nodes)
         {
-            MemberProperty property = member.GetComponent<MemberProperty>();
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            if (state == 0)
+            {
+                index = new List<int>();
+                index.Add(property.number * 2);
+                index.Add(property.number * 2 + 1);
+                length = property.rightMember.length;
+                state = 1;
+            }else if (state == 1)
+            {
+                if (property.support)
+                {
+                    index.Add(property.number * 2);
+                    index.Add(property.number * 2 + 1);
+                    float[,] val = GenerateK(property.leftMember, length);
+                    k.Add(new IndexMatrix(index, val));
 
-            List<int> index = new List<int>(){ property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
-            string indexStr = "";
-            foreach (int i in index)
-                indexStr += i + " ";
-            Debug.Log("index = " + indexStr);
-
-            float[,] kVal = GenerateK(member.GetComponent<MemberProperty>().number);
-            
-            k.Add(new IndexMatrix(index, kVal));
+                    index = new List<int>();
+                    index.Add(property.number * 2);
+                    index.Add(property.number * 2 + 1);
+                    if (property.rightMember)
+                    {
+                        length = property.rightMember.length;
+                    }
+                }
+                else
+                {
+                    length += property.rightMember.length;
+                }
+            }
         }
     }
 
-    float[,] GenerateK(int member)
+    float[,] GenerateK(MemberProperty member,float L)
     {
-        float E = collector.members[member].GetComponent<MemberProperty>().GetE();
-        float I = collector.members[member].GetComponent<MemberProperty>().GetI();
-        float L = collector.members[member].GetComponent<MemberProperty>().length;
+        float E = member.GetE();
+        float I = member.GetI();
 
         float[,] k = new float[4, 4];
         float kMul = (E * I) / (L*L*L);
