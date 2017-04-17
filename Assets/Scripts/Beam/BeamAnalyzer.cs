@@ -49,6 +49,8 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateQF();
         GeneratePF();
         GenerateD();
+        GenerateU();
+        GenerateQ();
     }
 
     void GenerateDegreeOfFreedom()
@@ -336,7 +338,16 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(dStr);
     }
     
+    void GenerateU()
+    {
+
+    }
     
+    void GenerateQ()
+    {
+
+    }
+
     public void ResetAnalyzer()
     {
 
