@@ -6,13 +6,28 @@ public class BeamAnalyzer : MonoBehaviour {
 
     BeamCollector collector;
 
-    float[] df;
-    List<k> kList;
-    struct k
+    float[] df,pi;
+    List<IndexMatrix> k;
+    IndexMatrix s;
+    List<IndexArray> qf,u,ku,q;
+    IndexArray pf,p,d;
+
+    struct IndexArray
+    {
+        public List<int> index;
+        public float[] val;
+        public IndexArray(List<int> index,float[] val)
+        {
+            this.index = index;
+            this.val = val;
+        }
+    }
+
+    struct IndexMatrix
     {
         public List<int> index;
         public float[,] k_val;
-        public k(List<int> index,float[,] k_val)
+        public IndexMatrix(List<int> index,float[,] k_val)
         {
             this.index = index;
             this.k_val = k_val;
@@ -29,6 +44,14 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateDegreeOfFreedom();
         GenerateAllK();
         GenerateS();
+        GeneratePi();
+        GenerateP();
+        GenerateQF();
+        GeneratePF();
+        GenerateD();
+        GenerateU();
+        GenerateKU();
+        GenerateQ();
     }
 
     void GenerateDegreeOfFreedom()
@@ -47,7 +70,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
     void GenerateAllK()
     {
-        kList = new List<k>();
+        k = new List<IndexMatrix>();
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
@@ -60,7 +83,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
             float[,] kVal = GenerateK(member.GetComponent<MemberProperty>().number);
             
-            kList.Add(new k(index, kVal));
+            k.Add(new IndexMatrix(index, kVal));
         }
     }
 
@@ -113,12 +136,14 @@ public class BeamAnalyzer : MonoBehaviour {
             for (int j = 0;j<availableIndex.Count;j++)
             {
                 S[i, j] = 0;
-                foreach (k kVal in kList)
+                foreach (IndexMatrix ki in k)
                 {
-                    S[i, j] += FindKValueByIndex(kVal,availableIndex[i], availableIndex[j]);
+                    S[i, j] += FindKValueByIndex(ki,availableIndex[i], availableIndex[j]);
                 }
             }
         }
+
+        s = new IndexMatrix(availableIndex, S);
 
         string sStr = "";
         for (int i = 0; i < availableIndex.Count; i++)
@@ -131,7 +156,7 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log("S = " + sStr);
     }
 
-    float FindKValueByIndex(k kTarget,int x,int y)
+    float FindKValueByIndex(IndexMatrix kTarget,int x,int y)
     {
         int kIndexX = kTarget.index.IndexOf(x);
         int kIndexY = kTarget.index.IndexOf(y);
@@ -151,6 +176,269 @@ public class BeamAnalyzer : MonoBehaviour {
             indexStr += i + " ";
         Debug.Log("Available Index = " + indexStr);
         return availableIndex;
+    }
+
+    void GeneratePi()
+    {
+        pi = new float[collector.nodes.Count*2];
+        foreach (GameObject node in collector.nodes)
+        {
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            if (property.support)
+            {
+                if (property.pointLoad)
+                    pi[property.number * 2] = property.pointLoad.load;
+                if (property.momentum)
+                    pi[property.number * 2 + 1] = property.momentum.momentum;
+            }
+        }
+
+        string piStr = "pi = ";
+        foreach (float piVal in pi)
+        {
+            piStr += piVal + " ";
+        }
+        Debug.Log(piStr);
+    }
+
+    void GenerateP()
+    {
+        List<int> availableIndex = FindAvailableDF();
+        float[] pVal = new float[availableIndex.Count];
+        for (int i = 0; i < availableIndex.Count; i++)
+        {
+            pVal[i] = pi[availableIndex[i]];
+        }
+        p = new IndexArray(availableIndex, pVal);
+
+        string pStr = "p = ";
+        foreach (float i in p.val)
+            pStr += i + " ";
+        Debug.Log(pStr);
+    }
+
+    void GenerateQF()
+    {
+        qf = new List<IndexArray>();
+        //Point Load Case
+        foreach (PointLoadProperty pointLoad in collector.pointLoads)
+        {
+            if (!collector.nodes[pointLoad.node].GetComponent<NodeProperty>().support)
+            {
+                float l1 = GetLengthOfLoad(pointLoad.node, false);
+                float l2 = GetLengthOfLoad(pointLoad.node, true);
+                int node1 = GetEndNodeIndex(pointLoad.node, false);
+                int node2 = GetEndNodeIndex(pointLoad.node, true);
+                List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                float[] qfi = new float[4];
+                qfi[0] += pointLoad.load * Mathf.Pow(l2, 2) * (3 * l1 + l2) / Mathf.Pow(l1 + l2, 3) * 1f;
+                qfi[1] += pointLoad.load * l1 * Mathf.Pow(l2, 2) / Mathf.Pow(l1 + l2, 2) * 1f;
+                qfi[2] += pointLoad.load * Mathf.Pow(l1, 2) * (l1 + 3 * l2) / Mathf.Pow(l1 + l2, 3) * 1f;
+                qfi[3] += pointLoad.load * Mathf.Pow(l1, 2) * l2 / Mathf.Pow(l1 + l2, 2) * -1f;
+                qf.Add(new IndexArray(index, qfi));
+            }
+        }
+        
+        //TODO Uniform Load
+        foreach (UniformLoadProperty uniform in collector.uniformLoads)
+        {
+            MemberProperty member = collector.members[uniform.element].GetComponent<MemberProperty>();
+            float l1 = GetLengthOfLoad(member.node2.number, false);
+            float l2 = GetLengthOfLoad(member.node2.number, true);
+            int node1 = GetEndNodeIndex(member.node2.number, false);
+            int node2 = GetEndNodeIndex(member.node2.number, true);
+            List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+            float[] qfi = new float[4];
+            qfi[1] += uniform.load * Mathf.Pow(l2, 3) * (4f * (l1 + l2) - 3 * l2) / (12 * Mathf.Pow(l1 + l2,2));
+            qfi[3] += uniform.load * Mathf.Pow(l2, 2) * (6 * Mathf.Pow(l1 + l2, 2) - 8 * (l1 + l2) * l2 + 3 * Mathf.Pow(l2, 2)) / (12 * (l1 + l2));
+
+            qfi[0] += (qfi[1] - qfi[3] + uniform.load * Mathf.Pow(l2, 2) / 2) / (l1 + l2);
+            qfi[2] += uniform.load * l2 - qfi[0];
+            qf.Add(new IndexArray(index, qfi));
+        }
+
+        string qfStr = "qf = \n";
+        foreach (IndexArray qfi in qf)
+        {
+            foreach (float qfiVal in qfi.val)
+            {
+                qfStr += qfiVal + " ";
+            }
+            qfStr += "\n";
+        }
+        Debug.Log(qfStr);
+    }
+
+    int GetEndNodeIndex(int node,bool isRight)
+    {
+        if (isRight)
+        {
+            if (node == collector.nodes.Count - 1) return node;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return node;
+            return GetEndNodeIndex(node + 1, isRight);
+        }else
+        {
+            if (node == 0) return node;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return node;
+            return GetEndNodeIndex(node - 1, isRight);
+        }
+    }
+
+    float GetLengthOfLoad(int node,bool isRight) 
+    {
+        if (isRight)
+        {
+            if (node == collector.nodes.Count) return 0;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
+            return collector.nodes[node].GetComponent<NodeProperty>().rightMember.length + GetLengthOfLoad(node + 1, isRight);
+        }else
+        {
+            if (node < 0) return 0;
+            if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
+            return collector.nodes[node].GetComponent<NodeProperty>().leftMember.length + GetLengthOfLoad(node - 1, isRight);
+        }
+    }
+
+    void GeneratePF()
+    {
+        List<int> availableIndex = FindAvailableDF();
+        float[] pfVal = new float[availableIndex.Count];
+        for (int i = 0; i < availableIndex.Count; i++)
+        {
+            foreach(IndexArray qfi in qf)
+            {
+                if (qfi.index.IndexOf(availableIndex[i]) >= 0)
+                {
+                    pfVal[i] += qfi.val[qfi.index.IndexOf(availableIndex[i])];
+                }
+            }
+        }
+        p = new IndexArray(availableIndex, pfVal);
+        string pStr = "p = ";
+        foreach (float pVal in p.val)
+            pStr += pVal + " ";
+        Debug.Log(pStr);
+    }
+
+    void GenerateD()
+    {
+        List<int> availableIndex = FindAvailableDF();
+        float[] pdpf = new float[availableIndex.Count];
+        for (int i = 0; i < availableIndex.Count; i++) {
+            pdpf[i] = p.val[p.index.IndexOf(availableIndex[i])] - pf.val[pf.index.IndexOf(availableIndex[i])];
+        }
+        float[,] inverseS = new float[availableIndex.Count, availableIndex.Count];
+        for (int i = 0;i< availableIndex.Count; i++)
+        {
+            for (int j = 0;j< availableIndex.Count; j++)
+            {
+                inverseS[i,j] = 1f / s.k_val[i,j];
+            }
+        }
+        float[] dVal = new float[availableIndex.Count];
+        for (int i = 0;i< availableIndex.Count; i++)
+        {
+            float sum = 0;
+            for (int j = 0;j< availableIndex.Count; j++)
+            {
+                sum += inverseS[i, j] * pdpf[j];
+            }
+            dVal[i] = sum;
+        }
+        d = new IndexArray(availableIndex, dVal);
+
+        string dStr = "d = ";
+        foreach (float val in d.val)
+        {
+            dStr += val + " ";
+        }
+        Debug.Log(dStr);
+    }
+    
+    void GenerateU()
+    {
+        u = new List<IndexArray>();
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            float[] uVal = new float[4];
+            for (int i = 0; i < 4; i++)
+            {
+                if (d.index.IndexOf(index[i]) >= 0)
+                    uVal[i] = d.val[d.index.IndexOf(index[i])];
+            }
+            u.Add(new IndexArray(index, uVal));
+        }
+
+        string uStr = "u = \n";
+        foreach (IndexArray ui in u)
+        {
+            foreach (float uij in ui.val)
+                uStr += uij + " ";
+            uStr += "\n";
+        }
+        Debug.Log(uStr);
+    }
+    
+    void GenerateKU()
+    {
+        ku = new List<IndexArray>();
+        for (int i = 0; i < k.Count; i++)
+        {
+            List<int> index = k[i].index;
+            float[] val = new float[4];
+            for (int j = 0; j < 4; j++)
+            {
+                for (int l = 0; l < 4; l++)
+                {
+                    val[j] += k[i].k_val[j, l] * u[i].val[l];
+                }
+            }
+            ku.Add(new IndexArray(index, val));
+        }
+
+        string kuStr = "ku = \n";
+        foreach (IndexArray kui in ku)
+        {
+            foreach (float val in kui.val)
+            {
+                kuStr += val + " ";
+            }
+            kuStr += "\n";
+        }
+        Debug.Log(kuStr);
+    }
+
+    void GenerateQ()
+    {
+        q = new List<IndexArray>();
+        foreach (IndexArray kui in ku)
+        {
+            List<int> index = kui.index;
+            float[] val = new float[4];
+            foreach (IndexArray qfi in qf)
+            {
+                foreach (int qfiIndex in qfi.index)
+                {
+                    if (index.IndexOf(qfiIndex) >= 0)
+                    {
+                        val[index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                    }
+                }
+            }
+        }
+
+        string qStr = "q = \n";
+        foreach (IndexArray qi in q)
+        {
+            foreach (float val in qi.val)
+            {
+                qStr += val + " ";
+            }
+            qStr += "\n";
+        }
+        Debug.Log(qStr);
     }
 
     public void ResetAnalyzer()
