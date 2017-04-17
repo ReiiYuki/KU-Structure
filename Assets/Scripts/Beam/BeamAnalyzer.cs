@@ -208,7 +208,7 @@ public class BeamAnalyzer : MonoBehaviour {
             if (property.support)
             {
                 if (property.pointLoad)
-                    pi[property.number * 2] = property.pointLoad.load;
+                    pi[property.number * 2] = -1*property.pointLoad.load;
                 if (property.momentum)
                     pi[property.number * 2 + 1] = property.momentum.momentum;
             }
@@ -334,11 +334,11 @@ public class BeamAnalyzer : MonoBehaviour {
                 }
             }
         }
-        p = new IndexArray(availableIndex, pfVal);
-        string pStr = "p = ";
-        foreach (float pVal in p.val)
-            pStr += pVal + " ";
-        Debug.Log(pStr);
+        pf = new IndexArray(availableIndex, pfVal);
+        string pfStr = "pf = ";
+        foreach (float pfValue in pf.val)
+            pfStr += pfValue + " ";
+        Debug.Log(pfStr);
     }
 
     void GenerateD()
@@ -360,6 +360,7 @@ public class BeamAnalyzer : MonoBehaviour {
         for (int i = 0;i< availableIndex.Count; i++)
         {
             float sum = 0;
+            dVal[i] = 0;
             for (int j = 0;j< availableIndex.Count; j++)
             {
                 sum += inverseS[i, j] * pdpf[j];
@@ -388,6 +389,8 @@ public class BeamAnalyzer : MonoBehaviour {
             {
                 if (d.index.IndexOf(index[i]) >= 0)
                     uVal[i] = d.val[d.index.IndexOf(index[i])];
+                else
+                    uVal[i] = 0;
             }
             u.Add(new IndexArray(index, uVal));
         }
