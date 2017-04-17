@@ -9,7 +9,7 @@ public class BeamAnalyzer : MonoBehaviour {
     float[] df,pi;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qf,u;
+    List<IndexArray> qf,u,ku;
     IndexArray pf,p,d;
 
     struct IndexArray
@@ -50,6 +50,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GeneratePF();
         GenerateD();
         GenerateU();
+        GenerateKU();
         GenerateQ();
     }
 
@@ -364,8 +365,8 @@ public class BeamAnalyzer : MonoBehaviour {
             float[] uVal = new float[4];
             for (int i = 0; i < 4; i++)
             {
-                if (p.index.IndexOf(index[i]) >= 0)
-                    uVal[i] = p.val[p.index.IndexOf(index[i])];
+                if (d.index.IndexOf(index[i]) >= 0)
+                    uVal[i] = d.val[d.index.IndexOf(index[i])];
             }
             u.Add(new IndexArray(index, uVal));
         }
@@ -380,6 +381,12 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(uStr);
     }
     
+    void GenerateKU()
+    {
+        ku = new List<IndexArray>();
+        foreach ()
+    }
+
     void GenerateQ()
     {
 
