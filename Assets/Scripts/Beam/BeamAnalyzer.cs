@@ -384,7 +384,30 @@ public class BeamAnalyzer : MonoBehaviour {
     void GenerateKU()
     {
         ku = new List<IndexArray>();
-        foreach ()
+        for (int i = 0; i < k.Count; i++)
+        {
+            List<int> index = k[i].index;
+            float[] val = new float[4];
+            for (int j = 0; j < 4; j++)
+            {
+                for (int l = 0; l < 4; l++)
+                {
+                    val[j] += k[i].k_val[j, l] * u[i].val[l];
+                }
+            }
+            ku.Add(new IndexArray(index, val));
+        }
+
+        string kuStr = "ku = \n";
+        foreach (IndexArray kui in ku)
+        {
+            foreach (float val in kui.val)
+            {
+                kuStr += val + " ";
+            }
+            kuStr += "\n";
+        }
+        Debug.Log(kuStr);
     }
 
     void GenerateQ()
