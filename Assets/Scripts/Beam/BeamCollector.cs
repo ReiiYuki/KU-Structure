@@ -9,6 +9,7 @@ public class BeamCollector : MonoBehaviour {
 
     public List<GameObject> members, nodes;
     public List<PointLoadProperty> pointLoads;
+    public List<UniformLoadProperty> uniformLoads;
 
     float currentPoint = 0;
 
@@ -17,6 +18,7 @@ public class BeamCollector : MonoBehaviour {
         members = new List<GameObject>();
         nodes = new List<GameObject>();
         pointLoads = new List<PointLoadProperty>();
+        uniformLoads = new List<UniformLoadProperty>();
 	}
 	
 	// Update is called once per frame
@@ -126,6 +128,8 @@ public class BeamCollector : MonoBehaviour {
         uniformLoad.GetComponent<UniformLoadProperty>().Inverse();
 
         uniformLoad.transform.SetParent(selectedElement.transform);
+
+        uniformLoads.Add(uniformLoad.GetComponent<UniformLoadProperty>());
     }
 
     public void AddMomentum(int node,float momentum)

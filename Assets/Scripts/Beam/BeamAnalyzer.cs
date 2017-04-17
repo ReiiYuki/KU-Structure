@@ -9,7 +9,7 @@ public class BeamAnalyzer : MonoBehaviour {
     float[] df,pi;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qf;
+    List<IndexArray> qf,u,ku,q;
     IndexArray pf,p,d;
 
     struct IndexArray
@@ -49,6 +49,9 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateQF();
         GeneratePF();
         GenerateD();
+        GenerateU();
+        GenerateKU();
+        GenerateQ();
     }
 
     void GenerateDegreeOfFreedom()
@@ -222,8 +225,8 @@ public class BeamAnalyzer : MonoBehaviour {
         {
             if (!collector.nodes[pointLoad.node].GetComponent<NodeProperty>().support)
             {
-                float l1 = GetLengthOfPointLoad(pointLoad.node, false);
-                float l2 = GetLengthOfPointLoad(pointLoad.node, true);
+                float l1 = GetLengthOfLoad(pointLoad.node, false);
+                float l2 = GetLengthOfLoad(pointLoad.node, true);
                 int node1 = GetEndNodeIndex(pointLoad.node, false);
                 int node2 = GetEndNodeIndex(pointLoad.node, true);
                 List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
@@ -237,6 +240,22 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         
         //TODO Uniform Load
+        foreach (UniformLoadProperty uniform in collector.uniformLoads)
+        {
+            MemberProperty member = collector.members[uniform.element].GetComponent<MemberProperty>();
+            float l1 = GetLengthOfLoad(member.node2.number, false);
+            float l2 = GetLengthOfLoad(member.node2.number, true);
+            int node1 = GetEndNodeIndex(member.node2.number, false);
+            int node2 = GetEndNodeIndex(member.node2.number, true);
+            List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+            float[] qfi = new float[4];
+            qfi[1] += uniform.load * Mathf.Pow(l2, 3) * (4f * (l1 + l2) - 3 * l2) / (12 * Mathf.Pow(l1 + l2,2));
+            qfi[3] += uniform.load * Mathf.Pow(l2, 2) * (6 * Mathf.Pow(l1 + l2, 2) - 8 * (l1 + l2) * l2 + 3 * Mathf.Pow(l2, 2)) / (12 * (l1 + l2));
+
+            qfi[0] += (qfi[1] - qfi[3] + uniform.load * Mathf.Pow(l2, 2) / 2) / (l1 + l2);
+            qfi[2] += uniform.load * l2 - qfi[0];
+            qf.Add(new IndexArray(index, qfi));
+        }
 
         string qfStr = "qf = \n";
         foreach (IndexArray qfi in qf)
@@ -265,18 +284,18 @@ public class BeamAnalyzer : MonoBehaviour {
         }
     }
 
-    float GetLengthOfPointLoad(int node,bool isRight) 
+    float GetLengthOfLoad(int node,bool isRight) 
     {
         if (isRight)
         {
             if (node == collector.nodes.Count) return 0;
             if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
-            return collector.nodes[node].GetComponent<NodeProperty>().rightMember.length + GetLengthOfPointLoad(node + 1, isRight);
+            return collector.nodes[node].GetComponent<NodeProperty>().rightMember.length + GetLengthOfLoad(node + 1, isRight);
         }else
         {
             if (node < 0) return 0;
             if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
-            return collector.nodes[node].GetComponent<NodeProperty>().leftMember.length + GetLengthOfPointLoad(node - 1, isRight);
+            return collector.nodes[node].GetComponent<NodeProperty>().leftMember.length + GetLengthOfLoad(node - 1, isRight);
         }
     }
 
@@ -336,7 +355,92 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(dStr);
     }
     
+    void GenerateU()
+    {
+        u = new List<IndexArray>();
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            float[] uVal = new float[4];
+            for (int i = 0; i < 4; i++)
+            {
+                if (d.index.IndexOf(index[i]) >= 0)
+                    uVal[i] = d.val[d.index.IndexOf(index[i])];
+            }
+            u.Add(new IndexArray(index, uVal));
+        }
+
+        string uStr = "u = \n";
+        foreach (IndexArray ui in u)
+        {
+            foreach (float uij in ui.val)
+                uStr += uij + " ";
+            uStr += "\n";
+        }
+        Debug.Log(uStr);
+    }
     
+    void GenerateKU()
+    {
+        ku = new List<IndexArray>();
+        for (int i = 0; i < k.Count; i++)
+        {
+            List<int> index = k[i].index;
+            float[] val = new float[4];
+            for (int j = 0; j < 4; j++)
+            {
+                for (int l = 0; l < 4; l++)
+                {
+                    val[j] += k[i].k_val[j, l] * u[i].val[l];
+                }
+            }
+            ku.Add(new IndexArray(index, val));
+        }
+
+        string kuStr = "ku = \n";
+        foreach (IndexArray kui in ku)
+        {
+            foreach (float val in kui.val)
+            {
+                kuStr += val + " ";
+            }
+            kuStr += "\n";
+        }
+        Debug.Log(kuStr);
+    }
+
+    void GenerateQ()
+    {
+        q = new List<IndexArray>();
+        foreach (IndexArray kui in ku)
+        {
+            List<int> index = kui.index;
+            float[] val = new float[4];
+            foreach (IndexArray qfi in qf)
+            {
+                foreach (int qfiIndex in qfi.index)
+                {
+                    if (index.IndexOf(qfiIndex) >= 0)
+                    {
+                        val[index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                    }
+                }
+            }
+        }
+
+        string qStr = "q = \n";
+        foreach (IndexArray qi in q)
+        {
+            foreach (float val in qi.val)
+            {
+                qStr += val + " ";
+            }
+            qStr += "\n";
+        }
+        Debug.Log(qStr);
+    }
+
     public void ResetAnalyzer()
     {
 
