@@ -239,7 +239,7 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         
         //TODO Uniform Load
-
+        
         string qfStr = "qf = \n";
         foreach (IndexArray qfi in qf)
         {
