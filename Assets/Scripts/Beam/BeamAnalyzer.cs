@@ -9,7 +9,7 @@ public class BeamAnalyzer : MonoBehaviour {
     float[] df,pi;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qf;
+    List<IndexArray> qf,u;
     IndexArray pf,p,d;
 
     struct IndexArray
@@ -356,7 +356,28 @@ public class BeamAnalyzer : MonoBehaviour {
     
     void GenerateU()
     {
+        u = new List<IndexArray>();
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            float[] uVal = new float[4];
+            for (int i = 0; i < 4; i++)
+            {
+                if (p.index.IndexOf(index[i]) >= 0)
+                    uVal[i] = p.val[p.index.IndexOf(index[i])];
+            }
+            u.Add(new IndexArray(index, uVal));
+        }
 
+        string uStr = "u = \n";
+        foreach (IndexArray ui in u)
+        {
+            foreach (float uij in ui.val)
+                uStr += uij + " ";
+            uStr += "\n";
+        }
+        Debug.Log(uStr);
     }
     
     void GenerateQ()
