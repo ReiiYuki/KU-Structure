@@ -224,8 +224,8 @@ public class BeamAnalyzer : MonoBehaviour {
         {
             if (!collector.nodes[pointLoad.node].GetComponent<NodeProperty>().support)
             {
-                float l1 = GetLengthOfPointLoad(pointLoad.node, false);
-                float l2 = GetLengthOfPointLoad(pointLoad.node, true);
+                float l1 = GetLengthOfLoad(pointLoad.node, false);
+                float l2 = GetLengthOfLoad(pointLoad.node, true);
                 int node1 = GetEndNodeIndex(pointLoad.node, false);
                 int node2 = GetEndNodeIndex(pointLoad.node, true);
                 List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
@@ -239,7 +239,23 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         
         //TODO Uniform Load
-        
+        foreach (UniformLoadProperty uniform in collector.uniformLoads)
+        {
+            MemberProperty member = collector.members[uniform.element].GetComponent<MemberProperty>();
+            float l1 = GetLengthOfLoad(member.node2.number, false);
+            float l2 = GetLengthOfLoad(member.node2.number, true);
+            int node1 = GetEndNodeIndex(member.node2.number, false);
+            int node2 = GetEndNodeIndex(member.node2.number, true);
+            List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+            float[] qfi = new float[4];
+            qfi[1] += uniform.load * Mathf.Pow(l2, 3) * (4f * (l1 + l2) - 3 * l2) / (12 * Mathf.Pow(l1 + l2,2));
+            qfi[3] += uniform.load * Mathf.Pow(l2, 2) * (6 * Mathf.Pow(l1 + l2, 2) - 8 * (l1 + l2) * l2 + 3 * Mathf.Pow(l2, 2)) / (12 * (l1 + l2));
+
+            qfi[0] += (qfi[1] - qfi[3] + uniform.load * Mathf.Pow(l2, 2) / 2) / (l1 + l2);
+            qfi[2] += uniform.load * l2 - qfi[0];
+            qf.Add(new IndexArray(index, qfi));
+        }
+
         string qfStr = "qf = \n";
         foreach (IndexArray qfi in qf)
         {
@@ -267,18 +283,18 @@ public class BeamAnalyzer : MonoBehaviour {
         }
     }
 
-    float GetLengthOfPointLoad(int node,bool isRight) 
+    float GetLengthOfLoad(int node,bool isRight) 
     {
         if (isRight)
         {
             if (node == collector.nodes.Count) return 0;
             if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
-            return collector.nodes[node].GetComponent<NodeProperty>().rightMember.length + GetLengthOfPointLoad(node + 1, isRight);
+            return collector.nodes[node].GetComponent<NodeProperty>().rightMember.length + GetLengthOfLoad(node + 1, isRight);
         }else
         {
             if (node < 0) return 0;
             if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
-            return collector.nodes[node].GetComponent<NodeProperty>().leftMember.length + GetLengthOfPointLoad(node - 1, isRight);
+            return collector.nodes[node].GetComponent<NodeProperty>().leftMember.length + GetLengthOfLoad(node - 1, isRight);
         }
     }
 
