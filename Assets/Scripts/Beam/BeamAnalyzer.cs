@@ -275,15 +275,18 @@ public class BeamAnalyzer : MonoBehaviour {
             MemberProperty member = collector.members[uniform.element].GetComponent<MemberProperty>();
             float l1 = GetLengthOfLoad(member.node2.number, false);
             float l2 = GetLengthOfLoad(member.node2.number, true);
+            float L = l1 + l2;
+            float w = uniform.load;
             int node1 = GetEndNodeIndex(member.node2.number, false);
             int node2 = GetEndNodeIndex(member.node2.number, true);
+            Debug.Log("l1 = " + l1 + " l2 = " + l2 + " L = " + (l1 + l2) + " node1 = " + node1 + " Node2 = " + node2);
             List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
             float[] qfi = new float[4];
-            qfi[1] += uniform.load * Mathf.Pow(l2, 3) * (4f * (l1 + l2) - 3 * l2) / (12 * Mathf.Pow(l1 + l2,2));
-            qfi[3] += uniform.load * Mathf.Pow(l2, 2) * (6 * Mathf.Pow(l1 + l2, 2) - 8 * (l1 + l2) * l2 + 3 * Mathf.Pow(l2, 2)) / (12 * (l1 + l2));
 
-            qfi[0] += (qfi[1] - qfi[3] + uniform.load * Mathf.Pow(l2, 2) / 2) / (l1 + l2);
-            qfi[2] += uniform.load * l2 - qfi[0];
+            qfi[1] = w * Mathf.Pow(l1, 2)*(6*Mathf.Pow(L,2)-8*L*l1+3*Mathf.Pow(l1,2))/(12*Mathf.Pow(L,2));
+            qfi[3] = -1 * w * Mathf.Pow(l1, 3) * (4 * L - 3 * l1) / (12 * Mathf.Pow(L, 2));
+            qfi[2] = (w * Mathf.Pow(l1, 2) / 2 - qfi[3] - qfi[1]) / L;
+            qfi[0] = w * l1 - qfi[2];
             qf.Add(new IndexArray(index, qfi));
         }
 
@@ -612,10 +615,9 @@ public class BeamAnalyzer : MonoBehaviour {
     void GenerateU()
     {
         u = new List<IndexArray>();
-        foreach (GameObject member in collector.members)
+        foreach (IndexMatrix ki in k)
         {
-            MemberProperty property = member.GetComponent<MemberProperty>();
-            List<int> index = new List<int>() { property.node1.number * 2, property.node1.number * 2 + 1, property.node2.number * 2, property.node2.number * 2 + 1 };
+            List<int> index = ki.index;
             float[] uVal = new float[4];
             for (int i = 0; i < 4; i++)
             {
@@ -667,6 +669,7 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(kuStr);
     }
     #endregion
+    #region q
     void GenerateQ()
     {
         q = new List<IndexArray>();
@@ -682,12 +685,19 @@ public class BeamAnalyzer : MonoBehaviour {
             {
                 foreach (IndexArray qfi in qf)
                 {
-                    foreach (int qfiIndex in qfi.index)
+                    if (ListEqual(index,qfi.index))
                     {
-                        if (index.IndexOf(qfiIndex) >= 0)
+                        foreach (int qfiIndex in qfi.index)
                         {
-                            val[index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                            if (index.IndexOf(qfiIndex) >= 0)
+                            {
+                                val[kui.index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                            }
                         }
+                        break;
+                    }else
+                    {
+                        val = kui.val;
                     }
                 }
             }
@@ -706,6 +716,15 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(qStr);
     }
 
+    bool ListEqual(List<int> list1,List<int> list2)
+    {
+        if (list1.Count != list2.Count) return false;
+        for (int i = 0; i < list1.Count; i++)
+            if (list1[i] != list2[i])
+                return false;
+        return true;
+    }
+    #endregion
     public void ResetAnalyzer()
     {
 
