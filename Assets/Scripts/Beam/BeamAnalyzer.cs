@@ -53,7 +53,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateKU();
         GenerateQ();
     }
-
+    #region DoF
     void GenerateDegreeOfFreedom()
     {
         df = new float[collector.nodes.Count*2];
@@ -67,7 +67,8 @@ public class BeamAnalyzer : MonoBehaviour {
         foreach (float i in df) dfStr += (i + " ");
         Debug.Log("Degree of Freedom = "+dfStr);
     }
-
+    #endregion
+    #region k
     void GenerateAllK()
     {
         k = new List<IndexMatrix>();
@@ -152,7 +153,8 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log("k = \n"+kStr);
         return k;
     }
-
+    #endregion
+    #region S
     void GenerateS()
     {
         List<int> availableIndex = FindAvailableDF();
@@ -203,7 +205,8 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log("Available Index = " + indexStr);
         return availableIndex;
     }
-
+    #endregion
+    #region p
     void GeneratePi()
     {
         pi = new float[collector.nodes.Count*2];
@@ -242,7 +245,8 @@ public class BeamAnalyzer : MonoBehaviour {
             pStr += i + " ";
         Debug.Log(pStr);
     }
-
+    #endregion
+    #region pf
     void GenerateQF()
     {
         qf = new List<IndexArray>();
@@ -345,7 +349,8 @@ public class BeamAnalyzer : MonoBehaviour {
             pfStr += pfValue + " ";
         Debug.Log(pfStr);
     }
-
+    #endregion
+    #region d
     void GenerateD()
     {
         List<int> availableIndex = FindAvailableDF();
@@ -388,6 +393,7 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(dStr);
     }
 
+    #region Convert Metrix
     float[][] ConvertTo2ArrD(float[,] arr2d)
     {
         float[][] newarr2d = new float[arr2d.GetLength(0)][];
@@ -415,7 +421,7 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         return newarr2d;
     }
-
+    #endregion
     #region inverse metrix
     float[][] InvertMatrix(float[][] A)
     {
@@ -630,7 +636,8 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         Debug.Log(uStr);
     }
-    
+    #endregion
+    #region ku
     void GenerateKU()
     {
         ku = new List<IndexArray>();
@@ -659,7 +666,7 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         Debug.Log(kuStr);
     }
-
+    #endregion
     void GenerateQ()
     {
         q = new List<IndexArray>();
@@ -667,16 +674,24 @@ public class BeamAnalyzer : MonoBehaviour {
         {
             List<int> index = kui.index;
             float[] val = new float[4];
-            foreach (IndexArray qfi in qf)
+            if (qf.Count == 0)
             {
-                foreach (int qfiIndex in qfi.index)
+                val = kui.val;
+            }
+            else
+            {
+                foreach (IndexArray qfi in qf)
                 {
-                    if (index.IndexOf(qfiIndex) >= 0)
+                    foreach (int qfiIndex in qfi.index)
                     {
-                        val[index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                        if (index.IndexOf(qfiIndex) >= 0)
+                        {
+                            val[index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                        }
                     }
                 }
             }
+            q.Add(new IndexArray(index, val));
         }
 
         string qStr = "q = \n";
