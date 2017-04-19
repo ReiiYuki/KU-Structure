@@ -6,11 +6,11 @@ public class BeamAnalyzer : MonoBehaviour {
 
     BeamCollector collector;
 
-    float[] df,pi;
+    float[] df,pi,q;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qf,u,ku,q;
-    IndexArray pf,p,d;
+    List<IndexArray> qf,u,ku,qi;
+    IndexArray pf,p,d,sfd,bmd;
 
     struct IndexArray
     {
@@ -51,7 +51,9 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateD();
         GenerateU();
         GenerateKU();
+        GenerateQI();
         GenerateQ();
+        GenerateSFDBMD();
     }
     #region DoF
     void GenerateDegreeOfFreedom()
@@ -414,6 +416,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
     float[,] ConvertTo2D(float[][] arr2d)
     {
+        if (arr2d.Length == 0) return null;
         float[,] newarr2d = new float[arr2d.Length,arr2d[0].Length];
         for (int i = 0; i < arr2d.Length; i++)
         {
@@ -670,9 +673,9 @@ public class BeamAnalyzer : MonoBehaviour {
     }
     #endregion
     #region q
-    void GenerateQ()
+    void GenerateQI()
     {
-        q = new List<IndexArray>();
+        qi = new List<IndexArray>();
         foreach (IndexArray kui in ku)
         {
             List<int> index = kui.index;
@@ -701,19 +704,19 @@ public class BeamAnalyzer : MonoBehaviour {
                     }
                 }
             }
-            q.Add(new IndexArray(index, val));
+            qi.Add(new IndexArray(index, val));
         }
 
-        string qStr = "q = \n";
-        foreach (IndexArray qi in q)
+        string qiStr = "qi = \n";
+        foreach (IndexArray qii in qi)
         {
-            foreach (float val in qi.val)
+            foreach (float val in qii.val)
             {
-                qStr += val + " ";
+                qiStr += val + " ";
             }
-            qStr += "\n";
+            qiStr += "\n";
         }
-        Debug.Log(qStr);
+        Debug.Log(qiStr);
     }
 
     bool ListEqual(List<int> list1,List<int> list2)
@@ -723,6 +726,64 @@ public class BeamAnalyzer : MonoBehaviour {
             if (list1[i] != list2[i])
                 return false;
         return true;
+    }
+
+    void GenerateQ()
+    {
+        q = new float[collector.nodes.Count*2];
+        foreach (GameObject node in collector.nodes)
+        {
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            q[property.number * 2] = 0;
+            q[property.number * 2 + 1] = 0;
+            foreach (IndexArray qii in qi)
+            {
+                if (qii.index.IndexOf(property.number * 2) >= 0)
+                {
+                    q[property.number * 2] += qii.val[qii.index.IndexOf(property.number * 2)];
+                }
+                if (qii.index.IndexOf(property.number * 2+1) >= 0)
+                {
+                    q[property.number * 2 + 1] += qii.val[qii.index.IndexOf(property.number * 2 + 1)];
+                }
+            }
+        }
+
+        string qStr = "q = ";
+        foreach (float qi in q) qStr += qi + " ";
+        Debug.Log(qStr);
+    }
+
+    #endregion
+
+    #region sfd and bmd
+    void GenerateSFDBMD()
+    {
+        float[] valSFD = new float[collector.nodes.Count];
+        float[] valBMD = new float[collector.nodes.Count];
+        List<int> indexSFD = new List<int>();
+        List<int> indexBMD = new List<int>();
+        foreach (GameObject node in collector.nodes)
+        {
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            indexSFD.Add(property.number * 2);
+            indexBMD.Add(property.number * 2 + 1);
+            valSFD[property.number] = q[property.number * 2];
+            if (property.pointLoad&&property.support)
+            {
+                valSFD[property.number] += property.pointLoad.load;  
+            }
+            valSFD[property.number] = (float)System.Math.Round(valSFD[property.number],4);
+            valBMD[property.number] = -1*(float)System.Math.Round(q[property.number * 2 + 1],4);
+        }
+        sfd = new IndexArray(indexSFD, valSFD);
+        bmd = new IndexArray(indexBMD, valBMD);
+        string sfdStr = "SFD = ";
+        foreach (float sfdi in sfd.val) sfdStr += sfdi + " ";
+        string bmdStr = "BMD = ";
+        foreach (float bmdi in bmd.val) bmdStr += bmdi + " ";
+        Debug.Log(sfdStr);
+        Debug.Log(bmdStr);
     }
     #endregion
     public void ResetAnalyzer()
