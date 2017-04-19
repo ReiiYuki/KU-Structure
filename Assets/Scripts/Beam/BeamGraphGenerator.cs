@@ -21,9 +21,9 @@ public class BeamGraphGenerator : MonoBehaviour {
         this.bmd = bmd;
         this.q = q;
 
-        InitOrigin();
         DrawForce();
         DrawLoadDiagram();
+        DrawMomentumDiagram();
     }
 
     void DrawForce()
@@ -69,7 +69,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         LineRenderer lineL = originL.GetComponent<LineRenderer>();
         lineL.startColor = new Color(128 / 255f, 222 / 255f, 234 / 255f);
         lineL.endColor = new Color(128 / 255f, 222 / 255f, 234 / 255f);
-        lineL.SetPositions(new Vector3[] { new Vector3(-100, -5), new Vector3(100, -5) });
+        lineL.SetPositions(new Vector3[] { new Vector3(int.MinValue, -5), new Vector3(int.MaxValue, -5) });
         originL.transform.SetParent(transform.GetChild(1));
 
         float max = Max(sfd.val);
@@ -181,13 +181,20 @@ public class BeamGraphGenerator : MonoBehaviour {
         return max;
     }
 
-    void InitOrigin()
+    void DrawMomentumDiagram()
     {
-        
-
         originM = Instantiate(originPrefabs, new Vector3(0, -10, 0), Quaternion.identity);
         originM.transform.SetParent(transform);
         LineRenderer lineM = originM.GetComponent<LineRenderer>();
-        lineM.SetPositions(new Vector3[] { new Vector3(-100, -8), new Vector3(100, -8) });
+        lineM.startColor = new Color(144/255f, 202/255f, 249/255f);
+        lineM.endColor = new Color(144/255f, 202/255f, 249/255f);
+        lineM.SetPositions(new Vector3[] { new Vector3(int.MinValue, -10), new Vector3(int.MaxValue, -10) });
+        lineM.transform.SetParent(transform.GetChild(2));
+
+        bool isStart = true;
+        foreach (GameObject member in collector.members)
+        {
+
+        }
     }
 }
