@@ -739,9 +739,13 @@ public class BeamAnalyzer : MonoBehaviour {
             foreach (IndexArray qii in qi)
             {
                 if (qii.index.IndexOf(property.number * 2) >= 0)
+                {
                     q[property.number * 2] += qii.val[qii.index.IndexOf(property.number * 2)];
+                }
                 if (qii.index.IndexOf(property.number * 2+1) >= 0)
-                    q[property.number * 2+1] += qii.val[qii.index.IndexOf(property.number * 2+1)];
+                {
+                    q[property.number * 2 + 1] += qii.val[qii.index.IndexOf(property.number * 2 + 1)];
+                }
             }
         }
 
@@ -770,10 +774,7 @@ public class BeamAnalyzer : MonoBehaviour {
                 valSFD[property.number] += property.pointLoad.load;  
             }
             valBMD[property.number] = q[property.number * 2 + 1];
-            /*if (property.momentum)
-            {
-                valBMD[property.number] += property.momentum.momentum;
-            }*/
+            
         }
         sfd = new IndexArray(indexSFD, valSFD);
         bmd = new IndexArray(indexBMD, valBMD);
