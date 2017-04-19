@@ -23,6 +23,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
         InitOrigin();
         DrawForce();
+        DrawLoadDiagram();
     }
 
     void DrawForce()
@@ -38,6 +39,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                     val += node.GetComponent<NodeProperty>().pointLoad.load;
                 if (val > 0)
                     reactionPointLoad.GetComponent<PointLoadProperty>().ForceInverse();
+                else
+                    reactionPointLoad.GetComponent<PointLoadProperty>().ABitInverse();
                 reactionPointLoad.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
                 reactionPointLoad.GetComponentInChildren<TextMesh>().text = val + " N.";
                 reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
@@ -47,7 +50,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 GameObject reactionMomentum = Instantiate(momentumPrefab, node.transform.position - new Vector3(0, 0.75f, 0f), Quaternion.identity);
                 reactionMomentum.GetComponent<MomentumProperty>().momentum = q[i+1];
-                reactionMomentum.GetComponentInChildren<TextMesh>().text = (q[i+1]) + " N.m";
+                reactionMomentum.GetComponentInChildren<TextMesh>().text = (-1*q[i+1]) + " N.m";
                 reactionMomentum.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
                 reactionMomentum.GetComponentInChildren<TextMesh>().transform.position += new Vector3(0, 0.5f);
                 reactionMomentum.GetComponentInChildren<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
@@ -57,12 +60,22 @@ public class BeamGraphGenerator : MonoBehaviour {
         }
     }
 
-    void InitOrigin()
+    void DrawLoadDiagram()
     {
         originL = Instantiate(originPrefabs, new Vector3(0, -5, 0), Quaternion.identity);
         originL.transform.SetParent(transform);
         LineRenderer lineL = originL.GetComponent<LineRenderer>();
-        lineL.SetPositions(new Vector3[] { new Vector3(-100, -5), new Vector3(100,-5) });
+        lineL.startColor = new Color(128 / 255f, 222 / 255f, 234 / 255f);
+        lineL.endColor = new Color(128 / 255f, 222 / 255f, 234 / 255f);
+        lineL.SetPositions(new Vector3[] { new Vector3(-100, -5), new Vector3(100, -5) });
+        originL.transform.SetParent(transform.GetChild(1));
+
+
+    }
+
+    void InitOrigin()
+    {
+        
 
         originM = Instantiate(originPrefabs, new Vector3(0, -10, 0), Quaternion.identity);
         originM.transform.SetParent(transform);
