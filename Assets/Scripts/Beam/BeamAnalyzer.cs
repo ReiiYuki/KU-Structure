@@ -769,12 +769,12 @@ public class BeamAnalyzer : MonoBehaviour {
             indexSFD.Add(property.number * 2);
             indexBMD.Add(property.number * 2 + 1);
             valSFD[property.number] = q[property.number * 2];
-            if (property.pointLoad)
+            if (property.pointLoad&&property.support)
             {
                 valSFD[property.number] += property.pointLoad.load;  
             }
-            valBMD[property.number] = q[property.number * 2 + 1];
-            
+            valSFD[property.number] = (float)System.Math.Round(valSFD[property.number],4);
+            valBMD[property.number] = -1*(float)System.Math.Round(q[property.number * 2 + 1],4);
         }
         sfd = new IndexArray(indexSFD, valSFD);
         bmd = new IndexArray(indexBMD, valBMD);
