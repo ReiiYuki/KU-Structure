@@ -23,4 +23,10 @@ public class PointLoadProperty : MonoBehaviour {
         transform.GetChild(0).localScale = new Vector3(transform.GetChild(0).localScale.x, transform.GetChild(0).localScale.y * -1, transform.GetChild(0).localScale.z);
         transform.position = new Vector3(transform.position.x, transform.position.y - 2.75f);
     }
+
+    public void ABitInverse()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y - 2.75f);
+        transform.GetChild(0).position = new Vector3(transform.GetChild(0).position.x, -2f);
+    }
 }
