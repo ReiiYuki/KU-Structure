@@ -6,10 +6,10 @@ public class BeamAnalyzer : MonoBehaviour {
 
     BeamCollector collector;
 
-    float[] df,pi;
+    float[] df,pi,q;
     List<IndexMatrix> k;
     IndexMatrix s;
-    List<IndexArray> qf,u,ku,q;
+    List<IndexArray> qf,u,ku,qi;
     IndexArray pf,p,d;
 
     struct IndexArray
@@ -51,6 +51,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateD();
         GenerateU();
         GenerateKU();
+        GenerateQI();
         GenerateQ();
     }
     #region DoF
@@ -414,6 +415,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
     float[,] ConvertTo2D(float[][] arr2d)
     {
+        if (arr2d.Length == 0) return null;
         float[,] newarr2d = new float[arr2d.Length,arr2d[0].Length];
         for (int i = 0; i < arr2d.Length; i++)
         {
@@ -670,9 +672,9 @@ public class BeamAnalyzer : MonoBehaviour {
     }
     #endregion
     #region q
-    void GenerateQ()
+    void GenerateQI()
     {
-        q = new List<IndexArray>();
+        qi = new List<IndexArray>();
         foreach (IndexArray kui in ku)
         {
             List<int> index = kui.index;
@@ -701,19 +703,19 @@ public class BeamAnalyzer : MonoBehaviour {
                     }
                 }
             }
-            q.Add(new IndexArray(index, val));
+            qi.Add(new IndexArray(index, val));
         }
 
-        string qStr = "q = \n";
-        foreach (IndexArray qi in q)
+        string qiStr = "qi = \n";
+        foreach (IndexArray qii in qi)
         {
-            foreach (float val in qi.val)
+            foreach (float val in qii.val)
             {
-                qStr += val + " ";
+                qiStr += val + " ";
             }
-            qStr += "\n";
+            qiStr += "\n";
         }
-        Debug.Log(qStr);
+        Debug.Log(qiStr);
     }
 
     bool ListEqual(List<int> list1,List<int> list2)
@@ -724,6 +726,29 @@ public class BeamAnalyzer : MonoBehaviour {
                 return false;
         return true;
     }
+
+    void GenerateQ()
+    {
+        q = new float[collector.nodes.Count*2];
+        foreach (GameObject node in collector.nodes)
+        {
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            q[property.number * 2] = 0;
+            q[property.number * 2 + 1] = 0;
+            foreach (IndexArray qii in qi)
+            {
+                if (qii.index.IndexOf(property.number * 2) >= 0)
+                    q[property.number * 2] += qii.val[qii.index.IndexOf(property.number * 2)];
+                if (qii.index.IndexOf(property.number * 2+1) >= 0)
+                    q[property.number * 2+1] += qii.val[qii.index.IndexOf(property.number * 2+1)];
+            }
+        }
+
+        string qStr = "q = ";
+        foreach (float qi in q) qStr += qi + " ";
+        Debug.Log(qStr);
+    }
+
     #endregion
     public void ResetAnalyzer()
     {
