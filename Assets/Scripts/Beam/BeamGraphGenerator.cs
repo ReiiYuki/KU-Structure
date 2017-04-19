@@ -45,6 +45,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                 reactionPointLoad.GetComponentInChildren<TextMesh>().text = val + " N.";
                 reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
                 reactionPointLoad.transform.SetParent(transform.GetChild(0));
+                if (val == 0)
+                    DestroyObject(reactionPointLoad);
             }
             if (q[i + 1] != 0)
             {
