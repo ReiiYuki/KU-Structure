@@ -37,6 +37,21 @@ public class BeamGraphGenerator : MonoBehaviour {
                 reactionPointLoad.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
                 reactionPointLoad.GetComponentInChildren<TextMesh>().text = sfd.val[i] + " N.";
                 reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionPointLoad.transform.SetParent(transform.GetChild(0));
+            }
+        }
+        for (int i = 0; i < bmd.val.Length; i++)
+        {
+            GameObject node = collector.nodes[(bmd.index[i]-1) / 2];
+            if (bmd.val[i] != 0)
+            {
+                GameObject reactionMomentum = Instantiate(momentumPrefab, node.transform.position - new Vector3(0, 0.75f, 0f), Quaternion.identity);
+                reactionMomentum.GetComponent<MomentumProperty>().momentum = -1 * bmd.val[i];
+                reactionMomentum.GetComponentInChildren<TextMesh>().text = (-1 * bmd.val[i]) + "";
+                reactionMomentum.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionMomentum.GetComponentInChildren<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionMomentum.GetComponent<MomentumProperty>().UpdateDirection();
+                reactionMomentum.transform.SetParent(transform.GetChild(0));
             }
         }
     }
