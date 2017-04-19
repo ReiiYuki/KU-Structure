@@ -12,7 +12,7 @@ public class BeamAnalyzer : MonoBehaviour {
     List<IndexArray> qf,u,ku,qi;
     IndexArray pf,p,d,sfd,bmd;
 
-    struct IndexArray
+    public struct IndexArray
     {
         public List<int> index;
         public float[] val;
@@ -54,6 +54,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateQI();
         GenerateQ();
         GenerateSFDBMD();
+        GameObject.FindObjectOfType<BeamGraphGenerator>().GenerateGraph(sfd, bmd);
     }
     #region DoF
     void GenerateDegreeOfFreedom()
