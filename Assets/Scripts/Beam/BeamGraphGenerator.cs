@@ -8,7 +8,7 @@ public class BeamGraphGenerator : MonoBehaviour {
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
-    float[] q;
+    float[] q,loadMem;
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
         DrawForce();
         DrawLoadDiagram();
-        DrawMomentumDiagram();
+        DrawMomentDiagram();
     }
 
     void DrawForce()
@@ -76,6 +76,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float val = 0;
         float x = 0;
         bool isStart = true;
+        loadMem = new float[collector.nodes.Count];
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
@@ -133,6 +134,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     new Vector3(x,(val+totalLoad)/max*3-5)
                 });
                 val += totalLoad;
+                loadMem[node2Index] = val;
                 line3.transform.SetParent(transform.GetChild(1));
 
                 TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
@@ -159,6 +161,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     new Vector3(x+property.length,(val+totalLoad)/max*3-5)
                 });
                 val += totalLoad;
+                loadMem[node2Index] = val;
                 x += property.length;
                 line2.transform.SetParent(transform.GetChild(1));
 
@@ -181,7 +184,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         return max;
     }
 
-    void DrawMomentumDiagram()
+    void DrawMomentDiagram()
     {
         originM = Instantiate(originPrefabs, new Vector3(0, -10, 0), Quaternion.identity);
         originM.transform.SetParent(transform);
@@ -192,9 +195,33 @@ public class BeamGraphGenerator : MonoBehaviour {
         lineM.transform.SetParent(transform.GetChild(2));
 
         bool isStart = true;
+        float max = MaxM(bmd.val);
+        Debug.Log(max);
         foreach (GameObject member in collector.members)
         {
+            if (isStart)
+            {
+                LineRenderer line1 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+                line1.startColor = new Color(144 / 255f, 202 / 255f, 249 / 255f);
+                line1.endColor = new Color(144 / 255f, 202 / 255f, 249 / 255f);
 
+            }
         }
+    }
+    
+    float MaxM(float[] arr)
+    {
+        float max = 0;
+        for (int i = 1; i < collector.nodes.Count; i++)
+        {
+            if (collector.nodes[i].GetComponent<NodeProperty>().leftMember.length * loadMem[i] + arr[i] > max)
+                max = collector.nodes[i].GetComponent<NodeProperty>().leftMember.length * loadMem[i] + arr[i];
+        }
+        return max;
+    }
+
+    float FindPoint(float p1,float p2,float length)
+    {
+        return p1 * length / (p1 - p2);
     }
 }
