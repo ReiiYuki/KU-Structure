@@ -70,7 +70,79 @@ public class BeamGraphGenerator : MonoBehaviour {
         lineL.SetPositions(new Vector3[] { new Vector3(-100, -5), new Vector3(100, -5) });
         originL.transform.SetParent(transform.GetChild(1));
 
+        float max = Max(sfd.val);
+        float val = 0;
+        float x = 0;
+        bool isStart = true;
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            if (isStart)
+            {
+                int node1Index = property.node1.number;
+                LineRenderer line1 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+                float totalLoad = sfd.val[node1Index];
+                if (collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad)
+                    totalLoad += collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
+                line1.SetPositions(new Vector3[]
+                {
+                    new Vector3(x,val/max*3-5),
+                    new Vector3(x,(val+totalLoad)/max*3-5)
+                });
+                val += totalLoad;
+                line1.transform.SetParent(transform.GetChild(1));
+                isStart = false;
+            }
+            
+            if (!property.uniformLoad)
+            {
+                LineRenderer line2 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+                line2.SetPositions(new Vector3[]
+                {
+                    new Vector3(x,val/max*3-5),
+                    new Vector3(x+property.length,val/max*3-5)
+                });
+                x += property.length;
+                line2.transform.SetParent(transform.GetChild(1));
 
+                int node2Index = property.node2.number;
+                LineRenderer line3 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+                float totalLoad = sfd.val[node2Index];
+                if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
+                    totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
+                line3.SetPositions(new Vector3[]
+                {
+                    new Vector3(x,val/max*3-5),
+                    new Vector3(x,(val+totalLoad)/max*3-5)
+                });
+                val += totalLoad;
+                line3.transform.SetParent(transform.GetChild(1));
+            }else
+            {
+                int node2Index = property.node2.number;
+                float totalLoad = sfd.val[node2Index];
+                if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
+                    totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
+                totalLoad -= property.uniformLoad.load * property.length;
+                LineRenderer line2 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+                line2.SetPositions(new Vector3[]
+                {
+                    new Vector3(x,val/max*3-5),
+                    new Vector3(x+property.length,(val+totalLoad)/max*3-5)
+                });
+                val += totalLoad;
+                x += property.length;
+                line2.transform.SetParent(transform.GetChild(1));
+            }
+        }
+    }
+
+    float Max(float[] arr)
+    {
+        float max = 0;
+        foreach (float e in arr)
+            if (e > max) max = e;
+        return max;
     }
 
     void InitOrigin()
