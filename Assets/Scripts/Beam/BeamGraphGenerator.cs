@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BeamGraphGenerator : MonoBehaviour {
 
-    public GameObject originPrefabs,pointLoadPrefab,momentumPrefab;
+    public GameObject originPrefabs,pointLoadPrefab,momentumPrefab,textPrefab;
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
@@ -93,6 +93,15 @@ public class BeamGraphGenerator : MonoBehaviour {
                 });
                 val += totalLoad;
                 line1.transform.SetParent(transform.GetChild(1));
+
+                TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
+                text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                text.text = System.Math.Round(val, 4) + "";
+                text.characterSize = 0.2f;
+                if (System.Math.Round(val, 4) < 0)
+                    text.transform.position -= new Vector3(0, 0.4f);
+                text.transform.SetParent(line1.transform);
+
                 isStart = false;
             }
             
@@ -123,7 +132,16 @@ public class BeamGraphGenerator : MonoBehaviour {
                 });
                 val += totalLoad;
                 line3.transform.SetParent(transform.GetChild(1));
-            }else
+
+                TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
+                if (System.Math.Round(val, 4) < 0)
+                    text.transform.position -= new Vector3(0, 0.4f);
+                text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                text.text = System.Math.Round(val, 4) + "";
+                text.characterSize = 0.2f;
+                text.transform.SetParent(line3.transform);
+            }
+            else
             {
                 int node2Index = property.node2.number;
                 float totalLoad = sfd.val[node2Index];
@@ -141,6 +159,14 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val += totalLoad;
                 x += property.length;
                 line2.transform.SetParent(transform.GetChild(1));
+
+                TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
+                text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                if (System.Math.Round(val, 4) < 0)
+                    text.transform.position -= new Vector3(0, 0.4f);
+                text.text = System.Math.Round(val,4) + "";
+                text.characterSize = 0.2f;
+                text.transform.SetParent(line2.transform);
             }
         }
     }
