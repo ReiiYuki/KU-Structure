@@ -8,16 +8,18 @@ public class BeamGraphGenerator : MonoBehaviour {
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
+    float[] q;
 
     void Start()
     {
         collector = GameObject.FindObjectOfType<BeamCollector>();
     }
 
-	public void GenerateGraph(BeamAnalyzer.IndexArray sfd,BeamAnalyzer.IndexArray bmd) 
+	public void GenerateGraph(BeamAnalyzer.IndexArray sfd,BeamAnalyzer.IndexArray bmd,float[] q) 
     {
         this.sfd = sfd;
         this.bmd = bmd;
+        this.q = q;
 
         InitOrigin();
         DrawForce();
@@ -25,30 +27,29 @@ public class BeamGraphGenerator : MonoBehaviour {
 
     void DrawForce()
     {
-        for (int i = 0; i < sfd.val.Length; i++)
+        for (int i = 0; i < q.Length; i += 2)
         {
-            GameObject node = collector.nodes[sfd.index[i]/2];
-            if (sfd.val[i] != 0)
+            GameObject node = collector.nodes[i/2];
+            if (q[i] != 0)
             {
                 GameObject reactionPointLoad = Instantiate(pointLoadPrefab, node.transform.position + new Vector3(0, 1), Quaternion.identity);
-                Debug.Log(sfd.val[i]);
-                if (sfd.val[i] >= 0)
+                float val = q[i];
+                if (node.GetComponent<NodeProperty>().pointLoad)
+                    val += node.GetComponent<NodeProperty>().pointLoad.load;
+                if (val > 0)
                     reactionPointLoad.GetComponent<PointLoadProperty>().ForceInverse();
                 reactionPointLoad.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
-                reactionPointLoad.GetComponentInChildren<TextMesh>().text = sfd.val[i] + " N.";
+                reactionPointLoad.GetComponentInChildren<TextMesh>().text = val + " N.";
                 reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
                 reactionPointLoad.transform.SetParent(transform.GetChild(0));
             }
-        }
-        for (int i = 0; i < bmd.val.Length; i++)
-        {
-            GameObject node = collector.nodes[(bmd.index[i]-1) / 2];
-            if (bmd.val[i] != 0)
+            if (q[i + 1] != 0)
             {
                 GameObject reactionMomentum = Instantiate(momentumPrefab, node.transform.position - new Vector3(0, 0.75f, 0f), Quaternion.identity);
-                reactionMomentum.GetComponent<MomentumProperty>().momentum = -1 * bmd.val[i];
-                reactionMomentum.GetComponentInChildren<TextMesh>().text = (-1 * bmd.val[i]) + "";
+                reactionMomentum.GetComponent<MomentumProperty>().momentum = q[i+1];
+                reactionMomentum.GetComponentInChildren<TextMesh>().text = (q[i+1]) + " N.m";
                 reactionMomentum.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionMomentum.GetComponentInChildren<TextMesh>().transform.position += new Vector3(0, 0.5f);
                 reactionMomentum.GetComponentInChildren<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
                 reactionMomentum.GetComponent<MomentumProperty>().UpdateDirection();
                 reactionMomentum.transform.SetParent(transform.GetChild(0));
