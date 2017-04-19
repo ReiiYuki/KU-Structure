@@ -84,6 +84,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                 float totalLoad = sfd.val[node1Index];
                 if (collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad)
                     totalLoad += collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
+                line1.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line1.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
                 line1.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
@@ -97,6 +99,8 @@ public class BeamGraphGenerator : MonoBehaviour {
             if (!property.uniformLoad)
             {
                 LineRenderer line2 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+                line2.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line2.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
                 line2.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
@@ -110,6 +114,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                 float totalLoad = sfd.val[node2Index];
                 if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
                     totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
+                line3.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line3.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
                 line3.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
@@ -125,6 +131,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                     totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
                 totalLoad -= property.uniformLoad.load * property.length;
                 LineRenderer line2 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+                line2.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line2.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
                 line2.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
