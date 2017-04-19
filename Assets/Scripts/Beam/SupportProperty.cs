@@ -5,4 +5,5 @@ using UnityEngine;
 public class SupportProperty : MonoBehaviour {
 
     public int m, dy,node;
+    public bool isMultiply;
 }
