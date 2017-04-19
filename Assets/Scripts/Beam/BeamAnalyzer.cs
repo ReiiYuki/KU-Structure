@@ -10,7 +10,7 @@ public class BeamAnalyzer : MonoBehaviour {
     List<IndexMatrix> k;
     IndexMatrix s;
     List<IndexArray> qf,u,ku,qi;
-    IndexArray pf,p,d;
+    IndexArray pf,p,d,sfd,bmd;
 
     struct IndexArray
     {
@@ -53,6 +53,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateKU();
         GenerateQI();
         GenerateQ();
+        GenerateSFDBMD();
     }
     #region DoF
     void GenerateDegreeOfFreedom()
@@ -749,6 +750,40 @@ public class BeamAnalyzer : MonoBehaviour {
         Debug.Log(qStr);
     }
 
+    #endregion
+
+    #region sfd and bmd
+    void GenerateSFDBMD()
+    {
+        float[] valSFD = new float[collector.nodes.Count];
+        float[] valBMD = new float[collector.nodes.Count];
+        List<int> indexSFD = new List<int>();
+        List<int> indexBMD = new List<int>();
+        foreach (GameObject node in collector.nodes)
+        {
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            indexSFD.Add(property.number * 2);
+            indexBMD.Add(property.number * 2 + 1);
+            valSFD[property.number] = q[property.number * 2];
+            if (property.pointLoad)
+            {
+                valSFD[property.number] += property.pointLoad.load;  
+            }
+            valBMD[property.number] = q[property.number * 2 + 1];
+            /*if (property.momentum)
+            {
+                valBMD[property.number] += property.momentum.momentum;
+            }*/
+        }
+        sfd = new IndexArray(indexSFD, valSFD);
+        bmd = new IndexArray(indexBMD, valBMD);
+        string sfdStr = "SFD = ";
+        foreach (float sfdi in sfd.val) sfdStr += sfdi + " ";
+        string bmdStr = "BMD = ";
+        foreach (float bmdi in bmd.val) bmdStr += bmdi + " ";
+        Debug.Log(sfdStr);
+        Debug.Log(bmdStr);
+    }
     #endregion
     public void ResetAnalyzer()
     {
