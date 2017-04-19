@@ -12,7 +12,7 @@ public class BeamAnalyzer : MonoBehaviour {
     List<IndexArray> qf,u,ku,qi;
     IndexArray pf,p,d,sfd,bmd;
 
-    struct IndexArray
+    public struct IndexArray
     {
         public List<int> index;
         public float[] val;
@@ -54,6 +54,7 @@ public class BeamAnalyzer : MonoBehaviour {
         GenerateQI();
         GenerateQ();
         GenerateSFDBMD();
+        GameObject.FindObjectOfType<BeamGraphGenerator>().GenerateGraph(sfd, bmd,q);
     }
     #region DoF
     void GenerateDegreeOfFreedom()
@@ -747,6 +748,8 @@ public class BeamAnalyzer : MonoBehaviour {
                     q[property.number * 2 + 1] += qii.val[qii.index.IndexOf(property.number * 2 + 1)];
                 }
             }
+            q[property.number * 2] = (float) System.Math.Round(q[property.number * 2],4);
+            q[property.number * 2+1] = (float)System.Math.Round(q[property.number * 2+1], 4);
         }
 
         string qStr = "q = ";
