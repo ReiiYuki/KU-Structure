@@ -10,6 +10,7 @@ public class BeamCollector : MonoBehaviour {
     public List<GameObject> members, nodes;
     public List<PointLoadProperty> pointLoads;
     public List<UniformLoadProperty> uniformLoads;
+    public List<GameObject> history;
 
     float currentPoint = 0;
 
@@ -64,6 +65,7 @@ public class BeamCollector : MonoBehaviour {
         member.transform.SetParent(transform); 
         members.Add(member);
 
+        history.Add(member);
     }
 
     public void AddSupport(int type,int node)
@@ -92,6 +94,9 @@ public class BeamCollector : MonoBehaviour {
         support.GetComponent<SupportProperty>().node = node;
 
         support.transform.SetParent(selectedNode.transform);
+
+        history.Add(support);
+
     }
 
     public void AddPointLoad(int node, float load)
@@ -109,6 +114,9 @@ public class BeamCollector : MonoBehaviour {
 
         pointLoad.transform.SetParent(selectNode.transform);
         pointLoads.Add(pointLoad.GetComponent<PointLoadProperty>());
+
+        history.Add(pointLoad);
+
     }
 
     public void AddUniformLoad(int element,float load)
@@ -130,6 +138,9 @@ public class BeamCollector : MonoBehaviour {
         uniformLoad.transform.SetParent(selectedElement.transform);
 
         uniformLoads.Add(uniformLoad.GetComponent<UniformLoadProperty>());
+
+        history.Add(uniformLoad);
+
     }
 
     public void AddMomentum(int node,float momentum)
@@ -146,6 +157,9 @@ public class BeamCollector : MonoBehaviour {
         selectNode.GetComponent<NodeProperty>().momentum = momentumObj.GetComponent<MomentumProperty>();
 
         momentumObj.transform.SetParent(selectNode.transform);
+
+        history.Add(momentumObj);
+
     }
 
     public Color GetColor(int x)
