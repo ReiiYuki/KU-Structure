@@ -49,7 +49,9 @@ public class BeamCollector : MonoBehaviour {
         numberText.transform.SetParent(member.transform);
 
         if (members.Count == 0) CreateNode(member.transform, currentPoint);
+        property.node1 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
         CreateNode(member.transform, currentPoint + span);
+        property.node2 = nodes[nodes.Count - 1].GetComponent<NodeProperty>();
 
         currentPoint += span;
 
@@ -96,6 +98,8 @@ public class BeamCollector : MonoBehaviour {
         pointLoad.GetComponent<PointLoadProperty>().node = node;
         selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
 
+        pointLoad.GetComponent<PointLoadProperty>().Inverse();
+
         pointLoad.transform.SetParent(selectNode.transform);
     }
 
@@ -112,6 +116,8 @@ public class BeamCollector : MonoBehaviour {
         uniformLoad.GetComponent<UniformLoadProperty>().element = element;
         uniformLoad.GetComponentInChildren<TextMesh>().text = load + " N/m.";
         selectedElement.GetComponent<MemberProperty>().uniformLoad = uniformLoad.GetComponent< UniformLoadProperty>();
+
+        uniformLoad.GetComponent<UniformLoadProperty>().Inverse();
 
         uniformLoad.transform.SetParent(selectedElement.transform);
     }
