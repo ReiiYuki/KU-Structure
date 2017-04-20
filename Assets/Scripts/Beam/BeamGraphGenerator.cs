@@ -274,7 +274,15 @@ public class BeamGraphGenerator : MonoBehaviour {
                 parabolaIndex++;
                 parabolaIndex %= 2;
             }
-            
+
+            TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 9.8f), Quaternion.identity).GetComponent<TextMesh>();
+            text.color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
+            if (System.Math.Round(point.y, 4) < 0)
+                text.transform.position -= new Vector3(0, 0.4f);
+            text.text = System.Math.Round(point.y, 4) + "";
+            text.characterSize = 0.2f;
+            text.transform.SetParent(line.transform);
+
             currentX = point.x;
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
