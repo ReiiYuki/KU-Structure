@@ -13,10 +13,12 @@ public class BeamGraphGenerator : MonoBehaviour {
     public struct Point
     {
         public float x, y;
-        public Point(float x, float y)
+        public bool parabola;
+        public Point(float x, float y,bool parabola)
         {
             this.x = x;
             this.y = y;
+            this.parabola = parabola;
         }
     }
 
@@ -222,7 +224,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 {
                     y += (property.leftMember.length) * loadMem[index++];
                     x += property.leftMember.length;
-                    points.Add(new Point(x, y));
+                    points.Add(new Point(x, y,false));
                 }
                 else
                 {
@@ -230,17 +232,17 @@ public class BeamGraphGenerator : MonoBehaviour {
                     float left = property.leftMember.length-separatePoint;
                     y += loadMem[index-1]*separatePoint/2;
                     x += separatePoint;
-                    points.Add(new Point(x, y));
+                    points.Add(new Point(x, y,true));
 
                     y += loadMem[index]*left/2;
                     x += left;
-                    points.Add(new Point(x, y));
+                    points.Add(new Point(x, y,true));
                 }
             }
             if (bmd.val[property.number] != 0)
             {
                 y += bmd.val[property.number];
-                points.Add(new Point(x, y));
+                points.Add(new Point(x, y,false));
             }
         }
 
