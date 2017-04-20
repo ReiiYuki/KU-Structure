@@ -21,10 +21,11 @@ public class TRUSSCollector : MonoBehaviour {
     public void AddNode(int x,int y)
     {
         Debug.Log("Add Node { x:" + x + " y : " + y + " }");
-
+        // create a new node
 		GameObject node = Instantiate(nodePrefab, new Vector3(x, y), Quaternion.identity);
 
-		node.GetComponent<NodeProperty>().number = nodes.Count;
+        // init node vriable
+		node.GetComponent<TrussNodeProperty>().number = nodes.Count;
 		node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
 
 		nodes.Add(node);
@@ -32,30 +33,40 @@ public class TRUSSCollector : MonoBehaviour {
 
     public void AddMember(int node1,int node2,int property)
     {
+        // get all the position of the node
 		float node1X = nodes [node1].transform.position.x;
 		float node1Y = nodes [node1].transform.position.y;
 		float node2X = nodes [node2].transform.position.x;
 		float node2Y = nodes [node2].transform.position.y;
         Debug.Log("Add Member { node1 : " + node1 + " node2 : " + node2 + " property : " + property + " }");
 
+        // create a new member
 		GameObject member = Instantiate(memberPrefab, Vector3.zero, Quaternion.identity);
 
+        // draw line
 		LineRenderer line = member.GetComponent<LineRenderer>();
 		line.startColor = GetColor(members.Count);
 		line.endColor = GetColor(members.Count);
 		line.SetPositions(new Vector3[] { new Vector3(node1X, node1Y), new Vector3(node2X, node2Y) });
 
-		MemberProperty memberProperty = member.GetComponent<MemberProperty>();
+        // init member variable
+		TrussMemberProperty memberProperty = member.GetComponent<TrussMemberProperty>();
 		memberProperty.type = property;
-		memberProperty.length = node2X-node1X;
 		memberProperty.number = members.Count;
-		memberProperty.origin = node1X;
+        memberProperty.node1 = nodes[node1].GetComponent<TrussNodeProperty>();
+        memberProperty.node2 = nodes[node2].GetComponent<TrussNodeProperty>();
 
-		GameObject lengthText = Instantiate(textPrefab, new Vector3((node1X+node2X) / 2f, -0.5f), Quaternion.identity);
-		lengthText.GetComponent<TextMesh>().text = (node2X-node1X) + " m.";
+        // add member to node
+        nodes[node1].GetComponent<TrussNodeProperty>().members.Add(memberProperty);
+        nodes[node2].GetComponent<TrussNodeProperty>().members.Add(memberProperty);
+
+        // draw the length of the member
+        GameObject lengthText = Instantiate(textPrefab, new Vector3((node1X + node2X) / 2f + .5f, (node1Y + node2Y) / 2f +.5f), Quaternion.identity);
+		lengthText.GetComponent<TextMesh>().text = memberProperty.lenght() + " m.";
 		lengthText.transform.SetParent(member.transform);
 
-		GameObject numberText = Instantiate(textPrefab, new Vector3(node2X / 2f, 0,-1f), Quaternion.identity);
+        // draw a number of the member
+		GameObject numberText = Instantiate(textPrefab, new Vector3((node1X+node2X) / 2f, (node1Y+node2Y)/2f), Quaternion.identity);
 		numberText.GetComponent<TextMesh>().text = members.Count + "";
 		numberText.GetComponent<TextMesh>().color = Color.white;
 		numberText.transform.SetParent(member.transform);
@@ -86,11 +97,17 @@ public class TRUSSCollector : MonoBehaviour {
 			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 1.35f), Quaternion.identity);
 		}
 
-		selectedNode.GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
-		selectedNode.GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
-		support.GetComponent<SupportProperty>().node = node;
+        // init support variable
+		support.GetComponent<TrussSupportProperty>().node = nodes[node].GetComponent<TrussNodeProperty>();
 
-		support.transform.SetParent(selectedNode.transform);
+        // add degree of freedom to node
+        nodes[node].GetComponent<TrussNodeProperty>().dx = 1;
+        nodes[node].GetComponent<TrussNodeProperty>().dy = 1;
+
+        // add support to node
+        nodes[node].GetComponent<TrussNodeProperty>().support = support.GetComponent<TrussSupportProperty>();
+
+        support.transform.SetParent(selectedNode.transform);
 	}
 
     public void AddPointLoad(int node,float loadX,float loadY)
@@ -100,15 +117,15 @@ public class TRUSSCollector : MonoBehaviour {
 
 		// add load X
 		if (loadX != 0) {
-			GameObject pointLoadX = Instantiate (pointLoadPrefabX, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x-1), (nodes [node].transform.position.y)), Quaternion.identity);
-			pointLoadX.transform.Rotate (new Vector3 (0, 0, 90));
+			GameObject pointLoadX = Instantiate (pointLoadPrefabX, selectNode.transform.position + new Vector3 ((nodes [node].transform.position.x+1.75f), (nodes [node].transform.position.y)), Quaternion.identity);
+			pointLoadX.transform.Rotate (new Vector3 (0, 0, -90));
 			pointLoadX.GetComponentInChildren<TextMesh> ().text = loadX + " N.";
 			pointLoadX.GetComponent<TrussPointLoadProperty> ().loadX = loadX;
 			pointLoadX.GetComponent<TrussPointLoadProperty> ().loadY = 0;
 			pointLoadX.GetComponent<TrussPointLoadProperty> ().node = node;
 			selectNode.GetComponent<NodeProperty> ().pointLoad = pointLoadX.GetComponent<PointLoadProperty> ();
 
-			//pointLoadX.GetComponent<PointLoadProperty> ().Inverse ();
+			pointLoadX.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadX.transform.SetParent (selectNode.transform);
 		}
@@ -122,10 +139,9 @@ public class TRUSSCollector : MonoBehaviour {
 			pointLoadY.GetComponent<TrussPointLoadProperty> ().node = node;
 			selectNode.GetComponent<NodeProperty> ().pointLoad = pointLoadY.GetComponent<PointLoadProperty> ();
 
-			//pointLoadY.GetComponent<PointLoadProperty> ().Inverse ();
+			pointLoadY.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadY.transform.SetParent (selectNode.transform);
-			Debug.Log ("in");
 		}
     }
 
