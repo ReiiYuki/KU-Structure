@@ -8,7 +8,17 @@ public class BeamGraphGenerator : MonoBehaviour {
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
-    float[] q,loadMem;
+    float[] q;
+    List<float> loadMem;
+    public struct Point
+    {
+        public float x, y;
+        public Point(float x, float y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     void Start()
     {
@@ -76,7 +86,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float val = 0;
         float x = 0;
         bool isStart = true;
-        loadMem = new float[collector.nodes.Count];
+        loadMem = new List<float>();
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
@@ -95,6 +105,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     new Vector3(x,(val+totalLoad)/max*3-5)
                 });
                 val += totalLoad;
+                loadMem.Add(val);
                 line1.transform.SetParent(transform.GetChild(1));
 
                 TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
@@ -134,7 +145,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     new Vector3(x,(val+totalLoad)/max*3-5)
                 });
                 val += totalLoad;
-                loadMem[node2Index] = val;
+                loadMem.Add(val);
                 line3.transform.SetParent(transform.GetChild(1));
 
                 TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
@@ -161,7 +172,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     new Vector3(x+property.length,(val+totalLoad)/max*3-5)
                 });
                 val += totalLoad;
-                loadMem[node2Index] = val;
+                loadMem.Add(val);
                 x += property.length;
                 line2.transform.SetParent(transform.GetChild(1));
 
@@ -174,6 +185,10 @@ public class BeamGraphGenerator : MonoBehaviour {
                 text.transform.SetParent(line2.transform);
             }
         }
+        string loadMemStr = "Load mem = ";
+        foreach (float l in loadMem)
+            loadMemStr += l + " ";
+        Debug.Log(loadMemStr);
     }
 
     float Max(float[] arr)
@@ -194,34 +209,55 @@ public class BeamGraphGenerator : MonoBehaviour {
         lineM.SetPositions(new Vector3[] { new Vector3(int.MinValue, -10), new Vector3(int.MaxValue, -10) });
         lineM.transform.SetParent(transform.GetChild(2));
 
-        bool isStart = true;
-        float max = MaxM(bmd.val);
-        Debug.Log(max);
-        foreach (GameObject member in collector.members)
+        List<Point> points = new List<Point>();
+        float x = 0;
+        float y = 0;
+        int index = 0;
+        foreach (GameObject node in collector.nodes)
         {
-            if (isStart)
+            NodeProperty property = node.GetComponent<NodeProperty>();
+            if (property.leftMember)
             {
-                LineRenderer line1 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
-                line1.startColor = new Color(144 / 255f, 202 / 255f, 249 / 255f);
-                line1.endColor = new Color(144 / 255f, 202 / 255f, 249 / 255f);
+                if (!property.leftMember.uniformLoad)
+                {
+                    y += (property.leftMember.length) * loadMem[index++];
+                    x += property.leftMember.length;
+                    points.Add(new Point(x, y));
+                    Debug.Log(x+" , " + y);
+                }
+                else
+                {
+                    float separatePoint = FindPoint(loadMem[index++], loadMem[index], property.leftMember.length);
+                    float left = property.leftMember.length-separatePoint;
+                    y += loadMem[index-1]*separatePoint/2;
+                    x += separatePoint;
+                    points.Add(new Point(x, y));
+                    Debug.Log(x + " , " + y);
 
+                    y += loadMem[index]*left/2;
+                    x += left;
+                    points.Add(new Point(x, y));
+                    Debug.Log(x + " , " + y);
+                }
+            }
+            /*if (property.momentum)
+            {
+                y -= property.momentum.momentum;
+                points.Add(new Point(x, y));
+                Debug.Log(x + " , " + y);
+            }*/
+            if (bmd.val[property.number] != 0)
+            {
+                y += bmd.val[property.number];
+                points.Add(new Point(x, y));
+                Debug.Log(x + " , " + y);
             }
         }
-    }
-    
-    float MaxM(float[] arr)
-    {
-        float max = 0;
-        for (int i = 1; i < collector.nodes.Count; i++)
-        {
-            if (collector.nodes[i].GetComponent<NodeProperty>().leftMember.length * loadMem[i] + arr[i] > max)
-                max = collector.nodes[i].GetComponent<NodeProperty>().leftMember.length * loadMem[i] + arr[i];
-        }
-        return max;
     }
 
     float FindPoint(float p1,float p2,float length)
     {
         return p1 * length / (p1 - p2);
     }
+
 }
