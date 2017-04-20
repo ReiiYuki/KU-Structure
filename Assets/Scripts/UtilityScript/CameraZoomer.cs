@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraZoomer : MonoBehaviour {
 
     public float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
-    public float orthoZoomSpeed = 0.5f;        // The rate of change of the orthographic size in orthographic mode.
+    public float orthoZoomSpeed = 0.001f;        // The rate of change of the orthographic size in orthographic mode.
 
     float cameraDistanceMax = 20f;
     float cameraDistanceMin = 5f;
