@@ -141,7 +141,7 @@ public class TrussAnalyzer : MonoBehaviour
             matrix = matrix * EAL;
             
         }
-        List<TrussNodeProperty> dnode = getNode(nodes);
+        List<TrussNodeProperty> dnode = getPoint(nodes);
         float[,] sArray = new float[dnode.Count, dnode.Count];
         for (int i = 0; i < dnode.Count; i++)
             for (int j = 0; j < dnode.Count; j++)
@@ -166,9 +166,29 @@ public class TrussAnalyzer : MonoBehaviour
 
 
                 }
+
+        
     }
-    
-    public List<TrussNodeProperty> getNode(List<TrussNodeProperty> nodes)
+    public Matrix2D inverse(Matrix2D matrix)
+    {
+        float[,] array = new float[matrix.array.GetLength(0), matrix.array.GetLength(1)];
+        for (int i = 0; i < array.GetLength(0); i++)
+            for (int j = 0; j < array.GetLength(1); j++)
+                array[i, j] = -matrix.array[i,j];
+
+        return new Matrix2D(array);
+    }
+    public List<TrussNodeProperty> getForce(List<TrussNodeProperty> nodes)
+    {
+        List<TrussNodeProperty> newList = new List<TrussNodeProperty>();
+        foreach (TrussNodeProperty node in nodes)
+        {
+            if (node.pointLoad.loadX !=0 || node.pointLoad.loadY !=0)
+                newList.Add(node)
+        }
+        return newList;
+    }
+    public List<TrussNodeProperty> getPoint(List<TrussNodeProperty> nodes)
     {
         List<TrussNodeProperty> newList = new List<TrussNodeProperty>();
         foreach(TrussNodeProperty node in nodes)
