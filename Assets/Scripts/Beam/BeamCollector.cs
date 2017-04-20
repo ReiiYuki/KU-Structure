@@ -20,6 +20,7 @@ public class BeamCollector : MonoBehaviour {
         nodes = new List<GameObject>();
         pointLoads = new List<PointLoadProperty>();
         uniformLoads = new List<UniformLoadProperty>();
+        history = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
