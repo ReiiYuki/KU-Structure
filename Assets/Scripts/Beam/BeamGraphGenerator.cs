@@ -278,4 +278,18 @@ public class BeamGraphGenerator : MonoBehaviour {
                 max = point.y;
         return max;
     }
+
+    void DrawParabola(Point p1,Point p2,Point p3)
+    {
+        float x1 = p1.x;
+        float x2 = p2.x;
+        float x3 = p3.x;
+        float y1 = p1.y;
+        float y2 = p2.y;
+        float y3 = p3.y;
+
+        float a = (y1 / ((x1 - x2) * (x1 - x3))) + (y2 / ((x2 - x1) * (x2 - x3))) + (y3 / ((x3 - x1) * (x3 - x2)));
+        float b = ((y1 * (x2 + x3)) / ((x1 - x2) * (x1 - x3))) - ((y2 * (x3 + x1)) / ((x2 - x1) * (x2 - x3))) - ((y3 * (x1 + x2)) / ((x3 - x1) * (x3 - x2)));
+        float c = ((y1 * x2 * x3) / ((x1 - x2) * (x1 - x3))) + ((y1 * x3 * x1) / ((x2 - x1) * (x2 - x3))) + ((y3 * x1 * x2) / ((x3 - x1) * (x3 - x2)));
+    }
 }
