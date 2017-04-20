@@ -241,16 +241,25 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 y += bmd.val[property.number];
                 points.Add(new Point(x, y));
-                Debug.Log(x + " , " + y);
             }
         }
 
         float max = FindMaxPoint(points);
         float currentX = 0;
         float currentY = 0;
+        float offset = -10;
         foreach (Point point in points)
         {
-
+            LineRenderer line = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+            line.startColor = new Color(33/255f, 150/255f, 243/255f);
+            line.endColor = new Color(33 / 255f, 150 / 255f, 243 / 255f);
+            line.SetPositions(new Vector3[] {
+                new Vector3(currentX,currentY/max*3+offset),
+                new Vector3(point.x,point.y/max*3+offset)
+            });
+            currentX = point.x;
+            currentY = point.y;
+            line.transform.SetParent(transform.GetChild(2));
         }
     }
 
