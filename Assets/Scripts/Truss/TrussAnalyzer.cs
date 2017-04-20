@@ -114,18 +114,18 @@ public class TrussAnalyzer : MonoBehaviour
     }
 
 
-    public void memberToArray(List<GameObject> members)
+    public void memberToArray(List<TrussMemberProperty> members,List<TrussNodeProperty> nodes)
     {
         float[][] array = new float[members.Count][];
         Matrix2D[] matrixs = new Matrix2D[members.Count];
-        foreach(GameObject member in members)
+        foreach(TrussMemberProperty member in members)
         {
-            TrussMemberProperty memProp = member.GetComponent<TrussMemberProperty>();
-            TrussNodeProperty node1 = memProp.node1;
-            TrussNodeProperty node2 = memProp.node2;
 
-            float cos = calAngle(node1.x, node2.x, memProp.lenght());
-            float sin = calAngle(node1.y, node2.y, memProp.lenght());
+            TrussNodeProperty node1 = member.node1;
+            TrussNodeProperty node2 = member.node2;
+
+            float cos = calAngle(node1.x, node2.x, member.lenght());
+            float sin = calAngle(node1.y, node2.y, member.lenght());
             float cos2 = Mathf.Pow(cos, 2);
             float sin2 = Mathf.Pow(sin, 2);
             float cossin = cos * sin;
@@ -136,13 +136,47 @@ public class TrussAnalyzer : MonoBehaviour
                     {-cossin,-sin2,cossin,sin2}
                 });
 
-            float EAL = memProp.GetE() * memProp.GetI() / memProp.lenght();
+            float EAL = member.GetE() * member.GetI() / member.lenght();
 
             matrix = matrix * EAL;
             
         }
+        List<TrussNodeProperty> dnode = getNode(nodes);
+        float[,] sArray = new float[dnode.Count, dnode.Count];
+        for (int i = 0; i < dnode.Count; i++)
+            for (int j = 0; j < dnode.Count; j++)
+                for (int k = 0; k < members.Count; k++)
+                {
+                    if ((members[k].node1.Equals(dnode[i])&& members[k].node1.Equals(dnode[j]))||
+                        (members[k].node2.Equals(dnode[i]) && members[k].node2.Equals(dnode[j])))
+                    {
+                        sArray[i * 2, j * 2] += matrixs[k].array[0, 0];
+                        sArray[i * 2+1, j * 2] += matrixs[k].array[1, 0];
+                        sArray[i * 2, j * 2+1] += matrixs[k].array[0, 1];
+                        sArray[i * 2+1, j * 2+1] += matrixs[k].array[1, 1];
+                    }
+                    if ((members[k].node2.Equals(dnode[i])&& members[k].node1.Equals(dnode[j]))||
+                        (members[k].node1.Equals(dnode[i]) && members[k].node2.Equals(dnode[j])))
+                    {
+                        sArray[i * 2, j * 2] += matrixs[k].array[2, 0];
+                        sArray[i * 2 + 1, j * 2] += matrixs[k].array[3, 0];
+                        sArray[i * 2, j * 2 + 1] += matrixs[k].array[2, 3];
+                        sArray[i * 2 + 1, j * 2 + 1] += matrixs[k].array[3, 3];
+                    }
 
 
+                }
+    }
+    
+    public List<TrussNodeProperty> getNode(List<TrussNodeProperty> nodes)
+    {
+        List<TrussNodeProperty> newList = new List<TrussNodeProperty>();
+        foreach(TrussNodeProperty node in nodes)
+        {
+            if(node.dx==1)
+                newList.Add(node)
+        }
+        return newList;
     }
 
     private float calAngle(float x1,float x2,float lenght)
