@@ -193,7 +193,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
     float Max(float[] arr)
     {
-        float max = 0;
+        float max = int.MinValue;
         foreach (float e in arr)
             if (e > max) max = e;
         return max;
@@ -223,7 +223,6 @@ public class BeamGraphGenerator : MonoBehaviour {
                     y += (property.leftMember.length) * loadMem[index++];
                     x += property.leftMember.length;
                     points.Add(new Point(x, y));
-                    Debug.Log(x+" , " + y);
                 }
                 else
                 {
@@ -232,26 +231,26 @@ public class BeamGraphGenerator : MonoBehaviour {
                     y += loadMem[index-1]*separatePoint/2;
                     x += separatePoint;
                     points.Add(new Point(x, y));
-                    Debug.Log(x + " , " + y);
 
                     y += loadMem[index]*left/2;
                     x += left;
                     points.Add(new Point(x, y));
-                    Debug.Log(x + " , " + y);
                 }
             }
-            /*if (property.momentum)
-            {
-                y -= property.momentum.momentum;
-                points.Add(new Point(x, y));
-                Debug.Log(x + " , " + y);
-            }*/
             if (bmd.val[property.number] != 0)
             {
                 y += bmd.val[property.number];
                 points.Add(new Point(x, y));
                 Debug.Log(x + " , " + y);
             }
+        }
+
+        float max = FindMaxPoint(points);
+        float currentX = 0;
+        float currentY = 0;
+        foreach (Point point in points)
+        {
+
         }
     }
 
@@ -260,4 +259,12 @@ public class BeamGraphGenerator : MonoBehaviour {
         return p1 * length / (p1 - p2);
     }
 
+    float FindMaxPoint(List<Point> points)
+    {
+        float max = int.MinValue;
+        foreach (Point point in points)
+            if (point.y > max)
+                max = point.y;
+        return max;
+    }
 }
