@@ -250,15 +250,31 @@ public class BeamGraphGenerator : MonoBehaviour {
         float currentX = 0;
         float currentY = 0;
         float offset = -10;
+        float parabolaIndex = 0;
+        float[] parabolaEquation = new float[3];
         foreach (Point point in points)
         {
             LineRenderer line = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
             line.startColor = new Color(33/255f, 150/255f, 243/255f);
             line.endColor = new Color(33 / 255f, 150 / 255f, 243 / 255f);
-            line.SetPositions(new Vector3[] {
-                new Vector3(currentX,currentY/max*3+offset),
-                new Vector3(point.x,point.y/max*3+offset)
-            });
+
+            if (!point.parabola)
+            {
+                line.SetPositions(new Vector3[] {
+                    new Vector3(currentX,currentY/max*3+offset),
+                    new Vector3(point.x,point.y/max*3+offset)
+                });
+            }else
+            {
+                int currentIndex = points.IndexOf(point);
+                if (parabolaIndex == 0) {
+                    parabolaEquation = GenerateParabolaEquation(points[currentIndex - 1], points[currentIndex], points[currentIndex + 1]);
+                }
+                DrawParabola(parabolaEquation, points[currentIndex - 1], points[currentIndex], line,max,offset);
+                parabolaIndex++;
+                parabolaIndex %= 2;
+            }
+            
             currentX = point.x;
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
@@ -279,7 +295,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         return max;
     }
 
-    void DrawParabola(Point p1,Point p2,Point p3)
+    float[] GenerateParabolaEquation(Point p1,Point p2,Point p3)
     {
         float x1 = p1.x;
         float x2 = p2.x;
@@ -287,9 +303,33 @@ public class BeamGraphGenerator : MonoBehaviour {
         float y1 = p1.y;
         float y2 = p2.y;
         float y3 = p3.y;
+        Debug.Log("x1 = " + x1 + " y1 = " + y1 + " x2 = " + x2 + " y2 = " + y2 + " x3 = " + x3 + " y3 = " + y3);
+        float a = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / ((x1 - x2) * (x1 - x3) * (x2 - x3));
+        float b = (x1 * x1 * (y2 - y3) + x3 * x3 * (y1 - y2) + x2 * x2 * (y3 - y1)) / ((x1 - x2) * (x1 - x3) * (x2 - x3));
+        float c = (x2 * x2 * (x3 * y1 - x1 * y3) + x2 * (x1 * x1 * y3 - x3 * x3 * y1) + x1 * x3 * (x3 - x1) * y2) / ((x1 - x2) * (x1 - x3) * (x2 - x3));
+        Debug.Log("a = " + a + " b = " + b + " c = " + c);
+        return new float[]{ a,b,c };
+    }
 
-        float a = (y1 / ((x1 - x2) * (x1 - x3))) + (y2 / ((x2 - x1) * (x2 - x3))) + (y3 / ((x3 - x1) * (x3 - x2)));
-        float b = ((y1 * (x2 + x3)) / ((x1 - x2) * (x1 - x3))) - ((y2 * (x3 + x1)) / ((x2 - x1) * (x2 - x3))) - ((y3 * (x1 + x2)) / ((x3 - x1) * (x3 - x2)));
-        float c = ((y1 * x2 * x3) / ((x1 - x2) * (x1 - x3))) + ((y1 * x3 * x1) / ((x2 - x1) * (x2 - x3))) + ((y3 * x1 * x2) / ((x3 - x1) * (x3 - x2)));
+    void DrawParabola(float[] eq,Point point1,Point point2,LineRenderer line,float max,float offset)
+    {
+
+        float x = (float)System.Math.Round(point1.x,4);
+        float y = (float)System.Math.Round(point1.y, 4);
+        float targetX = (float)System.Math.Round(point2.x, 4);
+        float targetY = (float)System.Math.Round(point2.y, 4);
+        Debug.Log("a = " + eq[0] + "b = " + eq[1] + "c= " + eq[2]);
+        List<Vector3> position = new List<Vector3>();
+        while (x <= targetX )
+        {
+            float a = eq[0] * x * x;
+            float b = eq[1] * x;
+            float c = eq[2];
+            y = a + b + c;
+            position.Add( new Vector3(x, y/max*3+offset));
+            x += 0.0001f;
+        }
+        line.SetVertexCount(position.Count);
+        line.SetPositions(position.ToArray());
     }
 }
