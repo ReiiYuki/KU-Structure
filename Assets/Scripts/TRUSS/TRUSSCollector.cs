@@ -25,6 +25,8 @@ public class TRUSSCollector : MonoBehaviour {
 		GameObject node = Instantiate(nodePrefab, new Vector3(x, y), Quaternion.identity);
 
         // init node vriable
+        node.GetComponent<TrussNodeProperty>().x = x;
+        node.GetComponent<TrussNodeProperty>().y = y;
 		node.GetComponent<TrussNodeProperty>().number = nodes.Count;
 		node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
 
@@ -143,6 +145,7 @@ public class TRUSSCollector : MonoBehaviour {
 
 			pointLoadY.transform.SetParent (selectNode.transform);
 		}
+
     }
 
 	public Color GetColor(int x)
@@ -150,4 +153,5 @@ public class TRUSSCollector : MonoBehaviour {
 		if (x % 2 == 0) return new Color(169 / 255f, 169 / 255f, 169 / 255f);
 		return new Color(112 / 255f, 128 / 255f, 144 / 255f);
 	}
+    
 }

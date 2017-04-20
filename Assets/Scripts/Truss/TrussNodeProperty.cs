@@ -6,7 +6,7 @@ public class TrussNodeProperty : MonoBehaviour
 {
 
     public int number;
-    public float dx, dy;
+    public float dx, dy, x,y;
     public TrussPointLoadProperty pointLoad;
     public TrussSupportProperty support;
     public List<TrussMemberProperty> members;
