@@ -176,4 +176,10 @@ public class BeamCollector : MonoBehaviour {
         node.transform.SetParent(parent);
         nodes.Add(node);
     }
+
+    public void Undo()
+    {
+        if (history.Count == 0) return;
+        history.RemoveAt(history.Count - 1);
+    }
 }
