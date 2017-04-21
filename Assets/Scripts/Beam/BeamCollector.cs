@@ -203,4 +203,10 @@ public class BeamCollector : Collector {
         Debug.Log("Uniform Load : " + uniformLoads.Count);
         Debug.Log("Point Load : " + pointLoads.Count);
     }
+
+    public void ResetCollector()
+    {
+        while (history.Count > 0)
+            Undo();
+    }
 }
