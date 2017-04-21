@@ -223,7 +223,7 @@ public class TrussAnalyzer : MonoBehaviour
                 numbers.Add(node.pointLoad.loadY);
             }
         }
-        float[,] array = new float[numbers.Count,];
+        float[,] array = new float[numbers.Count,1];
         for(int i=0;i<numbers.Count;i++)
         {
             array[i, 0] = numbers[i];
@@ -236,8 +236,8 @@ public class TrussAnalyzer : MonoBehaviour
         List<TrussNodeProperty> newList = new List<TrussNodeProperty>();
         foreach(TrussNodeProperty node in nodes)
         {
-            if(node.dx==1)
-                newList.Add(node)
+            if (node.dx == 1)
+                newList.Add(node);
         }
         return newList;
     }
