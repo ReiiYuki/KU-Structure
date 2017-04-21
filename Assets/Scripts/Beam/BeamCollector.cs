@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BeamCollector : MonoBehaviour {
+public class BeamCollector : Collector {
 
     public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab,momentumPrefab,uniformLoadPrefab;
     public GameObject[] supportPrefabs;
@@ -10,6 +10,7 @@ public class BeamCollector : MonoBehaviour {
     public List<GameObject> members, nodes;
     public List<PointLoadProperty> pointLoads;
     public List<UniformLoadProperty> uniformLoads;
+    public List<GameObject> history;
 
     float currentPoint = 0;
 
@@ -19,6 +20,7 @@ public class BeamCollector : MonoBehaviour {
         nodes = new List<GameObject>();
         pointLoads = new List<PointLoadProperty>();
         uniformLoads = new List<UniformLoadProperty>();
+        history = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
@@ -64,6 +66,7 @@ public class BeamCollector : MonoBehaviour {
         member.transform.SetParent(transform); 
         members.Add(member);
 
+        history.Add(member);
     }
 
     public void AddSupport(int type,int node)
@@ -92,6 +95,9 @@ public class BeamCollector : MonoBehaviour {
         support.GetComponent<SupportProperty>().node = node;
 
         support.transform.SetParent(selectedNode.transform);
+
+        history.Add(support);
+
     }
 
     public void AddPointLoad(int node, float load)
@@ -109,6 +115,9 @@ public class BeamCollector : MonoBehaviour {
 
         pointLoad.transform.SetParent(selectNode.transform);
         pointLoads.Add(pointLoad.GetComponent<PointLoadProperty>());
+
+        history.Add(pointLoad);
+
     }
 
     public void AddUniformLoad(int element,float load)
@@ -130,6 +139,9 @@ public class BeamCollector : MonoBehaviour {
         uniformLoad.transform.SetParent(selectedElement.transform);
 
         uniformLoads.Add(uniformLoad.GetComponent<UniformLoadProperty>());
+
+        history.Add(uniformLoad);
+
     }
 
     public void AddMomentum(int node,float momentum)
@@ -146,6 +158,9 @@ public class BeamCollector : MonoBehaviour {
         selectNode.GetComponent<NodeProperty>().momentum = momentumObj.GetComponent<MomentumProperty>();
 
         momentumObj.transform.SetParent(selectNode.transform);
+
+        history.Add(momentumObj);
+
     }
 
     public Color GetColor(int x)
@@ -161,5 +176,31 @@ public class BeamCollector : MonoBehaviour {
         node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
         node.transform.SetParent(parent);
         nodes.Add(node);
+    }
+
+    override
+    public void Undo()
+    {
+        Debug.Log(history.Count);
+        if (history.Count == 0) return;
+        GameObject obj = history[history.Count - 1];
+        if (members.IndexOf(obj) >= 0)
+        {
+            nodes.RemoveAt(obj.GetComponent<MemberProperty>().node2.number);
+            if (members.Count == 1)
+                nodes.RemoveAt(obj.GetComponent<MemberProperty>().node1.number);    
+            members.Remove(obj);
+        }
+        else if (obj.GetComponent<PointLoadProperty>())
+            pointLoads.Remove(obj.GetComponent<PointLoadProperty>());
+        else if (obj.GetComponent<UniformLoadProperty>())
+            uniformLoads.Remove(obj.GetComponent<UniformLoadProperty>());
+        history.Remove(obj);
+        DestroyObject(obj);
+        Debug.Log("History : " + history.Count);
+        Debug.Log("Member : " + members.Count);
+        Debug.Log("Node : " + nodes.Count);
+        Debug.Log("Uniform Load : " + uniformLoads.Count);
+        Debug.Log("Point Load : " + pointLoads.Count);
     }
 }
