@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CameraZoomer : MonoBehaviour {
 
-    public float perspectiveZoomSpeed = 0.5f;        // The rate of change of the field of view in perspective mode.
-    public float orthoZoomSpeed = 0.001f;        // The rate of change of the orthographic size in orthographic mode.
+    public float orthoZoomSpeed = 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001f;        // The rate of change of the orthographic size in orthographic mode.
 
     float cameraDistanceMax = 20f;
     float cameraDistanceMin = 5f;
@@ -43,7 +42,7 @@ public class CameraZoomer : MonoBehaviour {
             camera.orthographicSize += deltaMagnitudeDiff * orthoZoomSpeed;
 
             // Make sure the orthographic size never drops below zero.
-            camera.orthographicSize = Mathf.Max(camera.orthographicSize, 0.1f);
+            camera.orthographicSize = Mathf.Max(camera.orthographicSize, cameraDistanceMin);
         }
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
