@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BeamCollector : MonoBehaviour {
+public class BeamCollector : Collector {
 
     public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefab,momentumPrefab,uniformLoadPrefab;
     public GameObject[] supportPrefabs;
@@ -178,6 +178,7 @@ public class BeamCollector : MonoBehaviour {
         nodes.Add(node);
     }
 
+    override
     public void Undo()
     {
         if (history.Count == 0) return;
