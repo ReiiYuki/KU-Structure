@@ -232,13 +232,18 @@ public class TrussAnalyzer : MonoBehaviour
         {
             U[i] = K[i] * U[i];
         }
-
         Matrix2D[] TT = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
             TT[i] = T[i];
         }
 
+        Matrix2D[] F = new Matrix2D[members.Count];
+        for (int i = 0; i < members.Count; i++)
+        {
+            F[i] = TT[i]*Q[i];
+        }
+        Debug.Log(F);
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)
