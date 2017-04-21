@@ -119,6 +119,14 @@ public class TrussAnalyzer : MonoBehaviour
 
             return new Matrix2D(array);
         }
+        public  Matrix2D trantranspose()
+        {
+            float[,] matric = new float[array.GetLength(1),array.GetLength(0)];
+            for (int i = 0; i < array.GetLength(1); i++)
+                for (int j = 0; j < array.GetLength(0); j++)
+                    matric[i, j] = matric[j, i]; ;
+            return new Matrix2D(matric);
+        }
     }
 
 
@@ -126,8 +134,8 @@ public class TrussAnalyzer : MonoBehaviour
     {
         float[][] array = new float[members.Count][];
         Matrix2D[] matrixs = new Matrix2D[members.Count];
-        Matrix2D[] matrixsT = new Matrix2D[members.Count];
-        Matrix2D[] matrixsK = new Matrix2D[members.Count];
+        Matrix2D[] T = new Matrix2D[members.Count];
+        Matrix2D[] K = new Matrix2D[members.Count];
         for (int i = 0;i < members.Count;i++)
         {
 
@@ -162,8 +170,8 @@ public class TrussAnalyzer : MonoBehaviour
                 });
             matrix = matrix * EAL;
             matrixs[i] = matrix;
-            matrixsT[i] = matrixT;
-            matrixsK[i] = matrixK;
+            T[i] = matrixT;
+            K[i] = matrixK;
         }
         List<TrussNodeProperty> dnode = getPoint(nodes);
         float[,] sArray = new float[dnode.Count, dnode.Count];
@@ -215,15 +223,22 @@ public class TrussAnalyzer : MonoBehaviour
         Matrix2D[] U = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
-            U[i] = matrixsT[i] * new Matrix2D(vArray);
+            U[i] = T[i] * new Matrix2D(vArray);
         }
 
 
         Matrix2D[] Q = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
-            U[i] = matrixsK[i] * U[i];
+            U[i] = K[i] * U[i];
         }
+
+        Matrix2D[] TT = new Matrix2D[members.Count];
+        for (int i = 0; i < members.Count; i++)
+        {
+            TT[i] = T[i];
+        }
+
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)
