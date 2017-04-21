@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class TrussAnalyzer : MonoBehaviour
 {
-
+    TRUSSCollector collector;
     // Use this for initialization
     void Start()
     {
-
+        collector = GetComponent<TRUSSCollector>();
     }
 
     // Update is called once per frame
@@ -130,8 +130,15 @@ public class TrussAnalyzer : MonoBehaviour
     }
 
 
-    public void memberToArray(List<TrussMemberProperty> members,List<TrussNodeProperty> nodes)
+    public void analyze()
     {
+        List<TrussMemberProperty> members = new List<TrussMemberProperty>();
+        foreach (GameObject g in collector.members)
+            members.Add(g.GetComponent<TrussMemberProperty>());
+
+        List<TrussNodeProperty> nodes = new List<TrussNodeProperty>();
+        foreach (GameObject g in collector.nodes)
+            nodes.Add(g.GetComponent<TrussNodeProperty>());
         float[][] array = new float[members.Count][];
         Matrix2D[] matrixs = new Matrix2D[members.Count];
         Matrix2D[] T = new Matrix2D[members.Count];
