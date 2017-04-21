@@ -53,9 +53,9 @@ public class BeamGraphGenerator : MonoBehaviour {
                     reactionPointLoad.GetComponent<PointLoadProperty>().ForceInverse();
                 else
                     reactionPointLoad.GetComponent<PointLoadProperty>().ABitInverse();
-                reactionPointLoad.GetComponent<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionPointLoad.GetComponent<SpriteRenderer>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionPointLoad.GetComponentInChildren<TextMesh>().text = val + " N.";
-                reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionPointLoad.transform.SetParent(transform.GetChild(0));
                 if (val == 0)
                     DestroyObject(reactionPointLoad);
@@ -65,9 +65,9 @@ public class BeamGraphGenerator : MonoBehaviour {
                 GameObject reactionMomentum = Instantiate(momentumPrefab, node.transform.position - new Vector3(0, 0.75f, 0f), Quaternion.identity);
                 reactionMomentum.GetComponent<MomentumProperty>().momentum = q[i+1];
                 reactionMomentum.GetComponentInChildren<TextMesh>().text = (-1*q[i+1]) + " N.m";
-                reactionMomentum.GetComponentInChildren<TextMesh>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionMomentum.GetComponentInChildren<TextMesh>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionMomentum.GetComponentInChildren<TextMesh>().transform.position += new Vector3(0, 0.5f);
-                reactionMomentum.GetComponentInChildren<SpriteRenderer>().color = new Color(100 / 255f, 181 / 255f, 246 / 255f);
+                reactionMomentum.GetComponentInChildren<SpriteRenderer>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionMomentum.GetComponent<MomentumProperty>().UpdateDirection();
                 reactionMomentum.transform.SetParent(transform.GetChild(0));
             }
@@ -98,8 +98,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                 float totalLoad = sfd.val[node1Index];
                 if (collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad)
                     totalLoad += collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
-                line1.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
-                line1.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line1.startColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+                line1.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 line1.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
@@ -111,7 +111,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 if (System.Math.Round(val, 3) != 0)
                 {
                     TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
-                    text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                    text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                     text.text = System.Math.Round(val, 3) + "";
                     text.characterSize = 0.2f;
                     if (System.Math.Round(val, 3) < 0)
@@ -126,8 +126,8 @@ public class BeamGraphGenerator : MonoBehaviour {
             if (!property.uniformLoad)
             {
                 LineRenderer line2 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
-                line2.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
-                line2.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line2.startColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+                line2.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 line2.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
@@ -141,8 +141,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                 float totalLoad = sfd.val[node2Index];
                 if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
                     totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
-                line3.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
-                line3.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line3.startColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+                line3.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 line3.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
@@ -157,7 +157,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
                     if (System.Math.Round(val, 3) < 0)
                         text.transform.position -= new Vector3(0, 0.4f);
-                    text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                    text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                     text.text = System.Math.Round(val, 3) + "";
                     text.characterSize = 0.2f;
                     text.transform.SetParent(line3.transform);
@@ -172,8 +172,8 @@ public class BeamGraphGenerator : MonoBehaviour {
                     totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
                 totalLoad -= property.uniformLoad.load * property.length;
                 LineRenderer line2 = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
-                line2.startColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
-                line2.endColor = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                line2.startColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+                line2.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 line2.SetPositions(new Vector3[]
                 {
                     new Vector3(x,val/max*3-5),
@@ -187,7 +187,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 if (System.Math.Round(val, 3) != 0)
                 {
                     TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
-                    text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                    text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                     if (System.Math.Round(val, 3) < 0)
                         text.transform.position -= new Vector3(0, 0.4f);
                     text.text = System.Math.Round(val, 3) + "";
@@ -198,6 +198,16 @@ public class BeamGraphGenerator : MonoBehaviour {
             }
         }
         lineL.SetPositions(new Vector3[] { new Vector3(0, -5), new Vector3(x, -5) });
+
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -5), Quaternion.identity).GetComponent<TextMesh>();
+        textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+        textStart.text = "SFD";
+        textStart.transform.SetParent(lineL.transform);
+
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -5), Quaternion.identity).GetComponent<TextMesh>();
+        textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+        textEnd.text = "SFD";
+        textEnd.transform.SetParent(lineL.transform);
 
         string loadMemStr = "Load mem = ";
         foreach (float l in loadMem)
@@ -266,8 +276,8 @@ public class BeamGraphGenerator : MonoBehaviour {
         foreach (Point point in points)
         {
             LineRenderer line = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
-            line.startColor = new Color(33/255f, 150/255f, 243/255f);
-            line.endColor = new Color(33 / 255f, 150 / 255f, 243 / 255f);
+            line.startColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+            line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
 
             if (!point.parabola)
             {
@@ -289,7 +299,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             if (System.Math.Round(point.y, 3) != 0)
             {
                 TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 9.8f), Quaternion.identity).GetComponent<TextMesh>();
-                text.color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
+                text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 if (System.Math.Round(point.y, 3) < 0)
                     text.transform.position -= new Vector3(0, 0.4f);
                 text.text = System.Math.Round(point.y, 3) + "";
@@ -303,6 +313,16 @@ public class BeamGraphGenerator : MonoBehaviour {
             line.transform.SetParent(transform.GetChild(2));
         }
         lineM.SetPositions(new Vector3[] { new Vector3(0, -10), new Vector3(currentX, -10) });
+
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -10), Quaternion.identity).GetComponent<TextMesh>();
+        textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+        textStart.text = "BMD";
+        textStart.transform.SetParent(lineM.transform);
+
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -10), Quaternion.identity).GetComponent<TextMesh>();
+        textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+        textEnd.text = "BMD";
+        textEnd.transform.SetParent(lineM.transform);
     }
 
     float FindPoint(float p1,float p2,float length)
