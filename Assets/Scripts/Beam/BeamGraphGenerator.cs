@@ -199,6 +199,16 @@ public class BeamGraphGenerator : MonoBehaviour {
         }
         lineL.SetPositions(new Vector3[] { new Vector3(0, -5), new Vector3(x, -5) });
 
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -5), Quaternion.identity).GetComponent<TextMesh>();
+        textStart.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+        textStart.text = "SFD";
+        textStart.transform.SetParent(lineL.transform);
+
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -5), Quaternion.identity).GetComponent<TextMesh>();
+        textEnd.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+        textEnd.text = "SFD";
+        textEnd.transform.SetParent(lineL.transform);
+
         string loadMemStr = "Load mem = ";
         foreach (float l in loadMem)
             loadMemStr += l + " ";
