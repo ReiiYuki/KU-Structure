@@ -81,7 +81,6 @@ public class BeamGraphGenerator : MonoBehaviour {
         LineRenderer lineL = originL.GetComponent<LineRenderer>();
         lineL.startColor = new Color(128 / 255f, 222 / 255f, 234 / 255f);
         lineL.endColor = new Color(128 / 255f, 222 / 255f, 234 / 255f);
-        lineL.SetPositions(new Vector3[] { new Vector3(int.MinValue, -5), new Vector3(int.MaxValue, -5) });
         originL.transform.SetParent(transform.GetChild(1));
 
         float max = Max(sfd.val);
@@ -109,14 +108,17 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val += totalLoad;
                 loadMem.Add(val);
                 line1.transform.SetParent(transform.GetChild(1));
-
-                TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
-                text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
-                text.text = System.Math.Round(val, 4) + "";
-                text.characterSize = 0.2f;
-                if (System.Math.Round(val, 4) < 0)
-                    text.transform.position -= new Vector3(0, 0.4f);
-                text.transform.SetParent(line1.transform);
+                if (System.Math.Round(val, 3) != 0)
+                {
+                    TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
+                    text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                    text.text = System.Math.Round(val, 3) + "";
+                    text.characterSize = 0.2f;
+                    if (System.Math.Round(val, 3) < 0)
+                        text.transform.position -= new Vector3(0, 0.4f);
+                    text.transform.SetParent(line1.transform);
+                }
+                
 
                 isStart = false;
             }
@@ -150,13 +152,17 @@ public class BeamGraphGenerator : MonoBehaviour {
                 loadMem.Add(val);
                 line3.transform.SetParent(transform.GetChild(1));
 
-                TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
-                if (System.Math.Round(val, 4) < 0)
-                    text.transform.position -= new Vector3(0, 0.4f);
-                text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
-                text.text = System.Math.Round(val, 4) + "";
-                text.characterSize = 0.2f;
-                text.transform.SetParent(line3.transform);
+                if (System.Math.Round(val, 3) != 0)
+                {
+                    TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
+                    if (System.Math.Round(val, 3) < 0)
+                        text.transform.position -= new Vector3(0, 0.4f);
+                    text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                    text.text = System.Math.Round(val, 3) + "";
+                    text.characterSize = 0.2f;
+                    text.transform.SetParent(line3.transform);
+                }
+                
             }
             else
             {
@@ -178,15 +184,21 @@ public class BeamGraphGenerator : MonoBehaviour {
                 x += property.length;
                 line2.transform.SetParent(transform.GetChild(1));
 
-                TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
-                text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
-                if (System.Math.Round(val, 4) < 0)
-                    text.transform.position -= new Vector3(0, 0.4f);
-                text.text = System.Math.Round(val,4) + "";
-                text.characterSize = 0.2f;
-                text.transform.SetParent(line2.transform);
+                if (System.Math.Round(val, 3) != 0)
+                {
+                    TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
+                    text.color = new Color(0 / 255f, 188 / 255f, 212 / 255f);
+                    if (System.Math.Round(val, 3) < 0)
+                        text.transform.position -= new Vector3(0, 0.4f);
+                    text.text = System.Math.Round(val, 3) + "";
+                    text.characterSize = 0.2f;
+                    text.transform.SetParent(line2.transform);
+                }
+                
             }
         }
+        lineL.SetPositions(new Vector3[] { new Vector3(0, -5), new Vector3(x, -5) });
+
         string loadMemStr = "Load mem = ";
         foreach (float l in loadMem)
             loadMemStr += l + " ";
@@ -208,7 +220,6 @@ public class BeamGraphGenerator : MonoBehaviour {
         LineRenderer lineM = originM.GetComponent<LineRenderer>();
         lineM.startColor = new Color(144/255f, 202/255f, 249/255f);
         lineM.endColor = new Color(144/255f, 202/255f, 249/255f);
-        lineM.SetPositions(new Vector3[] { new Vector3(int.MinValue, -10), new Vector3(int.MaxValue, -10) });
         lineM.transform.SetParent(transform.GetChild(2));
 
         List<Point> points = new List<Point>();
@@ -275,18 +286,23 @@ public class BeamGraphGenerator : MonoBehaviour {
                 parabolaIndex %= 2;
             }
 
-            TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 9.8f), Quaternion.identity).GetComponent<TextMesh>();
-            text.color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
-            if (System.Math.Round(point.y, 4) < 0)
-                text.transform.position -= new Vector3(0, 0.4f);
-            text.text = System.Math.Round(point.y, 4) + "";
-            text.characterSize = 0.2f;
-            text.transform.SetParent(line.transform);
+            if (System.Math.Round(point.y, 3) != 0)
+            {
+                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 9.8f), Quaternion.identity).GetComponent<TextMesh>();
+                text.color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
+                if (System.Math.Round(point.y, 3) < 0)
+                    text.transform.position -= new Vector3(0, 0.4f);
+                text.text = System.Math.Round(point.y, 3) + "";
+                text.characterSize = 0.2f;
+                text.transform.SetParent(line.transform);
+            }
+            
 
             currentX = point.x;
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
         }
+        lineM.SetPositions(new Vector3[] { new Vector3(0, -10), new Vector3(currentX, -10) });
     }
 
     float FindPoint(float p1,float p2,float length)
