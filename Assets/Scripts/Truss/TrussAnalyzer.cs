@@ -163,6 +163,7 @@ public class TrussAnalyzer : MonoBehaviour
             matrix = matrix * EAL;
             matrixs[i] = matrix;
             matrixsT[i] = matrixT;
+            matrixsK[i] = matrixK;
         }
         List<TrussNodeProperty> dnode = getPoint(nodes);
         float[,] sArray = new float[dnode.Count, dnode.Count];
@@ -218,6 +219,11 @@ public class TrussAnalyzer : MonoBehaviour
         }
 
 
+        Matrix2D[] Q = new Matrix2D[members.Count];
+        for (int i = 0; i < members.Count; i++)
+        {
+            U[i] = matrixsK[i] * U[i];
+        }
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)
