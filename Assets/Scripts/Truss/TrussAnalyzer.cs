@@ -126,14 +126,16 @@ public class TrussAnalyzer : MonoBehaviour
     {
         float[][] array = new float[members.Count][];
         Matrix2D[] matrixs = new Matrix2D[members.Count];
-        foreach(TrussMemberProperty member in members)
+        Matrix2D[] matrixsT = new Matrix2D[members.Count];
+        Matrix2D[] matrixsK = new Matrix2D[members.Count];
+        for (int i = 0;i < members.Count;i++)
         {
 
-            TrussNodeProperty node1 = member.node1;
-            TrussNodeProperty node2 = member.node2;
+            TrussNodeProperty node1 = members[i].node1;
+            TrussNodeProperty node2 = members[i].node2;
 
-            float cos = calAngle(node1.x, node2.x, member.lenght());
-            float sin = calAngle(node1.y, node2.y, member.lenght());
+            float cos = calAngle(node1.x, node2.x, members[i].lenght());
+            float sin = calAngle(node1.y, node2.y, members[i].lenght());
             float cos2 = Mathf.Pow(cos, 2);
             float sin2 = Mathf.Pow(sin, 2);
             float cossin = cos * sin;
@@ -143,11 +145,24 @@ public class TrussAnalyzer : MonoBehaviour
                     {-cos2,-cossin,cos2,cossin},
                     {-cossin,-sin2,cossin,sin2}
                 });
+            Matrix2D matrixT = new Matrix2D(new float[,] {
+                    {cos,sin,0,0},
+                    {-sin,cos,0,0},
+                    {0,0,cos,sin},
+                    {0,0,-sin,cos}
+                });
 
-            float EAL = member.GetE() * member.GetI() / member.lenght();
+            float EAL = members[i].GetE() * members[i].GetI() / members[i].lenght();
 
+            Matrix2D matrixK = new Matrix2D(new float[,] {
+                    {EAL,0,-EAL,0},
+                    {0,0,0,0},
+                    {-EAL,0,EAL,0},
+                    {0,0,0,0}
+                });
             matrix = matrix * EAL;
-            
+            matrixs[i] = matrix;
+            matrixsT[i] = matrixT;
         }
         List<TrussNodeProperty> dnode = getPoint(nodes);
         float[,] sArray = new float[dnode.Count, dnode.Count];
@@ -195,7 +210,12 @@ public class TrussAnalyzer : MonoBehaviour
                     vArray[i, 3] = d.array[i * 2+1, 0];
                 }
             }
-               
+
+        Matrix2D[] U = new Matrix2D[members.Count];
+        for (int i = 0; i < members.Count; i++)
+        {
+            U[i] = matrixsT[i] * new Matrix2D(vArray);
+        }
 
 
     }
