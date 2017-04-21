@@ -376,4 +376,15 @@ public class BeamGraphGenerator : MonoBehaviour {
         line.SetVertexCount(position.Count);
         line.SetPositions(position.ToArray());
     }
+
+    public void ResetGraphGenerator()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            for (int j = 0; j < transform.GetChild(i).childCount; j++)
+            {
+                DestroyObject(transform.GetChild(i).GetChild(j).gameObject);
+            }
+        }
+    }
 }
