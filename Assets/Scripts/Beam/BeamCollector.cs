@@ -181,7 +181,26 @@ public class BeamCollector : Collector {
     override
     public void Undo()
     {
+        Debug.Log(history.Count);
         if (history.Count == 0) return;
-        history.RemoveAt(history.Count - 1);
+        GameObject obj = history[history.Count - 1];
+        if (members.IndexOf(obj) >= 0)
+        {
+            nodes.RemoveAt(obj.GetComponent<MemberProperty>().node2.number);
+            if (members.Count == 1)
+                nodes.RemoveAt(obj.GetComponent<MemberProperty>().node1.number);    
+            members.Remove(obj);
+        }
+        else if (obj.GetComponent<PointLoadProperty>())
+            pointLoads.Remove(obj.GetComponent<PointLoadProperty>());
+        else if (obj.GetComponent<UniformLoadProperty>())
+            uniformLoads.Remove(obj.GetComponent<UniformLoadProperty>());
+        history.Remove(obj);
+        DestroyObject(obj);
+        Debug.Log("History : " + history.Count);
+        Debug.Log("Member : " + members.Count);
+        Debug.Log("Node : " + nodes.Count);
+        Debug.Log("Uniform Load : " + uniformLoads.Count);
+        Debug.Log("Point Load : " + pointLoads.Count);
     }
 }
