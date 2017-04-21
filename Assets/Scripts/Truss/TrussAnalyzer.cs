@@ -17,7 +17,7 @@ public class TrussAnalyzer : MonoBehaviour
     {
     }
 
-    struct Matrix2D
+    public struct Matrix2D
     {
         public float[,] array;
 
@@ -110,7 +110,15 @@ public class TrussAnalyzer : MonoBehaviour
             return new Matrix2D(newArray);
         }
 
+        public static Matrix2D inverse(Matrix2D matrix)
+        {
+            float[,] array = new float[matrix.array.GetLength(0), matrix.array.GetLength(1)];
+            for (int i = 0; i < array.GetLength(0); i++)
+                for (int j = 0; j < array.GetLength(1); j++)
+                    array[i, j] = -matrix.array[i, j];
 
+            return new Matrix2D(array);
+        }
     }
 
 
@@ -167,26 +175,61 @@ public class TrussAnalyzer : MonoBehaviour
 
                 }
 
-        
-    }
-    public Matrix2D inverse(Matrix2D matrix)
-    {
-        float[,] array = new float[matrix.array.GetLength(0), matrix.array.GetLength(1)];
-        for (int i = 0; i < array.GetLength(0); i++)
-            for (int j = 0; j < array.GetLength(1); j++)
-                array[i, j] = -matrix.array[i,j];
+        Matrix2D sArrayI = Matrix2D.inverse(new Matrix2D(sArray));
+        Matrix2D fnodes = getForce(nodes);
+        Matrix2D d = fnodes*sArrayI;
+        int[] fIndex = getForceIndex(nodes);
 
-        return new Matrix2D(array);
+        float[,] vArray = new float[members.Count,4];
+        for (int i = 0; i < members.Count; i++)
+            for (int j = 0; j < fIndex.Length; j++)
+            {
+                if (members[i].node1.number == fIndex[j])
+                {
+                    vArray[i, 0] = d.array[i * 2, 0];
+                    vArray[i, 1] = d.array[i * 2+1, 0];
+                }
+                if (members[i].node2.number == fIndex[j])
+                {
+                    vArray[i, 2] = d.array[i * 2, 0];
+                    vArray[i, 3] = d.array[i * 2+1, 0];
+                }
+            }
+               
+
+
     }
-    public List<TrussNodeProperty> getForce(List<TrussNodeProperty> nodes)
+
+    public int[] getForceIndex(List<TrussNodeProperty> nodes)
     {
-        List<TrussNodeProperty> newList = new List<TrussNodeProperty>();
+        List<int> numbers = new List<int>();
         foreach (TrussNodeProperty node in nodes)
         {
-            if (node.pointLoad.loadX !=0 || node.pointLoad.loadY !=0)
-                newList.Add(node)
+            if (node.pointLoad.loadX != 0 || node.pointLoad.loadY != 0)
+            {
+                numbers.Add(node.number);
+            }
         }
-        return newList;
+        return numbers.ToArray();
+    }
+    public Matrix2D getForce(List<TrussNodeProperty> nodes)
+    {
+        List<float> numbers = new List<float>();
+        foreach (TrussNodeProperty node in nodes)
+        {
+            if (node.pointLoad.loadX != 0 || node.pointLoad.loadY != 0)
+            {
+                numbers.Add(node.pointLoad.loadX);
+                numbers.Add(node.pointLoad.loadY);
+            }
+        }
+        float[,] array = new float[numbers.Count,];
+        for(int i=0;i<numbers.Count;i++)
+        {
+            array[i, 0] = numbers[i];
+        }
+        return new Matrix2D(array);
+            
     }
     public List<TrussNodeProperty> getPoint(List<TrussNodeProperty> nodes)
     {
