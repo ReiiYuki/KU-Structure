@@ -107,7 +107,8 @@ public class BeamAnalyzer : MonoBehaviour {
                 }
                 else
                 {
-                    length += property.rightMember.length;
+                    if (property.rightMember)
+                        length += property.rightMember.length;
                 }
             }
         }
@@ -326,11 +327,13 @@ public class BeamAnalyzer : MonoBehaviour {
         {
             if (node == collector.nodes.Count) return 0;
             if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
+            if (!collector.nodes[node].GetComponent<NodeProperty>().rightMember) return 0;
             return collector.nodes[node].GetComponent<NodeProperty>().rightMember.length + GetLengthOfLoad(node + 1, isRight);
         }else
         {
             if (node < 0) return 0;
             if (collector.nodes[node].GetComponent<NodeProperty>().support) return 0;
+            if (!collector.nodes[node].GetComponent<NodeProperty>().leftMember) return 0;
             return collector.nodes[node].GetComponent<NodeProperty>().leftMember.length + GetLengthOfLoad(node - 1, isRight);
         }
     }
@@ -791,6 +794,6 @@ public class BeamAnalyzer : MonoBehaviour {
     #endregion
     public void ResetAnalyzer()
     {
-
+        GameObject.FindObjectOfType<BeamGraphGenerator>().ResetGraphGenerator();
     }
 }
