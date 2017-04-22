@@ -225,7 +225,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
     void DrawMomentDiagram()
     {
-        originM = Instantiate(originPrefabs, new Vector3(0, -10, 0), Quaternion.identity);
+        originM = Instantiate(originPrefabs, new Vector3(0, -15, 0), Quaternion.identity);
         originM.transform.SetParent(transform);
         LineRenderer lineM = originM.GetComponent<LineRenderer>();
         lineM.startColor = new Color(144/255f, 202/255f, 249/255f);
@@ -270,7 +270,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float max = FindMaxPoint(points);
         float currentX = 0;
         float currentY = 0;
-        float offset = -10;
+        float offset = -15;
         float parabolaIndex = 0;
         float[] parabolaEquation = new float[3];
         foreach (Point point in points)
@@ -298,7 +298,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
             if (System.Math.Round(point.y, 3) != 0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 9.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 14.8f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 if (System.Math.Round(point.y, 3) < 0)
                     text.transform.position -= new Vector3(0, 0.4f);
@@ -312,14 +312,14 @@ public class BeamGraphGenerator : MonoBehaviour {
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
         }
-        lineM.SetPositions(new Vector3[] { new Vector3(0, -10), new Vector3(currentX, -10) });
+        lineM.SetPositions(new Vector3[] { new Vector3(0, -15), new Vector3(currentX, -15) });
 
-        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -10), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -15), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textStart.text = "BMD";
         textStart.transform.SetParent(lineM.transform);
 
-        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -10), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -15), Quaternion.identity).GetComponent<TextMesh>();
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "BMD";
         textEnd.transform.SetParent(lineM.transform);
