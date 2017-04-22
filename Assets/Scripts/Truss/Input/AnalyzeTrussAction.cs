@@ -6,7 +6,7 @@ public class AnalyzeTrussAction : MonoBehaviour {
 
 	public void Analyze()
     {
-        GameObject.FindObjectOfType<TrussAnalyzer>();
+        GameObject.FindObjectOfType<TrussAnalyzer>().analyze();
     }
 }
  

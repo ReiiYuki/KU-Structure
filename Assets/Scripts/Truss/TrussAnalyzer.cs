@@ -258,7 +258,7 @@ public class TrussAnalyzer : MonoBehaviour
         List<int> numbers = new List<int>();
         foreach (TrussNodeProperty node in nodes)
         {
-            if (node.pointLoad.loadX != 0 || node.pointLoad.loadY != 0)
+            if (node.pointLoadX.load != 0 || node.pointLoadY.load != 0)
             {
                 numbers.Add(node.number);
             }
@@ -270,10 +270,10 @@ public class TrussAnalyzer : MonoBehaviour
         List<float> numbers = new List<float>();
         foreach (TrussNodeProperty node in nodes)
         {
-            if (node.pointLoad.loadX != 0 || node.pointLoad.loadY != 0)
+            if (node.pointLoadX.load != 0 || node.pointLoadY.load != 0)
             {
-                numbers.Add(node.pointLoad.loadX);
-                numbers.Add(node.pointLoad.loadY);
+                numbers.Add(node.pointLoadX.load);
+                numbers.Add(node.pointLoadY.load);
             }
         }
         float[,] array = new float[numbers.Count,1];
