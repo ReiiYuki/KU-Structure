@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnalyzeAction : MonoBehaviour {
+public class ResetBeam : MonoBehaviour {
 
-	public void Analyze()
+	public void ResetCollector()
     {
         GameObject.FindObjectOfType<BeamAnalyzer>().ResetAnalyzer();
-        GameObject.FindObjectOfType<BeamAnalyzer>().Analyze();
+        GameObject.FindObjectOfType<BeamCollector>().ResetCollector();
     }
 }
