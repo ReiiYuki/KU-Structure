@@ -132,9 +132,12 @@ public class TrussAnalyzer : MonoBehaviour
 
     public void analyze()
     {
+        Debug.Log("ininin");
+        Debug.Log(collector.members.Count);
         List<TrussMemberProperty> members = new List<TrussMemberProperty>();
         foreach (GameObject g in collector.members)
             members.Add(g.GetComponent<TrussMemberProperty>());
+
 
         List<TrussNodeProperty> nodes = new List<TrussNodeProperty>();
         foreach (GameObject g in collector.nodes)
@@ -181,9 +184,9 @@ public class TrussAnalyzer : MonoBehaviour
             K[i] = matrixK;
         }
         List<TrussNodeProperty> dnode = getPoint(nodes);
-        float[,] sArray = new float[dnode.Count, dnode.Count];
-        for (int i = 0; i < dnode.Count; i++)
-            for (int j = 0; j < dnode.Count; j++)
+        float[,] sArray = new float[dnode.Count*2, dnode.Count*2];
+        for (int i = 0; i < dnode.Count-1; i++)
+            for (int j = 0; j < dnode.Count-1; j++)
                 for (int k = 0; k < members.Count; k++)
                 {
                     if ((members[k].node1.Equals(dnode[i])&& members[k].node1.Equals(dnode[j]))||
@@ -250,7 +253,9 @@ public class TrussAnalyzer : MonoBehaviour
         {
             F[i] = TT[i]*Q[i];
         }
-        Debug.Log(F);
+        foreach (Matrix2D f in F)
+            Debug.Log(f.array);
+        Debug.Log(F.Length);
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)

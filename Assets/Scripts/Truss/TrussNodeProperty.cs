@@ -14,6 +14,8 @@ public class TrussNodeProperty : MonoBehaviour
     void Start()
     {
         members = new List<TrussMemberProperty>();
+        pointLoadX = new TrussPointLoadProperty();
+        pointLoadY = new TrussPointLoadProperty();
     }
 
 }

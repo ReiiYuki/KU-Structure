@@ -7,6 +7,7 @@ public class TRUSSCollector : MonoBehaviour {
 	public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefabX,pointLoadPrefabY,momentumPrefab,uniformLoadPrefab;
     public List<GameObject> nodes,members;
 	public GameObject[] supportPrefabs;
+    public TrussAnalyzer  trussAnalyzer= new TrussAnalyzer();
 	// Use this for initialization
 	void Start () {
         this.nodes = new List<GameObject>();
@@ -17,7 +18,21 @@ public class TRUSSCollector : MonoBehaviour {
 	void Update () {
 		
 	}
-
+    public void helpper()
+    {
+        AddNode(0,0);
+        AddNode(12, 0);
+        AddNode(24, 0);
+        AddNode(12, 16);
+        AddMember(0, 3, 0);
+        AddMember(1, 3, 0);
+        AddMember(2, 3, 0);
+        AddSupport(1, 0);
+        AddSupport(1, 1);
+        AddSupport(1, 2);
+        AddPointLoad(3, 150, 300);
+        Debug.Log(members.Count);
+    }
     public void AddNode(int x,int y)
     {
         Debug.Log("Add Node { x:" + x + " y : " + y + " }");
