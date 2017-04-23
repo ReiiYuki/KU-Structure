@@ -317,6 +317,27 @@ public class BeamAnalyzer : MonoBehaviour {
 
         }
 
+        //Moment Case
+        foreach (MomentumProperty moment in collector.moments)
+        {
+            if (!collector.nodes[moment.node].GetComponent<NodeProperty>().support)
+            {
+                float l1 = GetLengthOfLoad(moment.node, false);
+                float l2 = GetLengthOfLoad(moment.node, true);
+                int node1 = GetEndNodeIndex(moment.node, false);
+                int node2 = GetEndNodeIndex(moment.node, true);
+                float m = moment.momentum;
+                float L = l1 + l2;
+                List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                float[] qfi = new float[4];
+                qfi[1] = m * l2 * (l2 - 2 * l1) / Mathf.Pow(L, 2);
+                qfi[3] = m * l1 * (2 * l2 - l1) / Mathf.Pow(L, 2);
+                qfi[2] = (qfi[1] - qfi[2] + m) / L;
+                qfi[0] = -1 * qfi[2];
+                qf.Add(new IndexArray(index, qfi));
+            }
+        }
+
         string qfStr = "qf = \n";
         foreach (IndexArray qfi in qf)
         {
