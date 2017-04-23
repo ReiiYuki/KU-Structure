@@ -205,6 +205,11 @@ public class BeamCollector : Collector {
             pointLoads.Remove(obj.GetComponent<PointLoadProperty>());
         else if (obj.GetComponent<UniformLoadProperty>())
             uniformLoads.Remove(obj.GetComponent<UniformLoadProperty>());
+        else if (obj.GetComponent<SupportProperty>())
+        {
+            nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().dy = 0;
+            nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().m = 0;
+        }
         history.Remove(obj);
         DestroyObject(obj);
         Debug.Log("History : " + history.Count);
