@@ -44,8 +44,9 @@ public class TRUSSCollector : MonoBehaviour {
         node.GetComponent<TrussNodeProperty>().y = y;
 		node.GetComponent<TrussNodeProperty>().number = nodes.Count;
 		node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
-
-		nodes.Add(node);
+        node.GetComponent<TrussNodeProperty>().pointLoadX = new TrussPointLoadProperty();
+        node.GetComponent<TrussNodeProperty>().pointLoadY = new TrussPointLoadProperty();
+        nodes.Add(node);
     }
 
     public void AddMember(int node1,int node2,int property)
@@ -145,10 +146,7 @@ public class TRUSSCollector : MonoBehaviour {
 
 			pointLoadX.transform.SetParent (selectNode.transform);
 		}
-        else
-        {
-            selectNode.GetComponent<TrussNodeProperty>().pointLoadX = new TrussPointLoadProperty();
-        }
+
 		// add Load Y
 		if (loadY != 0) {
 			GameObject pointLoadY = Instantiate (pointLoadPrefabY, new Vector3 ((nodes [node].transform.position.x), (nodes [node].transform.position.y +1.25f)), Quaternion.identity);
@@ -164,10 +162,7 @@ public class TRUSSCollector : MonoBehaviour {
 
 			pointLoadY.transform.SetParent (selectNode.transform);
 		}
-        else
-        {
-            selectNode.GetComponent<TrussNodeProperty>().pointLoadY = new TrussPointLoadProperty();
-        }
+
     }
 
 	public Color GetColor(int x)

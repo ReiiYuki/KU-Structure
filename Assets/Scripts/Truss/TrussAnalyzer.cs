@@ -62,6 +62,7 @@ public class TrussAnalyzer : MonoBehaviour
         }
         public static Matrix2D operator *(Matrix2D a, float d)
         {
+
             float[,] newArray = new float[a.array.GetLength(0), a.array.GetLength(1)];
             for (int i = 0; i < a.array.GetLength(0); i++)
                 for (int j = 0; j < a.array.GetLength(1); j++)
@@ -127,13 +128,27 @@ public class TrussAnalyzer : MonoBehaviour
                     matric[i, j] = matric[j, i]; ;
             return new Matrix2D(matric);
         }
+
+        public override string ToString()
+        {
+            string s = "";
+            Debug.Log(array);
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    s += (array[i, j] + ",");
+                }
+                s += "\n";
+            }
+            return s;
+        }
     }
 
 
     public void analyze()
     {
-        Debug.Log("ininin");
-        Debug.Log(collector.members.Count);
+
         List<TrussMemberProperty> members = new List<TrussMemberProperty>();
         foreach (GameObject g in collector.members)
             members.Add(g.GetComponent<TrussMemberProperty>());
@@ -213,29 +228,37 @@ public class TrussAnalyzer : MonoBehaviour
         Matrix2D fnodes = getForce(nodes);
         Matrix2D d = fnodes*sArrayI;
         int[] fIndex = getForceIndex(nodes);
-
-        float[,] vArray = new float[members.Count,4];
+        Debug.Log(fIndex[0]);
+        Matrix2D[] V = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
             for (int j = 0; j < fIndex.Length; j++)
             {
+                float[,] vArray = new float[4, 1];
                 if (members[i].node1.number == fIndex[j])
                 {
-                    vArray[i, 0] = d.array[i * 2, 0];
-                    vArray[i, 1] = d.array[i * 2+1, 0];
+                    vArray[0, 0] = d.array[i * 2, 0];
+                    vArray[1, 0] = d.array[i * 2+1, 0];
                 }
                 if (members[i].node2.number == fIndex[j])
                 {
-                    vArray[i, 2] = d.array[i * 2, 0];
-                    vArray[i, 3] = d.array[i * 2+1, 0];
+                    vArray[2, 0] = d.array[i * 2, 0];
+                    vArray[3, 0] = d.array[i * 2+1, 0];
                 }
+                V[i] = new Matrix2D(vArray);
+                Debug.Log(V[i]);
+                Debug.Log("aaaaaaaaaaaaaaa");
+                break;
             }
 
         Matrix2D[] U = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
-            U[i] = T[i] * new Matrix2D(vArray);
+            Debug.Log(T[i].array.GetLength(0));
+            Debug.Log(T[i].array.GetLength(1));
+            Debug.Log(T[i]);
+            Debug.Log(V[i] == null);
+            U[i] = T[i] * V[i];
         }
-
 
         Matrix2D[] Q = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
@@ -260,14 +283,21 @@ public class TrussAnalyzer : MonoBehaviour
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)
     {
+        Debug.Log(nodes.Count);
+        for (int i = 0; i < nodes.Count; i++)
+            Debug.Log(nodes[i].pointLoadX);
         List<int> numbers = new List<int>();
         foreach (TrussNodeProperty node in nodes)
         {
+            Debug.Log(node.pointLoadX.load);
+            Debug.Log(node.pointLoadY.load);
+            Debug.Log("aaaaaaaaaaaaaa");
             if (node.pointLoadX.load != 0 || node.pointLoadY.load != 0)
             {
                 numbers.Add(node.number);
             }
         }
+        Debug.Log(numbers.Count);
         return numbers.ToArray();
     }
     public Matrix2D getForce(List<TrussNodeProperty> nodes)
