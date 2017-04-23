@@ -195,6 +195,7 @@ public class BeamCollector : Collector {
         GameObject obj = history[history.Count - 1];
         if (members.IndexOf(obj) >= 0)
         {
+            currentPoint -= obj.GetComponent<MemberProperty>().length;
             nodes.RemoveAt(obj.GetComponent<MemberProperty>().node2.number);
             if (members.Count == 1)
                 nodes.RemoveAt(obj.GetComponent<MemberProperty>().node1.number);    
@@ -204,6 +205,11 @@ public class BeamCollector : Collector {
             pointLoads.Remove(obj.GetComponent<PointLoadProperty>());
         else if (obj.GetComponent<UniformLoadProperty>())
             uniformLoads.Remove(obj.GetComponent<UniformLoadProperty>());
+        else if (obj.GetComponent<SupportProperty>())
+        {
+            nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().dy = 0;
+            nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().m = 0;
+        }
         history.Remove(obj);
         DestroyObject(obj);
         Debug.Log("History : " + history.Count);
