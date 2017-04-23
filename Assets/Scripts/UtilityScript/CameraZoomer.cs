@@ -39,7 +39,7 @@ public class CameraZoomer : MonoBehaviour {
             float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
 
             // ... change the orthographic size based on the change in distance between the touches.
-            camera.orthographicSize += deltaMagnitudeDiff * orthoZoomSpeed;
+            camera.orthographicSize += deltaMagnitudeDiff/10 * orthoZoomSpeed;
 
             // Make sure the orthographic size never drops below zero.
             camera.orthographicSize = Mathf.Max(camera.orthographicSize, cameraDistanceMin);
