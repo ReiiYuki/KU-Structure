@@ -45,26 +45,27 @@ public class BeamGraphGenerator : MonoBehaviour {
             GameObject node = collector.nodes[i/2];
             if (q[i] != 0)
             {
-                GameObject reactionPointLoad = Instantiate(pointLoadPrefab, node.transform.position + new Vector3(0, 1), Quaternion.identity);
                 float val = q[i];
                 if (node.GetComponent<NodeProperty>().pointLoad)
                     val += node.GetComponent<NodeProperty>().pointLoad.load;
+                GameObject reactionPointLoad = Instantiate(pointLoadPrefab, node.transform.position + new Vector3(0, 1), Quaternion.identity);
+                val = (float)System.Math.Round(val, 2);
                 if (val > 0)
                     reactionPointLoad.GetComponent<PointLoadProperty>().ForceInverse();
                 else
                     reactionPointLoad.GetComponent<PointLoadProperty>().ABitInverse();
                 reactionPointLoad.GetComponent<SpriteRenderer>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
-                reactionPointLoad.GetComponentInChildren<TextMesh>().text = val + " N.";
+                reactionPointLoad.GetComponentInChildren<TextMesh>().text = val + " kg.";
                 reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionPointLoad.transform.SetParent(transform.GetChild(0));
                 if (val == 0)
                     DestroyObject(reactionPointLoad);
             }
-            if (q[i + 1] != 0)
+            if (System.Math.Round(q[i + 1],2) != 0)
             {
                 GameObject reactionMomentum = Instantiate(momentumPrefab, node.transform.position - new Vector3(0, 0.75f, 0f), Quaternion.identity);
                 reactionMomentum.GetComponent<MomentumProperty>().momentum = q[i+1];
-                reactionMomentum.GetComponentInChildren<TextMesh>().text = (-1*q[i+1]) + " N.m";
+                reactionMomentum.GetComponentInChildren<TextMesh>().text = System.Math.Round(-1*q[i+1],2) + " kg.m";
                 reactionMomentum.GetComponentInChildren<TextMesh>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionMomentum.GetComponentInChildren<TextMesh>().transform.position += new Vector3(0, 0.5f);
                 reactionMomentum.GetComponentInChildren<SpriteRenderer>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
@@ -108,13 +109,13 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val += totalLoad;
                 loadMem.Add(val);
                 line1.transform.SetParent(transform.GetChild(1));
-                if (System.Math.Round(val, 3) != 0)
+                if (System.Math.Round(val, 2) != 0)
                 {
                     TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
                     text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
-                    text.text = System.Math.Round(val, 3) + "";
+                    text.text = System.Math.Round(val, 2) + "";
                     text.characterSize = 0.2f;
-                    if (System.Math.Round(val, 3) < 0)
+                    if (System.Math.Round(val, 2) < 0)
                         text.transform.position -= new Vector3(0, 0.4f);
                     text.transform.SetParent(line1.transform);
                 }
@@ -152,13 +153,13 @@ public class BeamGraphGenerator : MonoBehaviour {
                 loadMem.Add(val);
                 line3.transform.SetParent(transform.GetChild(1));
 
-                if (System.Math.Round(val, 3) != 0)
+                if (System.Math.Round(val, 2) != 0)
                 {
                     TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
-                    if (System.Math.Round(val, 3) < 0)
+                    if (System.Math.Round(val, 2) < 0)
                         text.transform.position -= new Vector3(0, 0.4f);
                     text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
-                    text.text = System.Math.Round(val, 3) + "";
+                    text.text = System.Math.Round(val, 2) + "";
                     text.characterSize = 0.2f;
                     text.transform.SetParent(line3.transform);
                 }
@@ -184,13 +185,13 @@ public class BeamGraphGenerator : MonoBehaviour {
                 x += property.length;
                 line2.transform.SetParent(transform.GetChild(1));
 
-                if (System.Math.Round(val, 3) != 0)
+                if (System.Math.Round(val, 2) != 0)
                 {
                     TextMesh text = Instantiate(textPrefab, new Vector3(x, val / max * 3 - 4.8f), Quaternion.identity).GetComponent<TextMesh>();
                     text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
-                    if (System.Math.Round(val, 3) < 0)
+                    if (System.Math.Round(val, 2) < 0)
                         text.transform.position -= new Vector3(0, 0.4f);
-                    text.text = System.Math.Round(val, 3) + "";
+                    text.text = System.Math.Round(val, 2) + "";
                     text.characterSize = 0.2f;
                     text.transform.SetParent(line2.transform);
                 }
@@ -296,13 +297,13 @@ public class BeamGraphGenerator : MonoBehaviour {
                 parabolaIndex %= 2;
             }
 
-            if (System.Math.Round(point.y, 3) != 0)
+            if (System.Math.Round(point.y, 2) != 0)
             {
                 TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 14.8f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
-                if (System.Math.Round(point.y, 3) < 0)
+                if (System.Math.Round(point.y, 2) < 0)
                     text.transform.position -= new Vector3(0, 0.4f);
-                text.text = System.Math.Round(point.y, 3) + "";
+                text.text = System.Math.Round(point.y, 2) + "";
                 text.characterSize = 0.2f;
                 text.transform.SetParent(line.transform);
             }
