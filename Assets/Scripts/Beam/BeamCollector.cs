@@ -67,6 +67,8 @@ public class BeamCollector : Collector {
         members.Add(member);
 
         history.Add(member);
+
+        Camera.main.transform.position = new Vector3(currentPoint-span/2,0, -10);
     }
 
     public void AddSupport(int type,int node)
