@@ -46,7 +46,7 @@ public class BeamCollector : Collector {
         property.origin = currentPoint;
 
         GameObject lengthText = Instantiate(textPrefab, new Vector3(currentPoint + span / 2f, -0.5f), Quaternion.identity);
-        lengthText.GetComponent<TextMesh>().text = span + " m.";
+        lengthText.GetComponent<TextMesh>().text = System.Math.Round(span,2) + " m.";
         lengthText.transform.SetParent(member.transform);
 
         GameObject numberText = Instantiate(textPrefab, new Vector3(currentPoint + span / 2f, 0,-1f), Quaternion.identity);
@@ -72,8 +72,8 @@ public class BeamCollector : Collector {
     public void AddSupport(int type,int node)
     {
         Debug.Log("Add Support { " + "type : " + type + " Node : " + node + " }");
-
         GameObject selectedNode = nodes[node];
+        if (selectedNode.GetComponent<NodeProperty>().support) Destroy(selectedNode.GetComponent<NodeProperty>().support.gameObject);
         GameObject support;
         if (type == 0)
         {
@@ -104,9 +104,12 @@ public class BeamCollector : Collector {
     {
         Debug.Log("Add Point Load { " + "node : " + node + " load : " + load + " }");
         GameObject selectNode = nodes[node];
+
+        if (selectNode.GetComponent<NodeProperty>().pointLoad) Destroy(selectNode.GetComponent<NodeProperty>().pointLoad.gameObject);
+
         GameObject pointLoad = Instantiate(pointLoadPrefab, selectNode.transform.position + new Vector3(0, 1), Quaternion.identity);
 
-        pointLoad.GetComponentInChildren<TextMesh>().text = load + " N.";
+        pointLoad.GetComponentInChildren<TextMesh>().text = System.Math.Round(load,2) + " kg.";
         pointLoad.GetComponent<PointLoadProperty>().load = load;
         pointLoad.GetComponent<PointLoadProperty>().node = node;
         selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
@@ -125,13 +128,16 @@ public class BeamCollector : Collector {
         Debug.Log("Add Uniform Load { " + "load : " + load + " element : " + element + " }");
 
         GameObject selectedElement = members[element];
+
+        if (selectedElement.GetComponent<MemberProperty>().uniformLoad) Destroy(selectedElement.GetComponent<MemberProperty>().uniformLoad.gameObject);
+
         GameObject uniformLoad = Instantiate(uniformLoadPrefab, new Vector3(selectedElement.GetComponent<MemberProperty>().origin+ selectedElement.GetComponent<MemberProperty>().length/2,1f), Quaternion.identity);
 
         uniformLoad.GetComponent<SpriteRenderer>().size = new Vector3(uniformLoad.GetComponent<SpriteRenderer>().size.x*selectedElement.GetComponent<MemberProperty>().length, uniformLoad.GetComponent<SpriteRenderer>().size.y);
 
         uniformLoad.GetComponent<UniformLoadProperty>().load = load;
         uniformLoad.GetComponent<UniformLoadProperty>().element = element;
-        uniformLoad.GetComponentInChildren<TextMesh>().text = load + " N/m.";
+        uniformLoad.GetComponentInChildren<TextMesh>().text = System.Math.Round(load,2) + " kg/m.";
         selectedElement.GetComponent<MemberProperty>().uniformLoad = uniformLoad.GetComponent< UniformLoadProperty>();
 
         uniformLoad.GetComponent<UniformLoadProperty>().Inverse();
@@ -149,9 +155,12 @@ public class BeamCollector : Collector {
         Debug.Log("Add Momentum { " + "Momentum : " + momentum + " node : " + node + "} ");
 
         GameObject selectNode = nodes[node];
+
+        if (selectNode.GetComponent<NodeProperty>().momentum) Destroy(selectNode.GetComponent<NodeProperty>().momentum.gameObject);
+
         GameObject momentumObj = Instantiate(momentumPrefab, selectNode.transform.position-new Vector3(0,0.75f,0f), Quaternion.identity);
 
-        momentumObj.GetComponentInChildren<TextMesh>().text = momentum + " N.m";
+        momentumObj.GetComponentInChildren<TextMesh>().text = System.Math.Round(momentum,2) + " kg.m";
         momentumObj.GetComponent<MomentumProperty>().node = node;
         momentumObj.GetComponent<MomentumProperty>().momentum = momentum;
         momentumObj.GetComponent<MomentumProperty>().UpdateDirection();
