@@ -67,6 +67,8 @@ public class BeamCollector : Collector {
         members.Add(member);
 
         history.Add(member);
+
+        Camera.main.transform.position = new Vector3(currentPoint-span/2,0, -10);
     }
 
     public void AddSupport(int type,int node)
@@ -98,6 +100,7 @@ public class BeamCollector : Collector {
 
         history.Add(support);
 
+        Camera.main.transform.position = new Vector3(selectedNode.transform.position.x, 0, -10);
     }
 
     public void AddPointLoad(int node, float load)
@@ -121,6 +124,7 @@ public class BeamCollector : Collector {
 
         history.Add(pointLoad);
 
+        Camera.main.transform.position = new Vector3(selectNode.transform.position.x, 0, -10);
     }
 
     public void AddUniformLoad(int element,float load)
@@ -148,6 +152,8 @@ public class BeamCollector : Collector {
 
         history.Add(uniformLoad);
 
+        Camera.main.transform.position = new Vector3(selectedElement.GetComponent<MemberProperty>().node1.transform.position.x+ selectedElement.GetComponent<MemberProperty>().length/2, 0, -10);
+
     }
 
     public void AddMomentum(int node,float momentum)
@@ -170,6 +176,7 @@ public class BeamCollector : Collector {
 
         history.Add(momentumObj);
 
+        Camera.main.transform.position = new Vector3(selectNode.transform.position.x, 0, -10);
     }
 
     public Color GetColor(int x)
@@ -195,6 +202,7 @@ public class BeamCollector : Collector {
         GameObject obj = history[history.Count - 1];
         if (members.IndexOf(obj) >= 0)
         {
+            currentPoint -= obj.GetComponent<MemberProperty>().length;
             nodes.RemoveAt(obj.GetComponent<MemberProperty>().node2.number);
             if (members.Count == 1)
                 nodes.RemoveAt(obj.GetComponent<MemberProperty>().node1.number);    
@@ -204,6 +212,11 @@ public class BeamCollector : Collector {
             pointLoads.Remove(obj.GetComponent<PointLoadProperty>());
         else if (obj.GetComponent<UniformLoadProperty>())
             uniformLoads.Remove(obj.GetComponent<UniformLoadProperty>());
+        else if (obj.GetComponent<SupportProperty>())
+        {
+            nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().dy = 0;
+            nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().m = 0;
+        }
         history.Remove(obj);
         DestroyObject(obj);
         Debug.Log("History : " + history.Count);
