@@ -277,21 +277,44 @@ public class BeamAnalyzer : MonoBehaviour {
         foreach (UniformLoadProperty uniform in collector.uniformLoads)
         {
             MemberProperty member = collector.members[uniform.element].GetComponent<MemberProperty>();
-            float l1 = GetLengthOfLoad(member.node2.number, false);
-            float l2 = GetLengthOfLoad(member.node2.number, true);
-            float L = l1 + l2;
-            float w = uniform.load;
-            int node1 = GetEndNodeIndex(member.node2.number, false);
-            int node2 = GetEndNodeIndex(member.node2.number, true);
-            Debug.Log("l1 = " + l1 + " l2 = " + l2 + " L = " + (l1 + l2) + " node1 = " + node1 + " Node2 = " + node2);
-            List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
-            float[] qfi = new float[4];
+            if (member.node1.support)
+            {
+                float l1 = GetLengthOfLoad(member.node2.number, false);
+                float l2 = GetLengthOfLoad(member.node2.number, true);
+                float L = l1 + l2;
+                float w = uniform.load;
+                int node1 = GetEndNodeIndex(member.node2.number, false);
+                int node2 = GetEndNodeIndex(member.node2.number, true);
+                Debug.Log("l1 = " + l1 + " l2 = " + l2 + " L = " + (l1 + l2) + " node1 = " + node1 + " Node2 = " + node2);
 
-            qfi[1] = w * Mathf.Pow(l1, 2)*(6*Mathf.Pow(L,2)-8*L*l1+3*Mathf.Pow(l1,2))/(12*Mathf.Pow(L,2));
-            qfi[3] = -1 * w * Mathf.Pow(l1, 3) * (4 * L - 3 * l1) / (12 * Mathf.Pow(L, 2));
-            qfi[2] = (w * Mathf.Pow(l1, 2) / 2 - qfi[3] - qfi[1]) / L;
-            qfi[0] = w * l1 - qfi[2];
-            qf.Add(new IndexArray(index, qfi));
+                List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                float[] qfi = new float[4];
+
+                qfi[1] = w * Mathf.Pow(l1, 2) * (6 * Mathf.Pow(L, 2) - 8 * L * l1 + 3 * Mathf.Pow(l1, 2)) / (12 * Mathf.Pow(L, 2));
+                qfi[3] = -1 * w * Mathf.Pow(l1, 3) * (4 * L - 3 * l1) / (12 * Mathf.Pow(L, 2));
+                qfi[2] = (w * Mathf.Pow(l1, 2) / 2 - qfi[3] - qfi[1]) / L;
+                qfi[0] = w * l1 - qfi[2];
+                qf.Add(new IndexArray(index, qfi));
+            }else
+            {
+                float l1 = GetLengthOfLoad(member.node1.number, false);
+                float l2 = GetLengthOfLoad(member.node1.number, true);
+                float L = l1 + l2;
+                float w = uniform.load;
+                int node1 = GetEndNodeIndex(member.node1.number, false);
+                int node2 = GetEndNodeIndex(member.node1.number, true);
+                Debug.Log("l1 = " + l1 + " l2 = " + l2 + " L = " + (l1 + l2) + " node1 = " + node1 + " Node2 = " + node2);
+
+                List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                float[] qfi = new float[4];
+                qfi[1] = w*Mathf.Pow(l2,3)*(4*L-3*l2)/ (12*Mathf.Pow(L,2));
+                qfi[3] = w * Mathf.Pow(l2, 2) * (6 * Mathf.Pow(L, 2) - 8 * L * l2 + 3 * Mathf.Pow(l2, 2))/(12*Mathf.Pow(L,2));
+                qfi[0] = (qfi[1] - qfi[3] + w * Mathf.Pow(l2, 2) / 2) / L;
+                qfi[2] = w * l2 - qfi[0];
+                qfi[3] *= -1;
+                qf.Add(new IndexArray(index, qfi));
+            }
+
         }
 
         string qfStr = "qf = \n";
