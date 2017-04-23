@@ -100,6 +100,7 @@ public class BeamCollector : Collector {
 
         history.Add(support);
 
+        Camera.main.transform.position = new Vector3(selectedNode.transform.position.x, 0, -10);
     }
 
     public void AddPointLoad(int node, float load)
@@ -123,6 +124,7 @@ public class BeamCollector : Collector {
 
         history.Add(pointLoad);
 
+        Camera.main.transform.position = new Vector3(selectNode.transform.position.x, 0, -10);
     }
 
     public void AddUniformLoad(int element,float load)
@@ -150,6 +152,8 @@ public class BeamCollector : Collector {
 
         history.Add(uniformLoad);
 
+        Camera.main.transform.position = new Vector3(selectedElement.GetComponent<MemberProperty>().node1.transform.position.x+ selectedElement.GetComponent<MemberProperty>().length/2, 0, -10);
+
     }
 
     public void AddMomentum(int node,float momentum)
@@ -172,6 +176,7 @@ public class BeamCollector : Collector {
 
         history.Add(momentumObj);
 
+        Camera.main.transform.position = new Vector3(selectNode.transform.position.x, 0, -10);
     }
 
     public Color GetColor(int x)
