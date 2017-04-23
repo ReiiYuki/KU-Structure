@@ -156,7 +156,15 @@ public class TrussAnalyzer : MonoBehaviour
 
         List<TrussNodeProperty> nodes = new List<TrussNodeProperty>();
         foreach (GameObject g in collector.nodes)
+        {
             nodes.Add(g.GetComponent<TrussNodeProperty>());
+            Debug.Log(g.GetComponent<TrussNodeProperty>().pointLoadX);
+        }
+        Debug.Log(GetComponent<TRUSSCollector>().nodes[3].GetComponent<TrussNodeProperty>().pointLoadX);
+        Debug.Log(GetComponent<TRUSSCollector>().members[0].GetComponent < TrussMemberProperty>().node1);
+        Debug.Log(collector.nodes.Count);
+        foreach (TrussNodeProperty node in nodes)
+            Debug.Log(node);
         float[][] array = new float[members.Count][];
         Matrix2D[] matrixs = new Matrix2D[members.Count];
         Matrix2D[] T = new Matrix2D[members.Count];
@@ -285,14 +293,13 @@ public class TrussAnalyzer : MonoBehaviour
     {
         Debug.Log(nodes.Count);
         for (int i = 0; i < nodes.Count; i++)
-            Debug.Log(nodes[i].pointLoadX);
+            Debug.Log(nodes);
         List<int> numbers = new List<int>();
         foreach (TrussNodeProperty node in nodes)
         {
-            Debug.Log(node.pointLoadX.load);
-            Debug.Log(node.pointLoadY.load);
-            Debug.Log("aaaaaaaaaaaaaa");
-            if (node.pointLoadX.load != 0 || node.pointLoadY.load != 0)
+            Debug.Log(node.pointLoadX);
+            Debug.Log(node.pointLoadY);
+            if (node.pointLoadX != null || node.pointLoadY != null)
             {
                 numbers.Add(node.number);
             }

@@ -31,7 +31,7 @@ public class TRUSSCollector : MonoBehaviour {
         AddSupport(1, 1);
         AddSupport(1, 2);
         AddPointLoad(3, 150, 300);
-        Debug.Log(members.Count);
+
     }
     public void AddNode(int x,int y)
     {
@@ -44,8 +44,6 @@ public class TRUSSCollector : MonoBehaviour {
         node.GetComponent<TrussNodeProperty>().y = y;
 		node.GetComponent<TrussNodeProperty>().number = nodes.Count;
 		node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
-        node.GetComponent<TrussNodeProperty>().pointLoadX = new TrussPointLoadProperty();
-        node.GetComponent<TrussNodeProperty>().pointLoadY = new TrussPointLoadProperty();
         nodes.Add(node);
     }
 
@@ -140,9 +138,10 @@ public class TRUSSCollector : MonoBehaviour {
             pointLoadX.GetComponent<TrussPointLoadProperty>().load = loadX;
             pointLoadX.GetComponent<TrussPointLoadProperty>().axis = 'x';
             pointLoadX.GetComponent<TrussPointLoadProperty> ().node = node;
+            Debug.Log(selectNode.GetComponent<TrussNodeProperty>().pointLoadX);
 			selectNode.GetComponent<TrussNodeProperty> ().pointLoadX = pointLoadX.GetComponent<TrussPointLoadProperty> ();
-
-			pointLoadX.GetComponent<TrussPointLoadProperty> ().Inverse ();
+            Debug.Log(selectNode.GetComponent<TrussNodeProperty>().pointLoadX);
+            pointLoadX.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadX.transform.SetParent (selectNode.transform);
 		}
@@ -162,7 +161,8 @@ public class TRUSSCollector : MonoBehaviour {
 
 			pointLoadY.transform.SetParent (selectNode.transform);
 		}
-
+        Debug.Log(nodes[node].GetComponent<TrussNodeProperty>().pointLoadX);
+        Debug.Log(nodes[3].GetComponent<TrussNodeProperty>().pointLoadX);
     }
 
 	public Color GetColor(int x)
