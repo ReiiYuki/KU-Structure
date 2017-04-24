@@ -22,7 +22,6 @@ public class TrussPointLoadProperty : MonoBehaviour {
 			transform.GetChild(0).localScale = new Vector3(transform.GetChild(0).localScale.x * -1, transform.GetChild(0).localScale.y, transform.GetChild(0).localScale.z);
 			transform.position = new Vector3(transform.position.x - 2.75f, transform.position.y );
 			transform.Rotate (new Vector3 (0, 0, 180));
-			Debug.Log ("in");
 		}
 	}
 }
