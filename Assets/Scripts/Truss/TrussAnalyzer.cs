@@ -53,7 +53,7 @@ public class TrussAnalyzer : MonoBehaviour
 
             return new Matrix2D(newArray);
         }
-        static float[,] MatrixProduct(float[,] matrixB, float[,] matrixA)
+        static float[,] MatrixProduct(float[,] matrixA, float[,] matrixB)
         {
             int aRows = matrixA.GetLength(0); int aCols = matrixA.GetLength(1);
             int bRows = matrixB.GetLength(0); int bCols = matrixB.GetLength(1);
@@ -490,7 +490,7 @@ public class TrussAnalyzer : MonoBehaviour
         Matrix2D fnodes = getForce(nodes);
         Debug.Log(sArrayI);
         Debug.Log(fnodes);
-        Matrix2D d = fnodes*sArrayI;
+        Matrix2D d = sArrayI* fnodes;
         int[] fIndex = getForceIndex(nodes);
         Debug.Log(d);
         Debug.Log(d.array.GetLength(0));
@@ -535,17 +535,19 @@ public class TrussAnalyzer : MonoBehaviour
         Matrix2D[] Q = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
-            U[i] = K[i] * U[i];
+            Q[i] = K[i] * U[i];
         }
         Matrix2D[] TT = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
-            TT[i] = T[i];
+            TT[i] = T[i].trantranspose();
         }
 
         Matrix2D[] F = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
+            Debug.Log(Q[i]);
+            Debug.Log(TT[i]);
             F[i] = TT[i]*Q[i];
         }
         foreach (Matrix2D f in F)
