@@ -160,9 +160,11 @@ public class TrussAnalyzer : MonoBehaviour
         public  Matrix2D trantranspose()
         {
             float[,] matric = new float[array.GetLength(1),array.GetLength(0)];
+            Debug.Log(this);
             for (int i = 0; i < array.GetLength(1); i++)
                 for (int j = 0; j < array.GetLength(0); j++)
-                    matric[i, j] = matric[j, i]; ;
+                    matric[i, j] = array[j, i];
+            Debug.Log(new Matrix2D(matric));
             return new Matrix2D(matric);
         }
 
@@ -551,7 +553,7 @@ public class TrussAnalyzer : MonoBehaviour
             F[i] = TT[i]*Q[i];
         }
         foreach (Matrix2D f in F)
-            Debug.Log(f.array);
+            Debug.Log(f);
         Debug.Log(F.Length);
     }
 
