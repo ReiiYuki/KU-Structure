@@ -168,6 +168,7 @@ public class TrussAnalyzer : MonoBehaviour
 
         public override string ToString()
         {
+            if (array == null) return null;
             string s = "";
             for (int i = 0; i < array.GetLength(0); i++)
             {
@@ -499,18 +500,23 @@ public class TrussAnalyzer : MonoBehaviour
             for (int j = 0; j < fIndex.Length; j++)
             {
                 float[,] vArray = new float[4, 1];
+                Debug.Log("I: "+i+" J: "+j);
+                Debug.Log("members[i].node1.number"+ members[i].node1.number+"members[i].node2.number: " +members[i].node2.number + "fIndex[j]: " + fIndex[j]);
+                Debug.Log(d);
                 if (members[i].node1.number == fIndex[j])
                 {
-                    vArray[0, 0] = d.array[i * 2, 0];
-                    vArray[1, 0] = d.array[i * 2+1, 0];
+                    vArray[0, 0] = d.array[j * 2, 0];
+                    vArray[1, 0] = d.array[j * 2 + 1, 0];
+                    Debug.Log(vArray[0, 0] + "     "+ vArray[1, 0]);
                 }
                 if (members[i].node2.number == fIndex[j])
                 {
-                    vArray[2, 0] = d.array[i * 2, 0];
-                    vArray[3, 0] = d.array[i * 2+1, 0];
+                    vArray[2, 0] = d.array[j * 2, 0];
+                    vArray[3, 0] = d.array[j * 2+1, 0];
+                    Debug.Log(vArray[2, 0] + "     " + vArray[3, 0]);
                 }
                 V[i] = new Matrix2D(vArray);
-                Debug.Log(V[i]);
+
                 Debug.Log("aaaaaaaaaaaaaaa");
                 break;
             }
@@ -522,7 +528,7 @@ public class TrussAnalyzer : MonoBehaviour
             Debug.Log(T[i].array.GetLength(0));
             Debug.Log(T[i].array.GetLength(1));
             Debug.Log(T[i]);
-            Debug.Log(V[i] == null);
+            Debug.Log(V[i]);
             U[i] = T[i] * V[i];
         }
 

@@ -30,7 +30,7 @@ public class TRUSSCollector : MonoBehaviour {
         AddSupport(1, 0);
         AddSupport(1, 1);
         AddSupport(1, 2);
-        AddPointLoad(3, 150, 300);
+        AddPointLoad(3, 150, -300);
 
     }
     public void AddNode(int x,int y)
