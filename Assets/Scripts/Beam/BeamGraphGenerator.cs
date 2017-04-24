@@ -230,6 +230,11 @@ public class BeamGraphGenerator : MonoBehaviour {
                     points.Add(new Point(x, y,true));
                 }
             }
+            if (!property.support && property.momentum)
+            {
+                y += property.momentum.momentum;
+                points.Add(new Point(x, y, false));
+            }
             if (bmd.val[property.number] != 0)
             {
                 y += bmd.val[property.number];

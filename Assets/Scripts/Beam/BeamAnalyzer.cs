@@ -281,21 +281,41 @@ public class BeamAnalyzer : MonoBehaviour {
             {
                 float l1 = GetLengthOfLoad(member.node2.number, false);
                 float l2 = GetLengthOfLoad(member.node2.number, true);
+                
                 float L = l1 + l2;
+
                 float w = uniform.load;
-                int node1 = GetEndNodeIndex(member.node2.number, false);
-                int node2 = GetEndNodeIndex(member.node2.number, true);
-                Debug.Log("l1 = " + l1 + " l2 = " + l2 + " L = " + (l1 + l2) + " node1 = " + node1 + " Node2 = " + node2);
 
-                List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
-                float[] qfi = new float[4];
+                if (!member.node2.support)
+                {
+                    int node1 = GetEndNodeIndex(member.node2.number, false);
+                    int node2 = GetEndNodeIndex(member.node2.number, true);
+                    Debug.Log("l1 = " + l1 + " l2 = " + l2 + " L = " + (l1 + l2) + " node1 = " + node1 + " Node2 = " + node2);
 
-                qfi[1] = w * Mathf.Pow(l1, 2) * (6 * Mathf.Pow(L, 2) - 8 * L * l1 + 3 * Mathf.Pow(l1, 2)) / (12 * Mathf.Pow(L, 2));
-                qfi[3] = -1 * w * Mathf.Pow(l1, 3) * (4 * L - 3 * l1) / (12 * Mathf.Pow(L, 2));
-                qfi[2] = (w * Mathf.Pow(l1, 2) / 2 - qfi[3] - qfi[1]) / L;
-                qfi[0] = w * l1 - qfi[2];
-                qf.Add(new IndexArray(index, qfi));
-            }else
+                    List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                    float[] qfi = new float[4];
+
+                    qfi[1] = w * Mathf.Pow(l1, 2) * (6 * Mathf.Pow(L, 2) - 8 * L * l1 + 3 * Mathf.Pow(l1, 2)) / (12 * Mathf.Pow(L, 2));
+                    qfi[3] = -1 * w * Mathf.Pow(l1, 3) * (4 * L - 3 * l1) / (12 * Mathf.Pow(L, 2));
+                    qfi[2] = (w * Mathf.Pow(l1, 2) / 2 - qfi[3] - qfi[1]) / L;
+                    qfi[0] = w * l1 - qfi[2];
+                    qf.Add(new IndexArray(index, qfi));
+                }else
+                {
+                    int node1 = member.node1.number;
+                    int node2 = member.node2.number;
+                    Debug.Log("l1 = " + l1 + " l2 = " + l2 + " L = " + (l1 + l2) + " node1 = " + node1 + " Node2 = " + node2);
+                    L = member.length;
+                    List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                    float[] qfi = new float[4];
+                    qfi[0] = w * L / 2;
+                    qfi[1] = w * Mathf.Pow(L, 2) / 12;
+                    qfi[2] = w * L / 2;
+                    qfi[3] = w * Mathf.Pow(L, 2) / 12 * -1;
+                    qf.Add(new IndexArray(index, qfi));
+                }
+                
+            }else if (member.node2.support)
             {
                 float l1 = GetLengthOfLoad(member.node1.number, false);
                 float l2 = GetLengthOfLoad(member.node1.number, true);
@@ -311,6 +331,23 @@ public class BeamAnalyzer : MonoBehaviour {
                 qfi[3] = w * Mathf.Pow(l2, 2) * (6 * Mathf.Pow(L, 2) - 8 * L * l2 + 3 * Mathf.Pow(l2, 2))/(12*Mathf.Pow(L,2));
                 qfi[0] = (qfi[1] - qfi[3] + w * Mathf.Pow(l2, 2) / 2) / L;
                 qfi[2] = w * l2 - qfi[0];
+                qfi[3] *= -1;
+                qf.Add(new IndexArray(index, qfi));
+            }else
+            {
+                float l1 = GetLengthOfLoad(member.node1.number, false);
+                float l2 = member.length;
+                float l3 = GetLengthOfLoad(member.node2.number, true);
+                float L = l1 + l2 + l3;
+                int node1 = GetEndNodeIndex(member.node1.number, false);
+                int node2 = GetEndNodeIndex(member.node2.number, true);
+                float w = uniform.load;
+                List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                float[] qfi = new float[4];
+                qfi[1] = w * l2 * (12 * (l1 + l2 / 2) * Mathf.Pow(l3 + l2 / 2, 2) + (l1 + l2 / 2) * Mathf.Pow(l2, 2) - 2 * (l3 + l2 / 2) * Mathf.Pow(l2, 2)) / (12 * Mathf.Pow(L, 2));
+                qfi[3] = w * l2 * (12 * Mathf.Pow(l1 + l2 / 2, 2) * (l3 + l2 / 2) + (l3 + l2 / 2) * Mathf.Pow(l2, 2) - 2 * (l1 + l2 / 2) * Mathf.Pow(l2, 2)) / (12 * Mathf.Pow(L, 2));
+                qfi[2] = (qfi[3] - qfi[1] + w * l2 * (l2 / 2 + l1)) / L;
+                qfi[0] = w * l2 - qfi[2];
                 qfi[3] *= -1;
                 qf.Add(new IndexArray(index, qfi));
             }
@@ -329,11 +366,13 @@ public class BeamAnalyzer : MonoBehaviour {
                 float m = moment.momentum;
                 float L = l1 + l2;
                 List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
+                Debug.Log(" Index : [ " + index[0] + " " + index[1] + " " + index[2] + " " + index[3]);
                 float[] qfi = new float[4];
                 qfi[1] = m * l2 * (l2 - 2 * l1) / Mathf.Pow(L, 2);
                 qfi[3] = m * l1 * (2 * l2 - l1) / Mathf.Pow(L, 2);
-                qfi[2] = (qfi[1] - qfi[2] + m) / L;
+                qfi[2] = (qfi[3] - qfi[1] + m) / L;
                 qfi[0] = -1 * qfi[2];
+                qfi[3] *= -1;
                 qf.Add(new IndexArray(index, qfi));
             }
         }
