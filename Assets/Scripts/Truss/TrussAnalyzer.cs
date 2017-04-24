@@ -53,7 +53,7 @@ public class TrussAnalyzer : MonoBehaviour
 
             return new Matrix2D(newArray);
         }
-        static float[,] MatrixProduct(float[,] matrixA, float[,] matrixB)
+        static float[,] MatrixProduct(float[,] matrixB, float[,] matrixA)
         {
             int aRows = matrixA.GetLength(0); int aCols = matrixA.GetLength(1);
             int bRows = matrixB.GetLength(0); int bCols = matrixB.GetLength(1);
