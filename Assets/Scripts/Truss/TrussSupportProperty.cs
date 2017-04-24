@@ -5,6 +5,6 @@ using UnityEngine;
 public class TrussSupportProperty : MonoBehaviour
 {
 
-    public int  e,i1,i2,type;
+    public int  type;
     public TrussNodeProperty node;
 }
