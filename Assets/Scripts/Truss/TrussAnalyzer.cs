@@ -552,9 +552,17 @@ public class TrussAnalyzer : MonoBehaviour
             Debug.Log(TT[i]);
             F[i] = TT[i]*Q[i];
         }
+        Debug.Log("###################");
         foreach (Matrix2D f in F)
             Debug.Log(f);
-        Debug.Log(F.Length);
+        Debug.Log("###################");
+
+        for(int i =0;i<members.Count;i++)
+        {
+            collector.AddForce(members[i].node1.number, F[i].array[0, 0],F[i].array[1,0]);
+            collector.AddForce(members[i].node2.number, F[i].array[2, 0], F[i].array[3, 0]);
+        }
+
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)

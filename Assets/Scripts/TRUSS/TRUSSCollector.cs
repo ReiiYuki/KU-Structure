@@ -8,10 +8,12 @@ public class TRUSSCollector : MonoBehaviour {
     public List<GameObject> nodes,members;
 	public GameObject[] supportPrefabs;
 
+    public List<GameObject> history;
 	// Use this for initialization
 	void Start () {
         this.nodes = new List<GameObject>();
         this.members = new List<GameObject>();
+        this.history = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
@@ -49,6 +51,7 @@ public class TRUSSCollector : MonoBehaviour {
         node.GetComponent<TrussNodeProperty>().number = nodes.Count;
 		node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
         nodes.Add(node);
+        history.Add(node);
     }
 
     public void AddMember(int node1,int node2,int property)
@@ -94,6 +97,7 @@ public class TRUSSCollector : MonoBehaviour {
 
 		member.transform.SetParent(transform); 
 		members.Add(member);
+        history.Add(member);
     }
 
     public void AddSupport(int type,int node)
@@ -127,6 +131,7 @@ public class TRUSSCollector : MonoBehaviour {
         nodes[node].GetComponent<TrussNodeProperty>().support = support.GetComponent<TrussSupportProperty>();
 
         support.transform.SetParent(selectedNode.transform);
+        history.Add(support);
 	}
 
     public void AddPointLoad(int node,float loadX,float loadY)
@@ -146,7 +151,8 @@ public class TRUSSCollector : MonoBehaviour {
             pointLoadX.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadX.transform.SetParent (selectNode.transform);
-		}
+            history.Add(pointLoadPrefabX);
+        }
 
 		// add Load Y
 		if (loadY != 0) {
@@ -162,10 +168,63 @@ public class TRUSSCollector : MonoBehaviour {
 			pointLoadY.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadY.transform.SetParent (selectNode.transform);
-		}
+            history.Add(pointLoadPrefabY);
+        }
     }
 
-	public Color GetColor(int x)
+    public void AddForce(int node, float loadX, float loadY)
+    {
+        Debug.Log("Add Point Load { node : " + node + " loadX : " + loadX + " loadY : " + loadY + " }");
+        GameObject selectNode = nodes[node];
+
+        // add load X
+        if (loadX != 0 && selectNode.GetComponent<TrussNodeProperty>().forceX ==null)
+        {
+            GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3((nodes[node].transform.position.x + 1.25f), (nodes[node].transform.position.y)), Quaternion.identity);
+            //Material newMaterial = new Material(Shader.Find("Specular"));
+            //newMaterial.color = new Color(255, 182, 0, 1);
+            //pointLoadX.GetComponent<MeshRenderer>().material = newMaterial;
+            pointLoadX.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
+            pointLoadX.transform.Rotate(new Vector3(0, 0, -90));
+            pointLoadX.GetComponentInChildren<TextMesh>().text = loadX + " N.";
+            pointLoadX.GetComponent<TrussPointLoadProperty>().load = loadX;
+            pointLoadX.GetComponent<TrussPointLoadProperty>().axis = 'x';
+            pointLoadX.GetComponent<TrussPointLoadProperty>().node = node;
+            selectNode.GetComponent<TrussNodeProperty>().forceX = pointLoadX.GetComponent<TrussPointLoadProperty>();
+            pointLoadX.GetComponent<TrussPointLoadProperty>().Inverse();
+
+            pointLoadX.transform.SetParent(selectNode.transform);
+            history.Add(pointLoadPrefabX);
+        }
+        else if (loadX != 0 && selectNode.GetComponent<TrussNodeProperty>().forceX != null)
+        {
+            Debug.Log("add loadX: "+loadX);
+            nodes[node].GetComponent<TrussNodeProperty>().pointLoadX.load +=loadX;
+        }
+        // add Load Y
+        if (loadY != 0 && selectNode.GetComponent<TrussNodeProperty>().forceY == null)
+        {
+            GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3((nodes[node].transform.position.x), (nodes[node].transform.position.y + 1.25f)), Quaternion.identity);
+            pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
+            pointLoadY.GetComponentInChildren<TextMesh>().text = loadY + " N.";
+
+            pointLoadY.GetComponent<TrussPointLoadProperty>().load = loadY;
+            pointLoadY.GetComponent<TrussPointLoadProperty>().axis = 'y';
+            pointLoadY.GetComponent<TrussPointLoadProperty>().node = node;
+            selectNode.GetComponent<TrussNodeProperty>().forceY = pointLoadY.GetComponent<TrussPointLoadProperty>();
+
+            pointLoadY.GetComponent<TrussPointLoadProperty>().Inverse();
+
+            pointLoadY.transform.SetParent(selectNode.transform);
+            history.Add(pointLoadPrefabY);
+        }
+        else if (loadY != 0 && selectNode.GetComponent<TrussNodeProperty>().forceY != null)
+        {
+            Debug.Log("add loadY: " + loadY);
+            nodes[node].GetComponent<TrussNodeProperty>().pointLoadY.load += loadY;
+        }
+    }
+    public Color GetColor(int x)
 	{
 		if (x % 2 == 0) return new Color(169 / 255f, 169 / 255f, 169 / 255f);
 		return new Color(112 / 255f, 128 / 255f, 144 / 255f);
