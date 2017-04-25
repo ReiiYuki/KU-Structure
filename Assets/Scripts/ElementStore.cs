@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ElementStore : MonoBehaviour {
 
+    struct Element
+    {
+
+    }
+
     // Use this for initialization
     void Start () {
 		
