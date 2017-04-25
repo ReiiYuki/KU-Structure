@@ -17,7 +17,7 @@ public class BeamCollector : Collector {
 
 	// Use this for initialization
 	void Start () {
-        members = new List<GameObject>();
+        members = new List<GameObject>();   
         nodes = new List<GameObject>();
         pointLoads = new List<PointLoadProperty>();
         uniformLoads = new List<UniformLoadProperty>();
