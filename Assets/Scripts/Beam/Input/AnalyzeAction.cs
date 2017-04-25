@@ -6,6 +6,7 @@ public class AnalyzeAction : MonoBehaviour {
 
 	public void Analyze()
     {
+        GameObject.FindObjectOfType<BeamAnalyzer>().ResetAnalyzer();
         GameObject.FindObjectOfType<BeamAnalyzer>().Analyze();
     }
 }
