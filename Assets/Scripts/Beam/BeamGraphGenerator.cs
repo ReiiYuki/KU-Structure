@@ -101,6 +101,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val += totalLoad;
                 loadMem.Add(val);
                 point.Add(new Point(x, val,false));
+                Debug.Log("(" + x + "," + val + ")");
                 isStart = false;
             }
             if (property.uniformLoad)
@@ -109,13 +110,28 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val -= property.uniformLoad.load * property.length;
                 x += property.length;
                 loadMem.Add(val);
+                Debug.Log("val2= " + val);
                 point.Add(new Point(x, val, false));
-                float totalLoad = sfd.val[node2Index];
+                Debug.Log("(" + x + "," + val + ")");
                 if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
+                {
+                    float totalLoad = sfd.val[node2Index];
                     totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
-                val += totalLoad;
-                loadMem.Add(val);
-                point.Add(new Point(x, val, false));
+                    val += totalLoad;
+                    loadMem.Add(val);
+                    Debug.Log("val= " + val);
+                    point.Add(new Point(x, val, false));
+                    Debug.Log("(" + x + "," + val + ")");
+                }
+                if (sfd.val[node2Index] != 0)
+                {
+                    float totalLoad = sfd.val[node2Index];
+                    val += totalLoad;
+                    loadMem.Add(val);
+                    Debug.Log("val= " + val);
+                    point.Add(new Point(x, val, false));
+                    Debug.Log("(" + x + "," + val + ")");
+                }
             }
             else
             {
@@ -128,8 +144,11 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val += totalLoad;
                 loadMem.Add(val);
                 point.Add(new Point(x, val, false));
+                Debug.Log("(" + x + "," + val + ")");
             }
         }
+
+        Debug.Log("------------");
 
         foreach (Point p in point) Debug.Log("("+p.x+","+p.y+")");
 
@@ -208,37 +227,46 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 if (!property.leftMember.uniformLoad)
                 {
+                    Debug.Log("L = "+ property.leftMember.length+" loadMem = "+loadMem[index]);
                     y += (property.leftMember.length) * loadMem[index++];
                     x += property.leftMember.length;
                     points.Add(new Point(x, y,false));
+                    Debug.Log("(" + x + "," + y + ")");
                 }
                 else
                 {
-                    Debug.Log("index = " + index);
+                    //Debug.Log("index = " + index);
                     float separatePoint = FindPoint(loadMem[index++], loadMem[index], property.leftMember.length);
-                    Debug.Log("Separate Point = " + separatePoint);
+                   // Debug.Log("Separate Point = " + separatePoint);
                     float left = property.leftMember.length-separatePoint;
                     Debug.Log("Left = " + left);
                     y += loadMem[index-1]*separatePoint/2;
                     x += separatePoint;
-                    Debug.Log("y1 = " + y);
+                    //Debug.Log("y1 = " + y);
                     points.Add(new Point(x, y,true));
+                    Debug.Log("(" + x + "," + y + ")");
 
                     y += loadMem[index]*left/2;
                     x += left;
-                    Debug.Log("y2 = " + y);
+                    //Debug.Log("y2 = " + y);
                     points.Add(new Point(x, y,true));
+                    Debug.Log("(" + x + "," + y + ")");
+
                 }
             }
             if (!property.support && property.momentum)
             {
                 y += property.momentum.momentum;
                 points.Add(new Point(x, y, false));
+                Debug.Log("(" + x + "," + y + ")");
+
             }
             if (bmd.val[property.number] != 0)
             {
                 y += bmd.val[property.number];
                 points.Add(new Point(x, y,false));
+                Debug.Log("(" + x + "," + y + ")");
+
             }
         }
 
