@@ -83,9 +83,26 @@ public class TRUSSCollector : MonoBehaviour {
         nodes[node2].GetComponent<TrussNodeProperty>().members.Add(memberProperty);
 
         // draw the length of the member
-        GameObject lengthText = Instantiate(textPrefab, new Vector3((node1X + node2X) / 2f + .5f, (node1Y + node2Y) / 2f +.5f), Quaternion.identity);
+        float slope = (node1Y - node2Y)/(node1X - node2X);
+        float b = node2Y - node2X * slope;
+        float invSlope = -1 / slope;
+        float invB = (node2Y + node1Y) / 2 - (node2X + node1X) / 2 * invSlope;
+        float newX = ((node1Y + node2Y) / 2f + 1.5f - invB) / invSlope;
+        float newY = ((node1X + node2X) / 2f + 1.5f) * invSlope + invB;
+        if (slope > 0)
+            newY = ((node1X + node2X) / 2f - 1.5f) * invSlope + invB;
+        if (invSlope == 0)
+        {
+            newX = (node1X + node2X) / 2f + 2f;
+            newY = (node1Y + node2Y) / 2f;
+        }
+        Debug.Log(newX);
+        Debug.Log(newY);
+        GameObject lengthText = Instantiate(textPrefab, new Vector3(newX,newY), Quaternion.identity);
 		lengthText.GetComponent<TextMesh>().text = memberProperty.lenght() + " m.";
-		lengthText.transform.SetParent(member.transform);
+        lengthText.GetComponent<TextMesh>().fontSize = 40;
+
+        lengthText.transform.SetParent(member.transform);
 
         // draw a number of the member
 		GameObject numberText = Instantiate(textPrefab, new Vector3((node1X+node2X) / 2f, (node1Y+node2Y)/2f), Quaternion.identity);
@@ -111,7 +128,11 @@ public class TRUSSCollector : MonoBehaviour {
 			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.25f, 0.75f), Quaternion.identity);
 			support.transform.Rotate(new Vector3(0, 0,-90f));
 		}
-		else if (type == 3)
+        else if (type == 1)
+        {
+            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
+        }
+        else if (type == 3)
 		{
 			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
 		}
@@ -178,7 +199,7 @@ public class TRUSSCollector : MonoBehaviour {
         GameObject selectNode = nodes[node];
 
         // add load X
-        if (loadX != 0 && selectNode.GetComponent<TrussNodeProperty>().forceX ==null)
+        if (loadX != 0 && selectNode.GetComponent<TrussNodeProperty>().pointLoadX ==null)
         {
             GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3((nodes[node].transform.position.x + 1.25f), (nodes[node].transform.position.y)), Quaternion.identity);
             //Material newMaterial = new Material(Shader.Find("Specular"));
@@ -196,13 +217,9 @@ public class TRUSSCollector : MonoBehaviour {
             pointLoadX.transform.SetParent(selectNode.transform);
             history.Add(pointLoadPrefabX);
         }
-        else if (loadX != 0 && selectNode.GetComponent<TrussNodeProperty>().forceX != null)
-        {
-            Debug.Log("add loadX: "+loadX);
-            nodes[node].GetComponent<TrussNodeProperty>().pointLoadX.load +=loadX;
-        }
+
         // add Load Y
-        if (loadY != 0 && selectNode.GetComponent<TrussNodeProperty>().forceY == null)
+        if (loadY != 0 && selectNode.GetComponent<TrussNodeProperty>().pointLoadY == null)
         {
             GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3((nodes[node].transform.position.x), (nodes[node].transform.position.y + 1.25f)), Quaternion.identity);
             pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
@@ -218,11 +235,7 @@ public class TRUSSCollector : MonoBehaviour {
             pointLoadY.transform.SetParent(selectNode.transform);
             history.Add(pointLoadPrefabY);
         }
-        else if (loadY != 0 && selectNode.GetComponent<TrussNodeProperty>().forceY != null)
-        {
-            Debug.Log("add loadY: " + loadY);
-            nodes[node].GetComponent<TrussNodeProperty>().pointLoadY.load += loadY;
-        }
+
     }
     public Color GetColor(int x)
 	{
