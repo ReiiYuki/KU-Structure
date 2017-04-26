@@ -18,8 +18,10 @@ public class LoadElementTypeAction : MonoBehaviour {
 		
 	}
 
-    void LoadElement()
+    public void LoadElement()
     {
+        for (int i = 0; i < transform.childCount; i++)
+            Destroy(transform.GetChild(i).gameObject);
         if (type == "H" || type == "I")
         {
             if (type == "H")
@@ -60,13 +62,14 @@ public class LoadElementTypeAction : MonoBehaviour {
         }
         else if (type=="U")
         {
+            ElementStore.GenerateU();
             float y = 0;
             int i = 0;
             foreach (ElementStore.UElement e in ElementStore.U_PROP)
             {
                 GameObject button = Instantiate(buttonPrefabs, transform);
                 button.GetComponent<RectTransform>().position = new Vector3(button.GetComponent<RectTransform>().position.x, y + button.GetComponent<RectTransform>().localScale.y);
-                y -= button.GetComponent<RectTransform>().localScale.y * 2;
+                y -= button.GetComponent<RectTransform>().localScale.y*1.5f ;
                 ColorBlock colorBlock = button.GetComponent<Button>().colors;
                 if (i % 2 == 0)
                 {

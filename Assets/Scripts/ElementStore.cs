@@ -48,6 +48,7 @@ public class ElementStore : MonoBehaviour {
     void Start () {
         GenerateH();
         GenerateI();
+        GenerateU();
     }
 
     void GenerateH()
@@ -113,19 +114,23 @@ public class ElementStore : MonoBehaviour {
 
     }
 
-    void GenerateU()
+    public static void GenerateU()
     {
         U_PROP = new List<UElement>();
         string savedData = PlayerPrefs.GetString("UPROP");
+        Debug.Log(savedData);
         if (savedData != "")
         {
-            string[] elementStr = savedData.Split(' ');
+            string[] elementStr = savedData.Split(null);
             foreach (string e in elementStr)
             {
-                string[] eStr = e.Split(',');
-                float E = float.Parse(eStr[0]);
-                float I = float.Parse(eStr[1]);
-                U_PROP.Add(new UElement(E, I));
+                if (!string.IsNullOrEmpty(e))
+                {
+                    string[] eStr = e.Split(',');
+                    float E = float.Parse(eStr[0]);
+                    float I = float.Parse(eStr[1]);
+                    U_PROP.Add(new UElement(E, I));
+                }
             }
         }
     }
