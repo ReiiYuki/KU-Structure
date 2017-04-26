@@ -468,34 +468,56 @@ public class BeamGraphGenerator : MonoBehaviour {
         float offset = -24f;
         int i = 0;
         float l = 0;
+        TextMesh ratioLab = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
+        ratioLab.transform.position = new Vector3(-2, offset - 2);
+        ratioLab.text = "Stress Ratio ";
+        ratioLab.color = new Color(251/255f, 140/255f, 0/255f);
+
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
             LineRenderer line = Instantiate(memberPrefab, transform.GetChild(3)).GetComponent<LineRenderer>();
+
             line.SetPositions(new Vector3[]
             {
                     new Vector3(l,offset),
                     new Vector3(l+property.length,offset)
             });
+
+            TextMesh ratioText = Instantiate(textPrefab, line.transform).GetComponent<TextMesh>();
+            ratioText.transform.position = new Vector3(l + property.length / 2, offset - 2);
+            ratioText.text = System.Math.Round(ratio[i],2) + "";
+
             if (ratio[i] > 1 || ratio[i] < 0) {
                 line.startColor = new Color(244/255f, 81/255f, 30/255f);
                 line.endColor = new Color(244 / 255f, 81 / 255f, 30 / 255f);
-            }else if (ratio[i] >= 0.5)
+                ratioText.color = new Color(244 / 255f, 81 / 255f, 30 / 255f);
+            }
+            else if (ratio[i] >= 0.5)
             {
                 line.startColor = new Color(192/255f, 202/255f, 51/255f);
                 line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+                ratioText.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
             }
             else
             {
                 line.startColor = new Color(124/255f, 179/255f, 66/255f);
                 line.endColor = new Color(124 / 255f, 179 / 255f, 66 / 255f);
+                ratioText.color = new Color(124 / 255f, 179 / 255f, 66 / 255f);
             }
             TextMesh text = Instantiate(textPrefab, line.transform).GetComponent<TextMesh>();
             text.transform.position = new Vector3(l + property.length / 2, offset);
             text.text = property.number+"";
+
+            
+
             l += property.length;
             i++;
         }
+        TextMesh ltext = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
+        ltext.transform.position = new Vector3(l / 2, offset - 3.5f);
+        ltext.text = "L = "+System.Math.Round(L,2);
+        ltext.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
     } 
 
     float FindMaxBMD(List<Point> bmd,float l,float le)
