@@ -42,6 +42,7 @@ public class ElementStore : MonoBehaviour {
 
     void GenerateH()
     {
+        Debug.Log("Gen H");
         H_BEAM = new List<Element>();
         H_BEAM.Add(new Element("100x50", 9.3f, 100f, 50f, 5f, 7f, 8f, 11.85f, 187f, 14.8f, 3.98f, 1.12f, 37.5f, 5.91f, 1f, 20400000000f, 14700000f, 1f, 24500000f, 0.05f));
         H_BEAM.Add(new Element("100x100", 17.2f, 100f, 100f, 6f, 8f, 10f, 21.9f, 383f, 134f, 4.18f, 2.47f, 76.5f, 26.7f, 1f, 20400000000f, 14700000f, 1f, 24500000f, 0.1f));
@@ -78,6 +79,7 @@ public class ElementStore : MonoBehaviour {
 
     void GenerateI()
     {
+        Debug.Log("Gen I");
         I_BEAM = new List<Element>();
         I_BEAM.Add(new Element("150x75", 17.1f, 150f, 75f, 5.5f, 9.5f, 9f, 4.5f, 21.83f, 819f, 57.5f, 6.12f, 1.62f, 109f, 1f, 20400000000f, 14700000f, 1f, 24500000f, 0.075f));
         I_BEAM.Add(new Element("200x100", 26f, 200f, 100f, 7f, 10f, 10f, 5f, 33.06f, 2170f, 138f, 8.11f, 2.05f, 217f, 1f, 20400000000f, 14700000f, 1f, 24500000f, 0.1f));

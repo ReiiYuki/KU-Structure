@@ -21,9 +21,16 @@ public class LoadElementTypeAction : MonoBehaviour {
     void LoadElement()
     {
         if (type == "H")
+        {
+            Debug.Log("Assign H");
             elements = ElementStore.H_BEAM;
-        else if (type == "I")
+        }
+        if (type == "I")
+        {
+            Debug.Log("Assign I");
+            Debug.Log(ElementStore.I_BEAM);
             elements = ElementStore.I_BEAM;
+        }
         float y = 0;
         int i = 0;
         foreach (ElementStore.Element e in elements)
