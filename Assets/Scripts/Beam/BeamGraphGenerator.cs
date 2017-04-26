@@ -248,7 +248,9 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 if (!property.leftMember.uniformLoad)
                 {
-                    Debug.Log("L = "+ property.leftMember.length+" loadMem = "+loadMem[index]);
+                    Debug.Log("L = "+ property.leftMember.length+" loadMem = "+loadMem[index].y);
+                    if (loadMem[index].x == loadMem[index + 1].x)
+                        index++;
                     y += (property.leftMember.length) * loadMem[index++].y;
                     x += property.leftMember.length;
                     points.Add(new Point(x, y,false));
