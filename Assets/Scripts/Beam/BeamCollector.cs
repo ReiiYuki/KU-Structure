@@ -30,9 +30,9 @@ public class BeamCollector : Collector {
 		
 	}
 
-    public void AddMember(float span,int type)
+    public void AddMember(float span,ElementStore.Element prop,ElementStore.UElement uprop)
     {
-        Debug.Log("Add Member { "+"Span : "+span+" Type : "+type+" }");
+        Debug.Log("Add Member { "+"Span : "+span+" Type : "+prop+" "+uprop+" }");
 
         GameObject member = Instantiate(memberPrefab, Vector3.zero, Quaternion.identity);
 
@@ -42,7 +42,8 @@ public class BeamCollector : Collector {
         line.SetPositions(new Vector3[] { new Vector3(currentPoint, 0), new Vector3(currentPoint + span, 0) });
 
         MemberProperty property = member.GetComponent<MemberProperty>();
-        property.type = type;
+        property.prop = prop;
+        property.uprop = uprop;
         property.length = span;
         property.number = members.Count;
         property.origin = currentPoint;
