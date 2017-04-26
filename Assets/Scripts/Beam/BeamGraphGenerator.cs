@@ -202,7 +202,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             }
         }
         
-        lineL.SetPositions(new Vector3[] { new Vector3(0, -9), new Vector3(currentX, -6) });
+        lineL.SetPositions(new Vector3[] { new Vector3(0, -9), new Vector3(currentX, -9) });
 
         TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -9), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
@@ -346,7 +346,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
         }
-        lineM.SetPositions(new Vector3[] { new Vector3(0, -16), new Vector3(currentX, -19) });
+        lineM.SetPositions(new Vector3[] { new Vector3(0, -19), new Vector3(currentX, -19) });
 
         TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -19), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
