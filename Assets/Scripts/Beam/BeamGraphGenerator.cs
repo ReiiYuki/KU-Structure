@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BeamGraphGenerator : MonoBehaviour {
 
-    public GameObject originPrefabs,pointLoadPrefab,momentumPrefab,textPrefab;
+    public GameObject originPrefabs,pointLoadPrefab,momentumPrefab,textPrefab,memberPrefab;
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
@@ -459,7 +459,41 @@ public class BeamGraphGenerator : MonoBehaviour {
         foreach (float r in ratio) Debug.Log(r);
         float L = FindMinL(lr);
         Debug.Log("L = " + L);
+
+        DrawStress(ratio, L);
     }
+
+    void DrawStress(float[] ratio,float L)
+    {
+        float offset = -24f;
+        int i = 0;
+        float l = 0;
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            LineRenderer line = Instantiate(memberPrefab, transform.GetChild(3)).GetComponent<LineRenderer>();
+            line.SetPositions(new Vector3[]
+            {
+                    new Vector3(l,offset),
+                    new Vector3(l+property.length,offset)
+            });
+            if (ratio[i] > 1 || ratio[i] < 0) {
+                line.startColor = new Color(244/255f, 81/255f, 30/255f);
+                line.endColor = new Color(244 / 255f, 81 / 255f, 30 / 255f);
+            }else if (ratio[i] >= 0.5)
+            {
+                line.startColor = new Color(192/255f, 202/255f, 51/255f);
+                line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+            }
+            else
+            {
+                line.startColor = new Color(124/255f, 179/255f, 66/255f);
+                line.endColor = new Color(124 / 255f, 179 / 255f, 66 / 255f);
+            }
+            l += property.length;
+            i++;
+        }
+    } 
 
     float FindMaxBMD(List<Point> bmd,float l,float le)
     {
