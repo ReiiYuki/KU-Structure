@@ -57,6 +57,7 @@ public class LoadElementTypeAction : MonoBehaviour {
                 }
                 button.GetComponent<Button>().colors = colorBlock;
                 button.GetComponentInChildren<Text>().text = e.name;
+                button.GetComponent<SelectElementPropertyAction>().prop = e;
                 i++;
             }
         }
@@ -85,6 +86,7 @@ public class LoadElementTypeAction : MonoBehaviour {
                 }
                 button.GetComponent<Button>().colors = colorBlock;
                 button.GetComponentInChildren<Text>().text = "E = "+e.E+" I = "+e.I;
+                button.GetComponent<SelectElementPropertyAction>().uprop = e;
                 i++;
             }
         }
