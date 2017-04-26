@@ -22,13 +22,14 @@ public class ScrollControl : MonoBehaviour {
         if (GetComponent<ScrollRect>().verticalNormalizedPosition > 0) {
             GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
         }
-        Debug.Log(transform.GetChild(0).GetChild(0).GetComponent<RectTransform>().sizeDelta);
-        Debug.Log(transform.GetChild(0).GetChild(0).GetComponent<RectTransform>().localPosition);
+       /* Debug.Log(GetComponent<ScrollRect>().verticalNormalizedPosition / transform.GetChild(0).childCount);
+        Debug.Log(transform.GetChild(0).GetChild(0).GetComponent<RectTransform>().rect.height);
+        Debug.Log(transform.GetChild(0).childCount);
         Debug.Log(transform.GetChild(0).GetChild(transform.GetChild(0).childCount-1).GetComponent<RectTransform>().localPosition);
-       /* if (GetComponent<ScrollRect>().verticalNormalizedPosition < transform.GetChild(0).GetChild(transform.GetChild(0).childCount-1).GetComponent<RectTransform>().localPosition.y)
-          {
-              GetComponent<ScrollRect>().verticalNormalizedPosition = transform.GetChild(0).GetChild(transform.GetChild(0).childCount-1).GetComponent<RectTransform>().localPosition.y;
-          }*/
+         if (GetComponent<ScrollRect>().verticalNormalizedPosition < -1*transform.GetChild(0).GetChild(0).GetComponent<RectTransform>().rect.height*transform.GetChild(0).childCount)
+             {
+                 GetComponent<ScrollRect>().verticalNormalizedPosition = -1 * transform.GetChild(0).GetChild(0).GetComponent<RectTransform>().rect.height * transform.GetChild(0).childCount;
+             }*/
 
     }
 }
