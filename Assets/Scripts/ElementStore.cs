@@ -5,6 +5,16 @@ using UnityEngine;
 public class ElementStore : MonoBehaviour {
 
     public static List<Element> H_BEAM,I_BEAM;
+    public static List<UElement> U_PROP;
+    public struct UElement
+    {
+        public float E, I;
+        public UElement(float E,float I)
+        {
+            this.E = E;
+            this.I = I;
+        }
+    }
     public struct Element
     {
         public string name;
@@ -101,5 +111,22 @@ public class ElementStore : MonoBehaviour {
         I_BEAM.Add(new Element("600mmX190mmX176kg", 176f, 600f, 190f, 16f, 35f, 38f, 19f, 224.5f, 130000f, 3540f, 24.1f, 3.97f, 4330f, 1f, 20400000000f, 14700000f, 1f, 24500000f, 0.19f));
 
 
+    }
+
+    void GenerateU()
+    {
+        U_PROP = new List<UElement>();
+        string savedData = PlayerPrefs.GetString("UPROP");
+        if (savedData != "")
+        {
+            string[] elementStr = savedData.Split(' ');
+            foreach (string e in elementStr)
+            {
+                string[] eStr = e.Split(',');
+                float E = float.Parse(eStr[0]);
+                float I = float.Parse(eStr[1]);
+                U_PROP.Add(new UElement(E, I));
+            }
+        }
     }
 }
