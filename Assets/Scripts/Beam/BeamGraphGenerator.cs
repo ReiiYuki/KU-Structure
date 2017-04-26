@@ -439,10 +439,26 @@ public class BeamGraphGenerator : MonoBehaviour {
     void FindStressRatio(List<Point> bmd)
     {
         float l = 0;
+        float[] ratio = new float[collector.members.Count];
+        float[] lr = new float[collector.members.Count];
+        int i = 0;
         foreach (GameObject member in collector.members)
         {
-
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            if (property.prop.name != null)
+            {
+                float m = FindMaxBMD(bmd, l, l + property.length);
+                Debug.Log("m = " + m + " c = " + property.prop.c + " i = " + property.prop.lx + " fb = " + property.prop.fb);
+                ratio[i] = m * property.prop.c / property.prop.lx / property.prop.fb;
+                lr[i] = property.prop.rt * Mathf.Sqrt((float)3.517 * property.prop.e * property.prop.cb / property.prop.fy);
+            }
+            l += property.length;
+            i++;
         }
+
+        foreach (float r in ratio) Debug.Log(r);
+        float L = FindMinL(lr);
+        Debug.Log("L = " + L);
     }
 
     float FindMaxBMD(List<Point> bmd,float l,float le)
@@ -453,5 +469,15 @@ public class BeamGraphGenerator : MonoBehaviour {
                 if (Mathf.Abs(p.y) > max)
                     max = Mathf.Abs(p.y);
         return max;
+    }
+
+    float FindMinL(float[] lr)
+    {
+        if (lr.Length == 0) return 0;
+        float min = lr[0];
+        foreach (float l in lr)
+            if (l < min)
+                min = l;
+        return min;
     }
 }
