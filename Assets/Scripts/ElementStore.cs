@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ElementStore : MonoBehaviour {
 
-    public List<Element> H_BEAM,I_BEAM;
+    public static List<Element> H_BEAM,I_BEAM;
     public struct Element
     {
         public string name;

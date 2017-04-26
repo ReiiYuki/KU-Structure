@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LoadElementTypeAction : MonoBehaviour {
 
     public string type;
+    public List<ElementStore.Element> elements;
     public GameObject buttonPrefabs;
 	// Use this for initialization
 	void Start () {
@@ -19,8 +20,13 @@ public class LoadElementTypeAction : MonoBehaviour {
 
     void LoadElement()
     {
+        if (type == "H")
+            elements = ElementStore.H_BEAM;
+        else if (type == "I")
+            elements = ElementStore.I_BEAM;
         float y = 0;
-        for (int i = 0; i < 30; i++)
+        int i = 0;
+        foreach (ElementStore.Element e in elements)
         {
             GameObject button = Instantiate(buttonPrefabs, transform);
             button.GetComponent<RectTransform>().position = new Vector3(button.GetComponent<RectTransform>().position.x, y + button.GetComponent<RectTransform>().localScale.y);
@@ -39,7 +45,8 @@ public class LoadElementTypeAction : MonoBehaviour {
                 colorBlock.pressedColor = new Color(106 / 255f, 27 / 255f, 154 / 255f);
             }
             button.GetComponent<Button>().colors = colorBlock;
-            button.GetComponentInChildren<Text>().text = i + "";
+            button.GetComponentInChildren<Text>().text = e.name;
+            i++;
         }
     }
 }
