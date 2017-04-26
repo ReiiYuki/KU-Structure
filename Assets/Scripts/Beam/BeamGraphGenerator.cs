@@ -490,6 +490,9 @@ public class BeamGraphGenerator : MonoBehaviour {
                 line.startColor = new Color(124/255f, 179/255f, 66/255f);
                 line.endColor = new Color(124 / 255f, 179 / 255f, 66 / 255f);
             }
+            TextMesh text = Instantiate(textPrefab, line.transform).GetComponent<TextMesh>();
+            text.transform.position = new Vector3(l + property.length / 2, offset);
+            text.text = property.number+"";
             l += property.length;
             i++;
         }
