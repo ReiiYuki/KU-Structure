@@ -101,23 +101,42 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val += totalLoad;
                 loadMem.Add(val);
                 point.Add(new Point(x, val,false));
+                Debug.Log("(" + x + "," + val + ")");
                 isStart = false;
             }
             if (property.uniformLoad)
             {
                 int node2Index = property.node2.number;
-                float totalLoad = sfd.val[node2Index];
-                if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
-                    totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
-                totalLoad -= property.uniformLoad.load * property.length;
-                val += totalLoad;
-                loadMem.Add(val);
+                val -= property.uniformLoad.load * property.length;
                 x += property.length;
+                loadMem.Add(val);
+                Debug.Log("val2= " + val);
                 point.Add(new Point(x, val, false));
+                Debug.Log("(" + x + "," + val + ")");
+                if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
+                {
+                    float totalLoad = sfd.val[node2Index];
+                    totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
+                    val += totalLoad;
+                    loadMem.Add(val);
+                    Debug.Log("val= " + val);
+                    point.Add(new Point(x, val, false));
+                    Debug.Log("(" + x + "," + val + ")");
+                }
+                if (sfd.val[node2Index] != 0)
+                {
+                    float totalLoad = sfd.val[node2Index];
+                    val += totalLoad;
+                    loadMem.Add(val);
+                    Debug.Log("val= " + val);
+                    point.Add(new Point(x, val, false));
+                    Debug.Log("(" + x + "," + val + ")");
+                }
             }
             else
             {
                 x += property.length;
+                point.Add(new Point(x, val, false));
                 int node2Index = property.node2.number;
                 float totalLoad = sfd.val[node2Index];
                 if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
@@ -125,12 +144,18 @@ public class BeamGraphGenerator : MonoBehaviour {
                 val += totalLoad;
                 loadMem.Add(val);
                 point.Add(new Point(x, val, false));
+                Debug.Log("(" + x + "," + val + ")");
             }
         }
+
+        Debug.Log("------------");
+
+        foreach (Point p in point) Debug.Log("("+p.x+","+p.y+")");
 
         float currentX = 0;
         float currentY = 0;
         float max = Max(point);
+        Debug.Log("max = " + max);
         foreach (Point p in point)
         {
             LineRenderer line = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
@@ -176,9 +201,9 @@ public class BeamGraphGenerator : MonoBehaviour {
 
     float Max(List<Point> ps)
     {
-        float max = int.MinValue;
+        float max = 0;
         foreach (Point p in ps)
-            if (p.y > max) max = p.y;
+            if (Mathf.Abs(p.y) > max) max = Mathf.Abs(p.y);
         return max;
     }
 
@@ -202,27 +227,46 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 if (!property.leftMember.uniformLoad)
                 {
+                    Debug.Log("L = "+ property.leftMember.length+" loadMem = "+loadMem[index]);
                     y += (property.leftMember.length) * loadMem[index++];
                     x += property.leftMember.length;
                     points.Add(new Point(x, y,false));
+                    Debug.Log("(" + x + "," + y + ")");
                 }
                 else
                 {
+                    //Debug.Log("index = " + index);
                     float separatePoint = FindPoint(loadMem[index++], loadMem[index], property.leftMember.length);
+                   // Debug.Log("Separate Point = " + separatePoint);
                     float left = property.leftMember.length-separatePoint;
+                    Debug.Log("Left = " + left);
                     y += loadMem[index-1]*separatePoint/2;
                     x += separatePoint;
+                    //Debug.Log("y1 = " + y);
                     points.Add(new Point(x, y,true));
+                    Debug.Log("(" + x + "," + y + ")");
 
                     y += loadMem[index]*left/2;
                     x += left;
+                    //Debug.Log("y2 = " + y);
                     points.Add(new Point(x, y,true));
+                    Debug.Log("(" + x + "," + y + ")");
+
                 }
+            }
+            if (!property.support && property.momentum)
+            {
+                y += property.momentum.momentum;
+                points.Add(new Point(x, y, false));
+                Debug.Log("(" + x + "," + y + ")");
+
             }
             if (bmd.val[property.number] != 0)
             {
                 y += bmd.val[property.number];
                 points.Add(new Point(x, y,false));
+                Debug.Log("(" + x + "," + y + ")");
+
             }
         }
 
@@ -286,6 +330,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
     float FindPoint(float p1,float p2,float length)
     {
+        Debug.Log("p1 = " + p1 + " p2 = " + p2 + " l = " + length);
         return p1 * length / (p1 - p2);
     }
 
