@@ -357,6 +357,10 @@ public class BeamGraphGenerator : MonoBehaviour {
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "BMD";
         textEnd.transform.SetParent(lineM.transform);
+
+        Debug.Log("BMD");
+        foreach (Point b in points) Debug.Log("(" + b.x + "," + b.y + ")");
+        FindStressRatio(points);
     }
 
     float FindPoint(float p1,float p2,float length)
@@ -430,5 +434,24 @@ public class BeamGraphGenerator : MonoBehaviour {
                 DestroyObject(transform.GetChild(i).GetChild(j).gameObject);
             }
         }
+    }
+
+    void FindStressRatio(List<Point> bmd)
+    {
+        float l = 0;
+        foreach (GameObject member in collector.members)
+        {
+
+        }
+    }
+
+    float FindMaxBMD(List<Point> bmd,float l,float le)
+    {
+        float max = 0;
+        foreach (Point p in bmd)
+            if (p.x >= l && p.x <= le)
+                if (Mathf.Abs(p.y) > max)
+                    max = Mathf.Abs(p.y);
+        return max;
     }
 }
