@@ -10,17 +10,19 @@ public class BeamCollector : Collector {
     public List<GameObject> members, nodes;
     public List<PointLoadProperty> pointLoads;
     public List<UniformLoadProperty> uniformLoads;
+    public List<MomentumProperty> moments;
     public List<GameObject> history;
 
     float currentPoint = 0;
 
 	// Use this for initialization
 	void Start () {
-        members = new List<GameObject>();
+        members = new List<GameObject>();   
         nodes = new List<GameObject>();
         pointLoads = new List<PointLoadProperty>();
         uniformLoads = new List<UniformLoadProperty>();
         history = new List<GameObject>();
+        moments = new List<MomentumProperty>();
 	}
 	
 	// Update is called once per frame
@@ -173,7 +175,7 @@ public class BeamCollector : Collector {
         selectNode.GetComponent<NodeProperty>().momentum = momentumObj.GetComponent<MomentumProperty>();
 
         momentumObj.transform.SetParent(selectNode.transform);
-
+        moments.Add(momentumObj.GetComponent<MomentumProperty>());
         history.Add(momentumObj);
 
         Camera.main.transform.position = new Vector3(selectNode.transform.position.x, 0, -10);
@@ -216,6 +218,9 @@ public class BeamCollector : Collector {
         {
             nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().dy = 0;
             nodes[obj.GetComponent<SupportProperty>().node].GetComponent<NodeProperty>().m = 0;
+        }else if (obj.GetComponent<MomentumProperty>())
+        {
+            moments.Remove(obj.GetComponent<MomentumProperty>());
         }
         history.Remove(obj);
         DestroyObject(obj);

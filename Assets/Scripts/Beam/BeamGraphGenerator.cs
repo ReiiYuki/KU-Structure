@@ -9,7 +9,7 @@ public class BeamGraphGenerator : MonoBehaviour {
     BeamCollector collector;
     GameObject originL,originM;
     float[] q;
-    List<float> loadMem;
+    List<Point> loadMem;
     public struct Point
     {
         public float x, y;
@@ -87,7 +87,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float val = 0;
         float x = 0;
         bool isStart = true;
-        loadMem = new List<float>();
+        loadMem = new List<Point>();
         List<Point> point = new List<Point>();
         foreach (GameObject member in collector.members)
         {
@@ -99,38 +99,84 @@ public class BeamGraphGenerator : MonoBehaviour {
                 if (collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad)
                     totalLoad += collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
                 val += totalLoad;
-                loadMem.Add(val);
+                loadMem.Add(new Point(node1Index, val, false));
                 point.Add(new Point(x, val,false));
+                Debug.Log("(" + x + "," + val + ")");
                 isStart = false;
             }
             if (property.uniformLoad)
             {
                 int node2Index = property.node2.number;
-                float totalLoad = sfd.val[node2Index];
-                if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
-                    totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
-                totalLoad -= property.uniformLoad.load * property.length;
-                val += totalLoad;
-                loadMem.Add(val);
+                val -= property.uniformLoad.load * property.length;
                 x += property.length;
+                if (loadMem[loadMem.Count - 1].x == x)
+                {
+                    Debug.Log("Should Delete!");
+                    loadMem.RemoveAt(loadMem.Count - 1);
+                }
+                loadMem.Add(new Point(node2Index, val, false));
+                Debug.Log("val2= " + val);
                 point.Add(new Point(x, val, false));
+                Debug.Log("(" + x + "," + val + ")");
+                if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
+                {
+                    float totalLoad = sfd.val[node2Index];
+                    totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
+                    val += totalLoad;
+                    if (loadMem[loadMem.Count - 1].x == x)
+                    {
+                        Debug.Log("Should Delete!");
+                        loadMem.RemoveAt(loadMem.Count - 1);
+                    }
+                    loadMem.Add(new Point(node2Index, val, false));
+                    Debug.Log("val= " + val);
+                    point.Add(new Point(x, val, false));
+                    Debug.Log("(" + x + "," + val + ")");
+                }
+                if (sfd.val[node2Index] != 0)
+                {
+                    float totalLoad = sfd.val[node2Index];
+                    val += totalLoad;
+                    if (loadMem[loadMem.Count - 1].x == x)
+                    {
+                        Debug.Log("Should Delete!");
+                        loadMem.RemoveAt(loadMem.Count - 1);
+                    }
+                    loadMem.Add(new Point(node2Index, val, false));
+                    Debug.Log("val= " + val);
+                    point.Add(new Point(x, val, false));
+                    Debug.Log("(" + x + "," + val + ")");
+                }
             }
             else
             {
                 x += property.length;
+                point.Add(new Point(x, val, false));
                 int node2Index = property.node2.number;
                 float totalLoad = sfd.val[node2Index];
                 if (collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad)
                     totalLoad -= collector.nodes[node2Index].GetComponent<NodeProperty>().pointLoad.load;
                 val += totalLoad;
-                loadMem.Add(val);
+                Debug.Log(loadMem[loadMem.Count - 1].x);
+                if (loadMem[loadMem.Count - 1].x == x)
+                {
+                    Debug.Log("Should Delete!");
+                    loadMem.RemoveAt(loadMem.Count - 1);
+                }
+                loadMem.Add(new Point(node2Index, val, false));
                 point.Add(new Point(x, val, false));
+                Debug.Log("(" + x + "," + val + ")");
             }
         }
+
+        Debug.Log("------------");
+
+        foreach (Point p in point) Debug.Log("("+p.x+","+p.y+")");
 
         float currentX = 0;
         float currentY = 0;
         float max = Max(point);
+        Debug.Log("max = " + max);
         foreach (Point p in point)
         {
             LineRenderer line = Instantiate(originPrefabs, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
@@ -169,16 +215,16 @@ public class BeamGraphGenerator : MonoBehaviour {
         textEnd.transform.SetParent(lineL.transform);
 
         string loadMemStr = "Load mem = ";
-        foreach (float l in loadMem)
-            loadMemStr += l + " ";
+        foreach (Point l in loadMem)
+            loadMemStr += l.x + ","+l.y+" ";
         Debug.Log(loadMemStr);
     }
 
     float Max(List<Point> ps)
     {
-        float max = int.MinValue;
+        float max = 0;
         foreach (Point p in ps)
-            if (p.y > max) max = p.y;
+            if (Mathf.Abs(p.y) > max) max = Mathf.Abs(p.y);
         return max;
     }
 
@@ -202,27 +248,54 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 if (!property.leftMember.uniformLoad)
                 {
-                    y += (property.leftMember.length) * loadMem[index++];
+                    Debug.Log("L = "+ property.leftMember.length+" loadMem = "+loadMem[index]);
+                    y += (property.leftMember.length) * loadMem[index++].y;
                     x += property.leftMember.length;
                     points.Add(new Point(x, y,false));
+                    Debug.Log("(" + x + "," + y + ")");
                 }
                 else
                 {
-                    float separatePoint = FindPoint(loadMem[index++], loadMem[index], property.leftMember.length);
+                    Debug.Log("index = " + index);
+                    Point p1 = loadMem[index++];
+                    Point p2 = loadMem[index];
+                    if (p1.x == p2.x)
+                    {
+                        p1 = loadMem[index++];
+                        p2 = loadMem[index];
+                    }
+                    //                    float separatePoint = FindPoint(loadMem[index++].y, loadMem[index].y, property.leftMember.length);
+                    float separatePoint = FindPoint(p1.y, p2.y, property.leftMember.length);
+                    Debug.Log("Separate Point = " + separatePoint);
                     float left = property.leftMember.length-separatePoint;
-                    y += loadMem[index-1]*separatePoint/2;
+                    Debug.Log("Left = " + left);
+                    y += p1.y*separatePoint/2;
                     x += separatePoint;
+                    //Debug.Log("y1 = " + y);
                     points.Add(new Point(x, y,true));
+                    Debug.Log("(" + x + "," + y + ")");
 
-                    y += loadMem[index]*left/2;
+                    y += p2.y*left/2;
                     x += left;
+                    //Debug.Log("y2 = " + y);
                     points.Add(new Point(x, y,true));
+                    Debug.Log("(" + x + "," + y + ")");
+
                 }
+            }
+            if (!property.support && property.momentum)
+            {
+                y += property.momentum.momentum;
+                points.Add(new Point(x, y, false));
+                Debug.Log("(" + x + "," + y + ")");
+
             }
             if (bmd.val[property.number] != 0)
             {
                 y += bmd.val[property.number];
                 points.Add(new Point(x, y,false));
+                Debug.Log("(" + x + "," + y + ")");
+
             }
         }
 
@@ -286,6 +359,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
     float FindPoint(float p1,float p2,float length)
     {
+        Debug.Log("p1 = " + p1 + " p2 = " + p2 + " l = " + length);
         return p1 * length / (p1 - p2);
     }
 
@@ -296,6 +370,15 @@ public class BeamGraphGenerator : MonoBehaviour {
             if (point.y > max)
                 max = point.y;
         return max;
+    }
+
+    List<float> FindAreaMem(int node)
+    {
+        List<float> mem = new List<float>();
+        foreach (Point l in loadMem)
+            if (l.x == node)
+                mem.Add(l.y);
+        return mem;
     }
 
     float[] GenerateParabolaEquation(Point p1,Point p2,Point p3)
