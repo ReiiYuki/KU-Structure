@@ -332,7 +332,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
             if (System.Math.Round(point.y, 2) != 0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 15.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 18.8f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 if (System.Math.Round(point.y, 2) < 0)
                     text.transform.position -= new Vector3(0, 0.4f);
