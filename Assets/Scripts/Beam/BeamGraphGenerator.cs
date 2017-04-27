@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BeamGraphGenerator : MonoBehaviour {
 
-    public GameObject originPrefabs,pointLoadPrefab,momentumPrefab,textPrefab;
+    public GameObject originPrefabs,pointLoadPrefab,momentumPrefab,textPrefab,memberPrefab;
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
@@ -184,15 +184,15 @@ public class BeamGraphGenerator : MonoBehaviour {
             line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
             line.SetPositions(new Vector3[]
             {
-                    new Vector3(currentX,currentY/max*3-6),
-                    new Vector3(p.x,p.y/max*3-6)
+                    new Vector3(currentX,currentY/max*3-9),
+                    new Vector3(p.x,p.y/max*3-9)
             });
             currentX = p.x;
             currentY = p.y;
             line.transform.SetParent(transform.GetChild(1));
             if (System.Math.Round(p.y, 2) !=0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(currentX, p.y / max * 3 - 5.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(currentX, p.y / max * 3 - 8.8f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 text.text = System.Math.Round(p.y, 2) + "";
                 text.characterSize = 0.2f;
@@ -202,14 +202,14 @@ public class BeamGraphGenerator : MonoBehaviour {
             }
         }
         
-        lineL.SetPositions(new Vector3[] { new Vector3(0, -6), new Vector3(currentX, -6) });
+        lineL.SetPositions(new Vector3[] { new Vector3(0, -9), new Vector3(currentX, -9) });
 
-        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -6), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -9), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textStart.text = "SFD";
         textStart.transform.SetParent(lineL.transform);
 
-        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -6), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -9), Quaternion.identity).GetComponent<TextMesh>();
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "SFD";
         textEnd.transform.SetParent(lineL.transform);
@@ -230,7 +230,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
     void DrawMomentDiagram()
     {
-        originM = Instantiate(originPrefabs, new Vector3(0, -16, 0), Quaternion.identity);
+        originM = Instantiate(originPrefabs, new Vector3(0, -19, 0), Quaternion.identity);
         originM.transform.SetParent(transform);
         LineRenderer lineM = originM.GetComponent<LineRenderer>();
         lineM.startColor = new Color(144/255f, 202/255f, 249/255f);
@@ -248,7 +248,9 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 if (!property.leftMember.uniformLoad)
                 {
-                    Debug.Log("L = "+ property.leftMember.length+" loadMem = "+loadMem[index]);
+                    Debug.Log("L = "+ property.leftMember.length+" loadMem = "+loadMem[index].y);
+                    if (loadMem[index].x == loadMem[index + 1].x)
+                        index++;
                     y += (property.leftMember.length) * loadMem[index++].y;
                     x += property.leftMember.length;
                     points.Add(new Point(x, y,false));
@@ -302,7 +304,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float max = FindMaxPoint(points);
         float currentX = 0;
         float currentY = 0;
-        float offset = -16;
+        float offset = -19;
         float parabolaIndex = 0;
         float[] parabolaEquation = new float[3];
         foreach (Point point in points)
@@ -330,7 +332,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
             if (System.Math.Round(point.y, 2) != 0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 15.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 18.8f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 if (System.Math.Round(point.y, 2) < 0)
                     text.transform.position -= new Vector3(0, 0.4f);
@@ -344,17 +346,21 @@ public class BeamGraphGenerator : MonoBehaviour {
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
         }
-        lineM.SetPositions(new Vector3[] { new Vector3(0, -16), new Vector3(currentX, -16) });
+        lineM.SetPositions(new Vector3[] { new Vector3(0, -19), new Vector3(currentX, -19) });
 
-        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -16), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -19), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textStart.text = "BMD";
         textStart.transform.SetParent(lineM.transform);
 
-        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -16), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -19), Quaternion.identity).GetComponent<TextMesh>();
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "BMD";
         textEnd.transform.SetParent(lineM.transform);
+
+        Debug.Log("BMD");
+        foreach (Point b in points) Debug.Log("(" + b.x + "," + b.y + ")");
+        FindStressRatio(points);
     }
 
     float FindPoint(float p1,float p2,float length)
@@ -428,5 +434,98 @@ public class BeamGraphGenerator : MonoBehaviour {
                 DestroyObject(transform.GetChild(i).GetChild(j).gameObject);
             }
         }
+    }
+
+    void FindStressRatio(List<Point> bmd)
+    {
+        float l = 0;
+        float[] ratio = new float[collector.members.Count];
+        float[] lr = new float[collector.members.Count];
+        int i = 0;
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            if (property.prop.name != null)
+            {
+                float m = FindMaxBMD(bmd, l, l + property.length);
+                Debug.Log("m = " + m + " c = " + property.prop.c + " i = " + property.prop.lx + " fb = " + property.prop.fb);
+                ratio[i] = m * property.prop.c / property.prop.lx / property.prop.fb;
+                lr[i] = property.prop.rt * Mathf.Sqrt((float)3.517 * property.prop.e * property.prop.cb / property.prop.fy);
+            }
+            l += property.length;
+            i++;
+        }
+
+        foreach (float r in ratio) Debug.Log(r);
+        float L = FindMinL(lr);
+        Debug.Log("L = " + L);
+
+        DrawStress(ratio, L);
+    }
+
+    void DrawStress(float[] ratio,float L)
+    {
+        float offset = -2;
+        int i = 0;
+        float l = 0;
+        TextMesh ratioLab = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
+        ratioLab.transform.position = new Vector3(-2, offset - 2);
+        ratioLab.text = "Stress Ratio ";
+        ratioLab.color = new Color(251/255f, 140/255f, 0/255f);
+
+        foreach (GameObject member in collector.members)
+        {
+            MemberProperty property = member.GetComponent<MemberProperty>();
+            LineRenderer line = member.GetComponent<LineRenderer>();
+
+            TextMesh ratioText = Instantiate(textPrefab, line.transform).GetComponent<TextMesh>();
+            ratioText.transform.position = new Vector3(l + property.length / 2, offset - 2);
+            ratioText.text = System.Math.Round(ratio[i],2) + "";
+
+            if (ratio[i] > 1 || ratio[i] < 0) {
+                line.startColor = new Color(244/255f, 81/255f, 30/255f);
+                line.endColor = new Color(244 / 255f, 81 / 255f, 30 / 255f);
+                ratioText.color = new Color(244 / 255f, 81 / 255f, 30 / 255f);
+            }
+            else if (ratio[i] >= 0.5)
+            {
+                line.startColor = new Color(192/255f, 202/255f, 51/255f);
+                line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+                ratioText.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+            }
+            else
+            {
+                line.startColor = new Color(124/255f, 179/255f, 66/255f);
+                line.endColor = new Color(124 / 255f, 179 / 255f, 66 / 255f);
+                ratioText.color = new Color(124 / 255f, 179 / 255f, 66 / 255f);
+            }           
+
+            l += property.length;
+            i++;
+        }
+        TextMesh ltext = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
+        ltext.transform.position = new Vector3(l / 2, offset - 3.5f);
+        ltext.text = "L = "+System.Math.Round(L,2);
+        ltext.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+    } 
+
+    float FindMaxBMD(List<Point> bmd,float l,float le)
+    {
+        float max = 0;
+        foreach (Point p in bmd)
+            if (p.x >= l && p.x <= le)
+                if (Mathf.Abs(p.y) > max)
+                    max = Mathf.Abs(p.y);
+        return max;
+    }
+
+    float FindMinL(float[] lr)
+    {
+        if (lr.Length == 0) return 0;
+        float min = lr[0];
+        foreach (float l in lr)
+            if (l < min)
+                min = l;
+        return min;
     }
 }
