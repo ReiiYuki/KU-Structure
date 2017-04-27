@@ -78,7 +78,11 @@ public class BeamCollector : Collector {
     {
         Debug.Log("Add Support { " + "type : " + type + " Node : " + node + " }");
         GameObject selectedNode = nodes[node];
-        if (selectedNode.GetComponent<NodeProperty>().support) Destroy(selectedNode.GetComponent<NodeProperty>().support.gameObject);
+        if (selectedNode.GetComponent<NodeProperty>().support)
+        {
+            history.Remove(selectedNode.GetComponent<NodeProperty>().support.gameObject);
+            Destroy(selectedNode.GetComponent<NodeProperty>().support.gameObject);
+        }
         GameObject support;
         if (type == 0)
         {
@@ -111,8 +115,12 @@ public class BeamCollector : Collector {
         Debug.Log("Add Point Load { " + "node : " + node + " load : " + load + " }");
         GameObject selectNode = nodes[node];
 
-        if (selectNode.GetComponent<NodeProperty>().pointLoad) Destroy(selectNode.GetComponent<NodeProperty>().pointLoad.gameObject);
-
+        if (selectNode.GetComponent<NodeProperty>().pointLoad)
+        {
+            pointLoads.Remove(selectNode.GetComponent<NodeProperty>().pointLoad);
+            history.Remove(selectNode.GetComponent<NodeProperty>().pointLoad.gameObject);
+            Destroy(selectNode.GetComponent<NodeProperty>().pointLoad.gameObject);
+        }
         GameObject pointLoad = Instantiate(pointLoadPrefab, selectNode.transform.position + new Vector3(0, 1), Quaternion.identity);
 
         pointLoad.GetComponentInChildren<TextMesh>().text = System.Math.Round(load,2) + " kg.";
@@ -136,8 +144,12 @@ public class BeamCollector : Collector {
 
         GameObject selectedElement = members[element];
 
-        if (selectedElement.GetComponent<MemberProperty>().uniformLoad) Destroy(selectedElement.GetComponent<MemberProperty>().uniformLoad.gameObject);
-
+        if (selectedElement.GetComponent<MemberProperty>().uniformLoad)
+        {
+            uniformLoads.Remove(selectedElement.GetComponent<MemberProperty>().uniformLoad);
+            history.Remove(selectedElement.GetComponent<MemberProperty>().uniformLoad.gameObject);
+            Destroy(selectedElement.GetComponent<MemberProperty>().uniformLoad.gameObject);
+        }
         GameObject uniformLoad = Instantiate(uniformLoadPrefab, new Vector3(selectedElement.GetComponent<MemberProperty>().origin+ selectedElement.GetComponent<MemberProperty>().length/2,1f), Quaternion.identity);
 
         uniformLoad.GetComponent<SpriteRenderer>().size = new Vector3(uniformLoad.GetComponent<SpriteRenderer>().size.x*selectedElement.GetComponent<MemberProperty>().length, uniformLoad.GetComponent<SpriteRenderer>().size.y);
@@ -165,8 +177,12 @@ public class BeamCollector : Collector {
 
         GameObject selectNode = nodes[node];
 
-        if (selectNode.GetComponent<NodeProperty>().momentum) Destroy(selectNode.GetComponent<NodeProperty>().momentum.gameObject);
-
+        if (selectNode.GetComponent<NodeProperty>().momentum)
+        {
+            moments.Remove(selectNode.GetComponent<NodeProperty>().momentum);
+            history.Remove(selectNode.GetComponent<NodeProperty>().momentum.gameObject);
+            Destroy(selectNode.GetComponent<NodeProperty>().momentum.gameObject);
+        }
         GameObject momentumObj = Instantiate(momentumPrefab, selectNode.transform.position-new Vector3(0,0.75f,0f), Quaternion.identity);
 
         momentumObj.GetComponentInChildren<TextMesh>().text = System.Math.Round(momentum,2) + " kg.m";
