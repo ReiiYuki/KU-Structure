@@ -773,8 +773,10 @@ public class BeamAnalyzer : MonoBehaviour {
             }
             else
             {
+                Debug.Log("qf.count = "+qf.Count);
                 foreach (IndexArray qfi in qf)
                 {
+                    Debug.Log("In");
                     if (ListEqual(index,qfi.index))
                     {
                         foreach (int qfiIndex in qfi.index)
@@ -793,7 +795,8 @@ public class BeamAnalyzer : MonoBehaviour {
             }
             qi.Add(new IndexArray(index, val));
         }
-
+        if (FindAvailableDF().Count == 0)
+            qi = qf;
         string qiStr = "qi = \n";
         foreach (IndexArray qii in qi)
         {
