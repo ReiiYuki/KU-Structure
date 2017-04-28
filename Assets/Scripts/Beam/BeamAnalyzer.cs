@@ -368,9 +368,9 @@ public class BeamAnalyzer : MonoBehaviour {
                 List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
                 Debug.Log(" Index : [ " + index[0] + " " + index[1] + " " + index[2] + " " + index[3]);
                 float[] qfi = new float[4];
-                qfi[1] = m * l2 * (l2 - 2 * l1) / Mathf.Pow(L, 2);
-                qfi[3] = m * l1 * (2 * l2 - l1) / Mathf.Pow(L, 2);
-                qfi[2] = (qfi[3] - qfi[1] + m) / L;
+                qfi[1] = m * l2 * (l2 - 2 * l1) / Mathf.Pow(L, 2)*-1;
+                qfi[3] = m * l1 * (2 * l2 - l1) / Mathf.Pow(L, 2)*-1;
+                qfi[2] = (qfi[3] - qfi[1] - m) / L;
                 qfi[0] = -1 * qfi[2];
                 qfi[3] *= -1;
                 qf.Add(new IndexArray(index, qfi));
@@ -763,37 +763,49 @@ public class BeamAnalyzer : MonoBehaviour {
     void GenerateQI()
     {
         qi = new List<IndexArray>();
-        foreach (IndexArray kui in ku)
+        if (FindAvailableDF().Count > 0)
         {
-            List<int> index = kui.index;
-            float[] val = new float[4];
-            if (qf.Count == 0)
+            foreach (IndexArray kui in ku)
             {
-                val = kui.val;
-            }
-            else
-            {
-                foreach (IndexArray qfi in qf)
+                List<int> index = kui.index;
+                float[] val = new float[4];
+                if (qf.Count == 0)
                 {
-                    if (ListEqual(index,qfi.index))
+                    val = kui.val;
+                }
+                else
+                {
+                    Debug.Log("qf.count = " + qf.Count);
+                    foreach (IndexArray qfi in qf)
                     {
-                        foreach (int qfiIndex in qfi.index)
+                        Debug.Log("In");
+                        if (ListEqual(index, qfi.index))
                         {
-                            if (index.IndexOf(qfiIndex) >= 0)
+                            foreach (int qfiIndex in qfi.index)
                             {
-                                val[kui.index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                                if (index.IndexOf(qfiIndex) >= 0)
+                                {
+                                    val[kui.index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
+                                }
                             }
+                            qf.Remove(qfi);
+                            break;
                         }
-                        break;
-                    }else
-                    {
-                        val = kui.val;
+                        else
+                        {
+                            val = kui.val;
+                        }
                     }
                 }
+                qi.Add(new IndexArray(index, val));
             }
-            qi.Add(new IndexArray(index, val));
+            foreach (IndexArray qfi in qf)
+            {
+                qi.Add(qfi);
+            }
         }
-
+        if (FindAvailableDF().Count == 0)
+            qi = qf;
         string qiStr = "qi = \n";
         foreach (IndexArray qii in qi)
         {
