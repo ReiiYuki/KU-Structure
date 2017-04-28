@@ -287,7 +287,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             }
             if (!property.support && property.momentum)
             {
-                y += property.momentum.momentum;
+                y -= property.momentum.momentum;
                 points.Add(new Point(x, y, false));
                 Debug.Log("(" + x + "," + y + ")");
 

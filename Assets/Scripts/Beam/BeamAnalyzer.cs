@@ -368,9 +368,9 @@ public class BeamAnalyzer : MonoBehaviour {
                 List<int> index = new List<int>() { node1 * 2, node1 * 2 + 1, node2 * 2, node2 * 2 + 1 };
                 Debug.Log(" Index : [ " + index[0] + " " + index[1] + " " + index[2] + " " + index[3]);
                 float[] qfi = new float[4];
-                qfi[1] = m * l2 * (l2 - 2 * l1) / Mathf.Pow(L, 2);
-                qfi[3] = m * l1 * (2 * l2 - l1) / Mathf.Pow(L, 2);
-                qfi[2] = (qfi[3] - qfi[1] + m) / L;
+                qfi[1] = m * l2 * (l2 - 2 * l1) / Mathf.Pow(L, 2)*-1;
+                qfi[3] = m * l1 * (2 * l2 - l1) / Mathf.Pow(L, 2)*-1;
+                qfi[2] = (qfi[3] - qfi[1] - m) / L;
                 qfi[0] = -1 * qfi[2];
                 qfi[3] *= -1;
                 qf.Add(new IndexArray(index, qfi));
