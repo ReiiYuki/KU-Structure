@@ -287,7 +287,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             }
             if (!property.support && property.momentum)
             {
-                y += property.momentum.momentum;
+                y -= property.momentum.momentum;
                 points.Add(new Point(x, y, false));
                 Debug.Log("(" + x + "," + y + ")");
 
@@ -396,6 +396,11 @@ public class BeamGraphGenerator : MonoBehaviour {
         float y2 = p2.y;
         float y3 = p3.y;
         Debug.Log("x1 = " + x1 + " y1 = " + y1 + " x2 = " + x2 + " y2 = " + y2 + " x3 = " + x3 + " y3 = " + y3);
+        if (x2 == x3)
+        {
+            x3 = x2 + (x2 - x1);
+            y3 = y1;
+        }
         float a = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / ((x1 - x2) * (x1 - x3) * (x2 - x3));
         float b = (x1 * x1 * (y2 - y3) + x3 * x3 * (y1 - y2) + x2 * x2 * (y3 - y1)) / ((x1 - x2) * (x1 - x3) * (x2 - x3));
         float c = (x2 * x2 * (x3 * y1 - x1 * y3) + x2 * (x1 * x1 * y3 - x3 * x3 * y1) + x1 * x3 * (x3 - x1) * y2) / ((x1 - x2) * (x1 - x3) * (x2 - x3));
