@@ -786,6 +786,7 @@ public class BeamAnalyzer : MonoBehaviour {
                                 val[kui.index.IndexOf(qfiIndex)] = kui.val[index.IndexOf(qfiIndex)] + qfi.val[qfi.index.IndexOf(qfiIndex)];
                             }
                         }
+                        qf.Remove(qfi);
                         break;
                     }else
                     {
@@ -794,6 +795,10 @@ public class BeamAnalyzer : MonoBehaviour {
                 }
             }
             qi.Add(new IndexArray(index, val));
+        }
+        foreach (IndexArray qfi in qf)
+        {
+            qi.Add(qfi);
         }
         if (FindAvailableDF().Count == 0)
             qi = qf;
