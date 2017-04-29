@@ -274,7 +274,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     y += p1.y*separatePoint/2;
                     x += separatePoint;
                     //Debug.Log("y1 = " + y);
-                    if (left >= 0)
+                    if (left >= 0&& separatePoint >= 0)
                     {
                         points.Add(new Point(x, y, true));
                         Debug.Log("(" + x + "," + y + ")");
@@ -283,9 +283,9 @@ public class BeamGraphGenerator : MonoBehaviour {
                     y += p2.y*left/2;
                     x += left;
                     //Debug.Log("y2 = " + y);
-                    points.Add(new Point(x, y,true));
-                    Debug.Log("(" + x + "," + y + ")");
 
+                        points.Add(new Point(x, y, true));
+                        Debug.Log("(" + x + "," + y + ")");
                 }
             }
             if (!property.support && property.momentum)
