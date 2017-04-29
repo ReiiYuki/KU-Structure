@@ -23,17 +23,17 @@ public class TRUSSCollector : MonoBehaviour {
     public void helpper()
     {
         // one
-        AddNode(0, 0);
-        AddNode(12, 0);
-        AddNode(24, 0);
-        AddNode(12, 16);
-        AddMember(0, 3, 1);
-        AddMember(1, 3, 0);
-        AddMember(2, 3, 1);
-        AddSupport(1, 0);
-        AddSupport(1, 1);
-        AddSupport(1, 2);
-        AddPointLoad(3, 150, -300);
+        //AddNode(0, 0);
+        //AddNode(12, 0);
+        //AddNode(24, 0);
+        //AddNode(12, 16);
+        //AddMember(0, 3, 1);
+        //AddMember(1, 3, 0);
+        //AddMember(2, 3, 1);
+        //AddSupport(1, 0);
+        //AddSupport(1, 1);
+        //AddSupport(1, 2);
+        //AddPointLoad(3, 150, -300);
 
         // 2
         //AddNode(0, 0);
@@ -65,6 +65,10 @@ public class TRUSSCollector : MonoBehaviour {
         //AddSupport(3, 3);
         //AddPointLoad(1,75,-150);
         //AddPointLoad(3,75,0);
+
+        AddNode(0, 0);
+        //AddForce(0, -100, -1000);
+        AddForce(0, 154, 354);
     }
     public void AddNode(float x,float y)
     {
@@ -257,7 +261,7 @@ public class TRUSSCollector : MonoBehaviour {
             }
             else
             {
-                GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3((nodes[node].transform.position.x - 1.75f), (nodes[node].transform.position.y)), Quaternion.identity);
+                GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3((nodes[node].transform.position.x - 2.0f), (nodes[node].transform.position.y)), Quaternion.identity);
                 //Material newMaterial = new Material(Shader.Find("Specular"));
                 //newMaterial.color = new Color(255, 182, 0, 1);
                 //pointLoadX.GetComponent<MeshRenderer>().material = newMaterial;
@@ -289,7 +293,7 @@ public class TRUSSCollector : MonoBehaviour {
             }
             else
             {
-                GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3((nodes[node].transform.position.x), (nodes[node].transform.position.y - 2.25f)), Quaternion.identity);
+                GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3((nodes[node].transform.position.x), (nodes[node].transform.position.y - 2.0f)), Quaternion.identity);
                 pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
                 pointLoadY.GetComponentInChildren<TextMesh>().text = loadY + " N.";
                 pointLoadY.GetComponent<TrussPointLoadProperty>().text = pointLoadY.GetComponentInChildren<TextMesh>();
