@@ -133,7 +133,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     point.Add(new Point(x, val, false));
                     Debug.Log("(" + x + "," + val + ")");
                 }
-                if (sfd.val[node2Index] != 0)
+                else if (sfd.val[node2Index] != 0)
                 {
                     float totalLoad = sfd.val[node2Index];
                     val += totalLoad;
