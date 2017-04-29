@@ -22,20 +22,49 @@ public class TRUSSCollector : MonoBehaviour {
 	}
     public void helpper()
     {
-        AddNode(0,0);
-        AddNode(12, 0);
-        AddNode(24, 0);
-        AddNode(12, 16);
-        AddMember(0, 3, 1);
-        AddMember(1, 3, 0);
-        AddMember(2, 3, 1);
-        AddSupport(1, 0);
-        AddSupport(1, 1);
-        AddSupport(1, 2);
-        AddPointLoad(3, 150, -300);
+        // one
+        //AddNode(0, 0);
+        //AddNode(12, 0);
+        //AddNode(24, 0);
+        //AddNode(12, 16);
+        //AddMember(0, 3, 1);
+        //AddMember(1, 3, 0);
+        //AddMember(2, 3, 1);
+        //AddSupport(1, 0);
+        //AddSupport(1, 1);
+        //AddSupport(1, 2);
+        //AddPointLoad(3, 150, -300);
 
+        // 2
+        AddNode(0, 0);
+        AddNode(4, 8);
+        AddNode(4, 4);
+        AddNode(8, 0);
+        AddMember(0, 1, 0);
+        AddMember(0, 2, 0);
+        AddMember(1, 2, 0);
+        AddMember(2, 3, 0);
+        AddMember(1, 3, 0);
+        AddMember(0, 3, 0);
+        AddSupport(1, 0);
+        AddSupport(2, 3);
+        AddPointLoad(1, 80, -120);
+
+        //3
+        //AddNode(0, 28.8f);
+        //AddNode(19.2f, 28.8f);
+        //AddNode(0, 0);
+        //AddNode(19.2f, 14.4f);
+        //AddMember(0,1,0);
+        //AddMember(0,3,0);
+        //AddMember(2,1,0);
+        //AddMember(2,3,0);
+        //AddMember(1,3,0);
+        //AddSupport(1,2);
+        //AddSupport(1, 0);
+        //AddSupport(2, 3);
     }
-    public void AddNode(int x,int y)
+    public void AddNode(float x,float y)
     {
         Debug.Log("Add Node { x:" + x + " y : " + y + " }");
         // create a new node
@@ -96,6 +125,12 @@ public class TRUSSCollector : MonoBehaviour {
             newX = (node1X + node2X) / 2f + 2f;
             newY = (node1Y + node2Y) / 2f;
         }
+        if(slope == 0)
+        {
+            newX = (node1X + node2X) / 2f;
+            newY = (node1Y + node2Y) / 2f + 2f;
+        }
+        Debug.Log( invSlope);
         Debug.Log(newX);
         Debug.Log(newY);
         GameObject lengthText = Instantiate(textPrefab, new Vector3(newX,newY), Quaternion.identity);

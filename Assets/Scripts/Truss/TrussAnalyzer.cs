@@ -438,8 +438,8 @@ public class TrussAnalyzer : MonoBehaviour
                     {0,0,-sin,cos}
                 });
 
-            float EAL = members[i].GetE() * members[i].GetI() / members[i].lenghtIn();
-
+            // float EAL = members[i].GetE() * members[i].GetI() / members[i].lenghtIn(); // first case
+            float EAL = members[i].GetE() * members[i].GetI() / members[i].lenght();
             Matrix2D matrixK = new Matrix2D(new float[,] {
                     {EAL,0,-EAL,0},
                     {0,0,0,0},
@@ -570,10 +570,12 @@ public class TrussAnalyzer : MonoBehaviour
         List<int> numbers = new List<int>();
         foreach (TrussNodeProperty node in nodes)
         {
-            if (node.pointLoadX != null || node.pointLoadY != null)
-            {
+            //if (node.pointLoadX != null || node.pointLoadY != null)
+            //{
+            //    numbers.Add(node.number);
+            //}
+            if (node.support == null)
                 numbers.Add(node.number);
-            }
         }
         Debug.Log(numbers.Count);
         return numbers.ToArray();
@@ -583,11 +585,18 @@ public class TrussAnalyzer : MonoBehaviour
         List<float> numbers = new List<float>();
         foreach (TrussNodeProperty node in nodes)
         {
-            if (node.pointLoadX != null || node.pointLoadY != null)
-            {
-                numbers.Add(node.pointLoadX.load);
-                numbers.Add(node.pointLoadY.load);
-            }
+            if(node.support == null)
+                if (node.pointLoadX != null || node.pointLoadY != null)
+                {
+                    numbers.Add(node.pointLoadX.load);
+                    numbers.Add(node.pointLoadY.load);
+                }
+                else
+                {
+                    numbers.Add(0);
+                    numbers.Add(0);
+                }
+            Debug.Log(node.pointLoadX + " " + node.pointLoadY);
         }
         float[,] array = new float[numbers.Count,1];
         for(int i=0;i<numbers.Count;i++)
