@@ -458,31 +458,150 @@ public class TrussAnalyzer : MonoBehaviour
             Debug.Log(m);
         List<TrussNodeProperty> dnode = getPoint(nodes);
         Debug.Log(dnode.Count);
-        float[,] sArray = new float[dnode.Count*2, dnode.Count*2];
-        for (int i = 0; i < dnode.Count; i++)
-            for (int j = 0; j < dnode.Count; j++)
+        //float[,] sArray = new float[dnode.Count*2, dnode.Count*2];
+        //for (int i = 0; i < dnode.Count; i++)
+        //    for (int j = 0; j < dnode.Count; j++)
+        //        for (int k = 0; k < members.Count; k++)
+        //        {
+        //            Debug.Log(members[k].node1.Equals(dnode[i])+ " " + members[k].node1.Equals(dnode[j])+" "+ members[k].node2.Equals(dnode[i])+" "+ members[k].node2.Equals(dnode[j]));
+        //            if ((members[k].node1.Equals(dnode[i])&& members[k].node1.Equals(dnode[j]))||
+        //                (members[k].node2.Equals(dnode[i]) && members[k].node2.Equals(dnode[j])))
+        //            {
+        //                sArray[i * 2, j * 2] += matrixs[k].array[0, 0];
+        //                sArray[i * 2+1, j * 2] += matrixs[k].array[1, 0];
+        //                sArray[i * 2, j * 2+1] += matrixs[k].array[0, 1];
+        //                sArray[i * 2+1, j * 2+1] += matrixs[k].array[1, 1];
+        //                Debug.Log("X");
+        //                Debug.Log(new Matrix2D(sArray));
+        //            }
+        //            if ((members[k].node2.Equals(dnode[i])&& members[k].node1.Equals(dnode[j]))||
+        //                (members[k].node1.Equals(dnode[i]) && members[k].node2.Equals(dnode[j])))
+        //            {
+        //                sArray[i * 2, j * 2] += matrixs[k].array[2, 0];
+        //                sArray[i * 2 + 1, j * 2] += matrixs[k].array[3, 0];
+        //                sArray[i * 2, j * 2 + 1] += matrixs[k].array[2, 3];
+        //                sArray[i * 2 + 1, j * 2 + 1] += matrixs[k].array[3, 3];
+        //                Debug.Log("Y");
+        //                Debug.Log(new Matrix2D(sArray));
+        //            }
+        //        }
+        //for (int l = 0; l < dfi.Length; l++)
+        //    for (int m = 0; m < members.Count; m++)
+        int[] dfi = getIndex(nodes);
+        float[,] sArray = new float[dfi.Length, dfi.Length];
+        for (int i = 0; i < dfi.Length; i++)
+            for (int j = 0; j < dfi.Length; j++)
                 for (int k = 0; k < members.Count; k++)
-                {
-                    Debug.Log(members[k].node1.Equals(dnode[i])+ " " + members[k].node1.Equals(dnode[j])+" "+ members[k].node2.Equals(dnode[i])+" "+ members[k].node2.Equals(dnode[j]));
-                    if ((members[k].node1.Equals(dnode[i])&& members[k].node1.Equals(dnode[j]))||
-                        (members[k].node2.Equals(dnode[i]) && members[k].node2.Equals(dnode[j])))
+
+                 {
+                    Debug.Log(members[k].node1.Equals(dnode[i]) + " " + members[k].node1.Equals(dnode[j]) + " " + members[k].node2.Equals(dnode[i]) + " " + members[k].node2.Equals(dnode[j]));
+                    if (members[k].node1.number * 2 == dfi[i])
                     {
-                        sArray[i * 2, j * 2] += matrixs[k].array[0, 0];
-                        sArray[i * 2+1, j * 2] += matrixs[k].array[1, 0];
-                        sArray[i * 2, j * 2+1] += matrixs[k].array[0, 1];
-                        sArray[i * 2+1, j * 2+1] += matrixs[k].array[1, 1];
-                        Debug.Log("X");
-                        Debug.Log(new Matrix2D(sArray));
+                        if (members[k].node1.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[0, 0];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node1.number * 2 +1== dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[0, 1];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[0, 2];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[0, 3];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
                     }
-                    if ((members[k].node2.Equals(dnode[i])&& members[k].node1.Equals(dnode[j]))||
-                        (members[k].node1.Equals(dnode[i]) && members[k].node2.Equals(dnode[j])))
+                    if (members[k].node1.number * 2 +1 == dfi[i])
                     {
-                        sArray[i * 2, j * 2] += matrixs[k].array[2, 0];
-                        sArray[i * 2 + 1, j * 2] += matrixs[k].array[3, 0];
-                        sArray[i * 2, j * 2 + 1] += matrixs[k].array[2, 3];
-                        sArray[i * 2 + 1, j * 2 + 1] += matrixs[k].array[3, 3];
-                        Debug.Log("Y");
-                        Debug.Log(new Matrix2D(sArray));
+                        if (members[k].node1.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[1, 0];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node1.number * 2 + 1 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[1, 1];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[1, 2];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[1, 3];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                    }
+                    if (members[k].node2.number * 2 == dfi[i])
+                    {
+                        if (members[k].node1.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[2, 0];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node1.number * 2 + 1 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[2, 1];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[2, 2];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[2, 3];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                    }
+                    if (members[k].node2.number * 2 + 1 == dfi[i])
+                    {
+                        if (members[k].node1.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[3, 0];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node1.number * 2 + 1 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[3, 1];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[3, 2];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
+                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        {
+                            sArray[i, j] += matrixs[k].array[3, 3];
+                            Debug.Log("X1");
+                            Debug.Log(new Matrix2D(sArray));
+                        }
                     }
 
 
@@ -577,6 +696,7 @@ public class TrussAnalyzer : MonoBehaviour
             if (node.support == null)
                 numbers.Add(node.number);
         }
+
         Debug.Log(numbers.Count);
         return numbers.ToArray();
     }
@@ -585,19 +705,20 @@ public class TrussAnalyzer : MonoBehaviour
         List<float> numbers = new List<float>();
         foreach (TrussNodeProperty node in nodes)
         {
-            if(node.support == null)
-                if (node.pointLoadX != null || node.pointLoadY != null)
-                {
+            if (node.dx == 1)
+                if (node.pointLoadX != null)
                     numbers.Add(node.pointLoadX.load);
-                    numbers.Add(node.pointLoadY.load);
-                }
                 else
-                {
                     numbers.Add(0);
+
+            if (node.dy == 1)
+                if (node.pointLoadY != null)
+                    numbers.Add(node.pointLoadY.load);
+                else
                     numbers.Add(0);
-                }
-            Debug.Log(node.pointLoadX + " " + node.pointLoadY);
+            
         }
+        Debug.Log(numbers.Count);
         float[,] array = new float[numbers.Count,1];
         for(int i=0;i<numbers.Count;i++)
         {
@@ -612,12 +733,23 @@ public class TrussAnalyzer : MonoBehaviour
         foreach(TrussNodeProperty node in nodes)
         {
             Debug.Log("dx: " + node.dx + " dy: " + node.dy+" node_index: "+node.number);
-            if (node.dx == 1)
+            if (node.dx == 1 || node.dy == 1)
                 newList.Add(node);
         }
         return newList;
     }
-
+    public int[] getIndex(List<TrussNodeProperty> nodes)
+    {
+        List<int> il = new List<int>();
+        foreach(TrussNodeProperty n in nodes)
+        {
+            if (n.dx == 1)
+                il.Add(n.number*2);
+            if(n.dy == 1)
+                il.Add(n.number*2+1)
+        }
+        return il.ToArray();
+    }
     private float calAngle(float x1,float x2,float lenght)
     {
         Debug.Log(x2 + "-" + x1 + "/" + lenght);

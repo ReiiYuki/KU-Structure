@@ -36,33 +36,35 @@ public class TRUSSCollector : MonoBehaviour {
         //AddPointLoad(3, 150, -300);
 
         // 2
-        AddNode(0, 0);
-        AddNode(4, 8);
-        AddNode(4, 4);
-        AddNode(8, 0);
-        AddMember(0, 1, 0);
-        AddMember(0, 2, 0);
-        AddMember(1, 2, 0);
-        AddMember(2, 3, 0);
-        AddMember(1, 3, 0);
-        AddMember(0, 3, 0);
-        AddSupport(1, 0);
-        AddSupport(2, 3);
-        AddPointLoad(1, 80, -120);
+        //AddNode(0, 0);
+        //AddNode(4, 8);
+        //AddNode(4, 4);
+        //AddNode(8, 0);
+        //AddMember(0, 1, 3);
+        //AddMember(0, 2, 3);
+        //AddMember(1, 2, 3);
+        //AddMember(2, 3, 3);
+        //AddMember(1, 3, 3);
+        //AddMember(0, 3, 3);
+        //AddSupport(1, 0);
+        //AddSupport(3, 3);
+        //AddPointLoad(1, 80, -120);
 
         //3
-        //AddNode(0, 28.8f);
-        //AddNode(19.2f, 28.8f);
-        //AddNode(0, 0);
-        //AddNode(19.2f, 14.4f);
-        //AddMember(0,1,0);
-        //AddMember(0,3,0);
-        //AddMember(2,1,0);
-        //AddMember(2,3,0);
-        //AddMember(1,3,0);
-        //AddSupport(1,2);
-        //AddSupport(1, 0);
-        //AddSupport(2, 3);
+        AddNode(0, 28.8f);
+        AddNode(19.2f, 28.8f);
+        AddNode(0, 0);
+        AddNode(19.2f, 14.4f);
+        AddMember(0, 1, 4);
+        AddMember(0, 3, 4);
+        AddMember(2, 1, 4);
+        AddMember(2, 3, 4);
+        AddMember(1, 3, 4);
+        AddSupport(1, 2);
+        AddSupport(1, 0);
+        AddSupport(3, 3);
+        AddPointLoad(1,75,-150);
+        AddPointLoad(3,75,0);
     }
     public void AddNode(float x,float y)
     {
@@ -180,9 +182,19 @@ public class TRUSSCollector : MonoBehaviour {
 		support.GetComponent<TrussSupportProperty>().node = nodes[node].GetComponent<TrussNodeProperty>();
 
         // add degree of freedom to node
-        nodes[node].GetComponent<TrussNodeProperty>().dx = 0;
-        nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
-
+        if (type == 0 || type == 1 || type == 2)
+        {
+            nodes[node].GetComponent<TrussNodeProperty>().dx = 0;
+            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
+        }
+        else if (type == 3)
+        {
+            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
+        }
+        else
+        {
+            nodes[node].GetComponent<TrussNodeProperty>().dx = 0;
+        }
         // add support to node
         nodes[node].GetComponent<TrussNodeProperty>().support = support.GetComponent<TrussSupportProperty>();
 
