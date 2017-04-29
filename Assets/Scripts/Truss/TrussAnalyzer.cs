@@ -673,8 +673,8 @@ public class TrussAnalyzer : MonoBehaviour
         {
             if (n.dx == 1)
                 il.Add(n.number*2);
-            if(n.dy == 1)
-                il.Add(n.number*2+1)
+            if (n.dy == 1)
+                il.Add(n.number * 2 + 1);
         }
         return il.ToArray();
     }
