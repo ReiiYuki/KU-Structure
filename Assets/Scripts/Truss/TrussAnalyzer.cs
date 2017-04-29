@@ -440,6 +440,7 @@ public class TrussAnalyzer : MonoBehaviour
 
             // float EAL = members[i].GetE() * members[i].GetI() / members[i].lenghtIn(); // first case
             float EAL = members[i].GetE() * members[i].GetI() / members[i].lenght();
+            Debug.Log("EAL: " + EAL);
             Matrix2D matrixK = new Matrix2D(new float[,] {
                     {EAL,0,-EAL,0},
                     {0,0,0,0},
@@ -578,16 +579,16 @@ public class TrussAnalyzer : MonoBehaviour
         Matrix2D[] U = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
-            Debug.Log(T[i].array.GetLength(0));
-            Debug.Log(T[i].array.GetLength(1));
-            Debug.Log(T[i]);
-            Debug.Log(V[i]);
+            Debug.Log("T: \n"+T[i]);
+            Debug.Log("V: \n"+V[i]);
             U[i] = T[i] * V[i];
         }
 
         Matrix2D[] Q = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
         {
+            Debug.Log("K: \n" + K[i]);
+            Debug.Log("U: \n" + U[i]);
             Q[i] = K[i] * U[i];
         }
         Matrix2D[] TT = new Matrix2D[members.Count];
