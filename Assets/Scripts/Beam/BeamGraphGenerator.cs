@@ -97,7 +97,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 int node1Index = property.node1.number;
                 float totalLoad = sfd.val[node1Index];
                 if (collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad)
-                    totalLoad += collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
+                    totalLoad -= collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
                 val += totalLoad;
                 loadMem.Add(new Point(node1Index, val, false));
                 point.Add(new Point(x, val,false));
@@ -133,7 +133,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                     point.Add(new Point(x, val, false));
                     Debug.Log("(" + x + "," + val + ")");
                 }
-                if (sfd.val[node2Index] != 0)
+                else if (sfd.val[node2Index] != 0)
                 {
                     float totalLoad = sfd.val[node2Index];
                     val += totalLoad;
@@ -274,8 +274,11 @@ public class BeamGraphGenerator : MonoBehaviour {
                     y += p1.y*separatePoint/2;
                     x += separatePoint;
                     //Debug.Log("y1 = " + y);
-                    points.Add(new Point(x, y,true));
-                    Debug.Log("(" + x + "," + y + ")");
+                    if (left >= 0)
+                    {
+                        points.Add(new Point(x, y, true));
+                        Debug.Log("(" + x + "," + y + ")");
+                    }
 
                     y += p2.y*left/2;
                     x += left;
