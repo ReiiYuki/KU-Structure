@@ -496,114 +496,42 @@ public class TrussAnalyzer : MonoBehaviour
                  {
                     Debug.Log(members[k].node1.Equals(dnode[i]) + " " + members[k].node1.Equals(dnode[j]) + " " + members[k].node2.Equals(dnode[i]) + " " + members[k].node2.Equals(dnode[j]));
                     if (members[k].node1.number * 2 == dfi[i])
-                    {
                         if (members[k].node1.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[0, 0];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node1.number * 2 +1== dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[0, 1];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[0, 2];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 + 1 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[0, 3];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
-                    }
                     if (members[k].node1.number * 2 +1 == dfi[i])
-                    {
                         if (members[k].node1.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[1, 0];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node1.number * 2 + 1 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[1, 1];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[1, 2];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 + 1 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[1, 3];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
-                    }
                     if (members[k].node2.number * 2 == dfi[i])
-                    {
                         if (members[k].node1.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[2, 0];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node1.number * 2 + 1 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[2, 1];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[2, 2];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 + 1 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[2, 3];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
-                    }
                     if (members[k].node2.number * 2 + 1 == dfi[i])
-                    {
                         if (members[k].node1.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[3, 0];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node1.number * 2 + 1 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[3, 1];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[3, 2];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
                         if (members[k].node2.number * 2 + 1 == dfi[j])
-                        {
                             sArray[i, j] += matrixs[k].array[3, 3];
-                            Debug.Log("X1");
-                            Debug.Log(new Matrix2D(sArray));
-                        }
-                    }
-
+                    Debug.Log(new Matrix2D(sArray));
 
                 }
         Debug.Log(new Matrix2D(sArray));
