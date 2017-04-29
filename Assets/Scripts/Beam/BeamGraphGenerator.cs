@@ -97,7 +97,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 int node1Index = property.node1.number;
                 float totalLoad = sfd.val[node1Index];
                 if (collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad)
-                    totalLoad += collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
+                    totalLoad -= collector.nodes[node1Index].GetComponent<NodeProperty>().pointLoad.load;
                 val += totalLoad;
                 loadMem.Add(new Point(node1Index, val, false));
                 point.Add(new Point(x, val,false));
