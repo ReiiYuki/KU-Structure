@@ -493,46 +493,53 @@ public class TrussAnalyzer : MonoBehaviour
             for (int j = 0; j < dfi.Length; j++)
                 for (int k = 0; k < members.Count; k++)
 
-                 {
-                    Debug.Log(members[k].node1.Equals(dnode[i]) + " " + members[k].node1.Equals(dnode[j]) + " " + members[k].node2.Equals(dnode[i]) + " " + members[k].node2.Equals(dnode[j]));
+                {
+                    Debug.Log(dfi[i] + " " + dfi[j] + " " + members[k].node1.number + " " + members[k].node2.number);
+                    Debug.Log(matrixs[k]);
                     if (members[k].node1.number * 2 == dfi[i])
+                    {
                         if (members[k].node1.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[0, 0];
-                        if (members[k].node1.number * 2 +1== dfi[j])
+                        else if (members[k].node1.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[0, 1];
-                        if (members[k].node2.number * 2 == dfi[j])
+                        else if (members[k].node2.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[0, 2];
-                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        else if (members[k].node2.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[0, 3];
-                    if (members[k].node1.number * 2 +1 == dfi[i])
+                    }
+                    else if (members[k].node1.number * 2 + 1 == dfi[i])
+                    {
                         if (members[k].node1.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[1, 0];
-                        if (members[k].node1.number * 2 + 1 == dfi[j])
+                        else if (members[k].node1.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[1, 1];
-                        if (members[k].node2.number * 2 == dfi[j])
+                        else if (members[k].node2.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[1, 2];
-                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        else if (members[k].node2.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[1, 3];
-                    if (members[k].node2.number * 2 == dfi[i])
+                    }
+                    else if (members[k].node2.number * 2 == dfi[i])
+                    {
                         if (members[k].node1.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[2, 0];
-                        if (members[k].node1.number * 2 + 1 == dfi[j])
+                        else if (members[k].node1.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[2, 1];
-                        if (members[k].node2.number * 2 == dfi[j])
+                        else if (members[k].node2.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[2, 2];
-                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        else if (members[k].node2.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[2, 3];
-                    if (members[k].node2.number * 2 + 1 == dfi[i])
+                    }
+                    else if (members[k].node2.number * 2 + 1 == dfi[i])
+                    {
                         if (members[k].node1.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[3, 0];
-                        if (members[k].node1.number * 2 + 1 == dfi[j])
+                        else if (members[k].node1.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[3, 1];
-                        if (members[k].node2.number * 2 == dfi[j])
+                        else if (members[k].node2.number * 2 == dfi[j])
                             sArray[i, j] += matrixs[k].array[3, 2];
-                        if (members[k].node2.number * 2 + 1 == dfi[j])
+                        else if (members[k].node2.number * 2 + 1 == dfi[j])
                             sArray[i, j] += matrixs[k].array[3, 3];
-                    Debug.Log(new Matrix2D(sArray));
-
+                    }
                 }
         Debug.Log(new Matrix2D(sArray));
         Matrix2D sArrayI = Matrix2D.inverse(new Matrix2D(sArray));
@@ -544,31 +551,28 @@ public class TrussAnalyzer : MonoBehaviour
         Debug.Log(d);
         Debug.Log(d.array.GetLength(0));
         Debug.Log(d.array.GetLength(1));
+        Debug.Log(fIndex.Length);
         Matrix2D[] V = new Matrix2D[members.Count];
         for (int i = 0; i < members.Count; i++)
-            for (int j = 0; j < fIndex.Length; j++)
+        {
+            for (int j = 0; j < dfi.Length; j++)
             {
                 float[,] vArray = new float[4, 1];
-                Debug.Log("I: "+i+" J: "+j);
-                Debug.Log("members[i].node1.number"+ members[i].node1.number+"members[i].node2.number: " +members[i].node2.number + "fIndex[j]: " + fIndex[j]);
+                Debug.Log("I: " + i + " J: " + j);
                 Debug.Log(d);
-                if (members[i].node1.number == fIndex[j])
-                {
-                    vArray[0, 0] = d.array[j * 2, 0];
-                    vArray[1, 0] = d.array[j * 2 + 1, 0];
-                    Debug.Log(vArray[0, 0] + "     "+ vArray[1, 0]);
-                }
-                if (members[i].node2.number == fIndex[j])
-                {
-                    vArray[2, 0] = d.array[j * 2, 0];
-                    vArray[3, 0] = d.array[j * 2+1, 0];
-                    Debug.Log(vArray[2, 0] + "     " + vArray[3, 0]);
-                }
+                if (dfi.Contains<int>(members[i].node1.number * 2 ))
+                    vArray[0, 0] = d.array[Array.IndexOf(dfi, members[i].node1.number * 2), 0];
+                if (dfi.Contains<int>(members[i].node1.number * 2+1 ))
+                    vArray[1, 0] = d.array[Array.IndexOf(dfi, members[i].node1.number * 2+1), 0];
+                if (dfi.Contains<int>(members[i].node2.number * 2))
+                    vArray[2, 0] = d.array[Array.IndexOf(dfi, members[i].node2.number * 2), 0];
+                if (dfi.Contains<int>(members[i].node2.number * 2+1))
+                    vArray[3, 0] = d.array[Array.IndexOf(dfi, members[i].node2.number * 2+1), 0];
                 V[i] = new Matrix2D(vArray);
-
+                Debug.Log(V[i]);
                 Debug.Log("aaaaaaaaaaaaaaa");
-                break;
             }
+        }
         foreach (Matrix2D m in V)
             Debug.Log(m);
         Matrix2D[] U = new Matrix2D[members.Count];

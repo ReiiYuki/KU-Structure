@@ -7,7 +7,7 @@ public class TrussPointLoadProperty : MonoBehaviour {
 	public float load;
     public char axis; 
 	public int node;
-
+    public TextMesh text;
 	public void Inverse()
 	{
 		if (axis == 'y' && load > 0)
