@@ -10,7 +10,7 @@ public class AddPointLoadAction : MonoBehaviour {
     public void AddPointLoad()
     {
         int node = nodeInput.GetComponent<LoadInputValue>().index;
-        float load = float.Parse(loadText.GetComponent<Text>().text);
+        float load = float.Parse(loadText.GetComponent<InputField>().text);
         GameObject.FindObjectOfType<BeamCollector>().AddPointLoad(node, load);
     }
 }
