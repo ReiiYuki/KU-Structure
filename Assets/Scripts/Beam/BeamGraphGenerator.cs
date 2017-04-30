@@ -184,32 +184,32 @@ public class BeamGraphGenerator : MonoBehaviour {
             line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
             line.SetPositions(new Vector3[]
             {
-                    new Vector3(currentX,currentY/max*3-9),
-                    new Vector3(p.x,p.y/max*3-9)
+                    new Vector3(currentX,currentY/max*3-11),
+                    new Vector3(p.x,p.y/max*3-11)
             });
             currentX = p.x;
             currentY = p.y;
             line.transform.SetParent(transform.GetChild(1));
             if (System.Math.Round(p.y, 2) !=0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(currentX, p.y / max * 3 - 8.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(currentX, p.y / max * 3 - 10.5f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 text.text = System.Math.Round(p.y, 2) + "";
                 text.characterSize = 0.2f;
                 if (System.Math.Round(p.y, 2) < 0)
-                    text.transform.position -= new Vector3(0, 0.4f);
+                    text.transform.position -= new Vector3(0, 0.9f);
                 text.transform.SetParent(line.transform);
             }
         }
         
-        lineL.SetPositions(new Vector3[] { new Vector3(0, -9), new Vector3(currentX, -9) });
+        lineL.SetPositions(new Vector3[] { new Vector3(0, -11), new Vector3(currentX, -11) });
 
-        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -9), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -11), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textStart.text = "SFD";
         textStart.transform.SetParent(lineL.transform);
 
-        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -9), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -11), Quaternion.identity).GetComponent<TextMesh>();
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "SFD";
         textEnd.transform.SetParent(lineL.transform);
