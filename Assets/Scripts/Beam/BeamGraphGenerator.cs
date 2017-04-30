@@ -317,7 +317,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float max = FindMaxPoint(points);
         float currentX = 0;
         float currentY = 0;
-        float offset = -19;
+        float offset = -21;
         float parabolaIndex = 0;
         float[] parabolaEquation = new float[3];
         foreach (Point point in points)
@@ -345,10 +345,10 @@ public class BeamGraphGenerator : MonoBehaviour {
 
             if (System.Math.Round(point.y, 2) != 0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 18.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 20.5f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 if (System.Math.Round(point.y, 2) < 0)
-                    text.transform.position -= new Vector3(0, 0.4f);
+                    text.transform.position -= new Vector3(0, 0.9f);
                 text.text = System.Math.Round(point.y, 2) + "";
                 text.characterSize = 0.2f;
                 text.transform.SetParent(line.transform);
@@ -359,14 +359,14 @@ public class BeamGraphGenerator : MonoBehaviour {
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
         }
-        lineM.SetPositions(new Vector3[] { new Vector3(0, -19), new Vector3(currentX, -19) });
+        lineM.SetPositions(new Vector3[] { new Vector3(0, -21), new Vector3(currentX, -21) });
 
-        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -19), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -21), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textStart.text = "BMD";
         textStart.transform.SetParent(lineM.transform);
 
-        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -19), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -21), Quaternion.identity).GetComponent<TextMesh>();
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "BMD";
         textEnd.transform.SetParent(lineM.transform);
