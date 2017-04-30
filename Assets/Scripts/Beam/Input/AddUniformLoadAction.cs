@@ -9,7 +9,7 @@ public class AddUniformLoadAction : MonoBehaviour {
 
     public void AddUniformLoad()
     {
-        float load = float.Parse(loadText.GetComponent<Text>().text);
+        float load = float.Parse(loadText.GetComponent<InputField>().text);
         int element = elementInput.GetComponent<LoadInputValue>().index;
         GameObject.FindObjectOfType<BeamCollector>().AddUniformLoad(element, load);
     }
