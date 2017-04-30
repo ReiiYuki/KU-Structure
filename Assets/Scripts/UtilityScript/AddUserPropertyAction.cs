@@ -8,9 +8,9 @@ public class AddUserPropertyAction : MonoBehaviour {
 
 	public void AddUserProperty()
     {
-        Debug.Log(eText.GetComponent<Text>().text + " " + iText.GetComponent<Text>().text);
-        float e = float.Parse(eText.GetComponent<Text>().text);
-        float i = float.Parse(iText.GetComponent<Text>().text);
+        Debug.Log(eText.GetComponent<InputField>().text + " " + iText.GetComponent<InputField>().text);
+        float e = float.Parse(eText.GetComponent<InputField>().text);
+        float i = float.Parse(iText.GetComponent<InputField>().text);
         string savedData = PlayerPrefs.GetString("UPROP");
         savedData += " " + e + "," + i + " ";
         PlayerPrefs.SetString("UPROP", savedData);
