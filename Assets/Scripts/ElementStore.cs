@@ -7,6 +7,7 @@ public class ElementStore : MonoBehaviour {
     public static List<Element> H_BEAM,I_BEAM;
     public static List<UElement> U_PROP;
     public static List<PElement> PIPE;
+    public static List<AElement> UT_PROP; 
     public struct UElement
     {
         public float E, I;
@@ -69,12 +70,23 @@ public class ElementStore : MonoBehaviour {
         }
     }
 
+    public struct AElement
+    {
+        public float I, A;
+        public AElement(float I,float A)
+        {
+            this.I = I;
+            this.A = A;
+        }
+    }
+
     // Use this for initialization
     void Start () {
         GenerateH();
         GenerateI();
         GenerateU();
         GeneratePIPE();
+        GenerateUT();
     }
 
     void GenerateH()
@@ -187,5 +199,26 @@ public class ElementStore : MonoBehaviour {
         PIPE.Add(new PElement("175 mm x 31.7 kg", 190.7f, 7f, 31.7f, 40.4f, 1260f, 0.06505899835785f, 179f, 14700000f, 24500000f, 1f));
         PIPE.Add(new PElement("200 mm x 31.1 kg", 216.3f, 6f, 31.1f, 39.61f, 1710f, 0.0743566193536705f, 203f, 14700000f, 24500000f, 1f));
         PIPE.Add(new PElement("200 mm x 41.1 kg", 216.3f, 8f, 41.1f, 52.35f, 2190f, 0.0736547614058042f, 263f, 14700000f, 24500000f, 1f));
+    }
+
+    public static void GenerateUT()
+    {
+        UT_PROP = new List<AElement>();
+        string savedData = PlayerPrefs.GetString("UTPROP");
+        Debug.Log(savedData);
+        if (savedData != "")
+        {
+            string[] elementStr = savedData.Split(null);
+            foreach (string e in elementStr)
+            {
+                if (!string.IsNullOrEmpty(e))
+                {
+                    string[] eStr = e.Split(',');
+                    float A = float.Parse(eStr[0]);
+                    float I = float.Parse(eStr[1]);
+                    UT_PROP.Add(new AElement(I,A));
+                }
+            }
+        }
     }
 }
