@@ -258,6 +258,10 @@ public class BeamGraphGenerator : MonoBehaviour {
                 }
                 else
                 {
+                    if (property.number-1==0 && bmd.val[property.number-1] == 0)
+                    {
+                        points.Add(new Point(0, 0, false));
+                    }
                     Debug.Log("index = " + index);
                     Point p1 = loadMem[index++];
                     Point p2 = loadMem[index];
@@ -288,6 +292,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                         Debug.Log("(" + x + "," + y + ")");
                 }
             }
+            
             if (!property.support && property.momentum)
             {
                 y -= property.momentum.momentum;
@@ -303,6 +308,11 @@ public class BeamGraphGenerator : MonoBehaviour {
 
             }
         }
+
+        Debug.Log("*************************************************************");
+        foreach (Point p in points) Debug.Log(p.x + ","+p.y);
+        Debug.Log("*************************************************************");
+
 
         float max = FindMaxPoint(points);
         float currentX = 0;
@@ -399,6 +409,11 @@ public class BeamGraphGenerator : MonoBehaviour {
         float y2 = p2.y;
         float y3 = p3.y;
         Debug.Log("x1 = " + x1 + " y1 = " + y1 + " x2 = " + x2 + " y2 = " + y2 + " x3 = " + x3 + " y3 = " + y3);
+        if (x1 == x2)
+        {
+            x1 = x2 - (x3 - x2);
+            y1 = y3;
+        }
         if (x2 == x3)
         {
             x3 = x2 + (x2 - x1);
