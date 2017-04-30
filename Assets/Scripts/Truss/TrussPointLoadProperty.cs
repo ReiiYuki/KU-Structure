@@ -7,6 +7,7 @@ public class TrussPointLoadProperty : MonoBehaviour {
 	public float load;
     public char axis; 
 	public int node;
+    public GameObject nodeG;
     public TextMesh text;
 	public void Inverse()
 	{
@@ -26,18 +27,38 @@ public class TrussPointLoadProperty : MonoBehaviour {
 	}
     public void InverseForce()
     {
+        Debug.Log(transform.localScale.y);
+        Debug.Log(transform.localScale.x);
         if (axis == 'y' && load > 0)
         {
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * -1, transform.localScale.z);
-            transform.GetChild(0).localScale = new Vector3(transform.GetChild(0).localScale.x, transform.GetChild(0).localScale.y * -1, transform.GetChild(0).localScale.z);
-            transform.position = new Vector3(transform.position.x, transform.position.y + 4f);
+            
+            transform.localScale = new Vector3(transform.localScale.x, -0.4724374f, transform.localScale.z);
+            transform.GetChild(0).localScale = new Vector3(transform.GetChild(0).localScale.x, -1, transform.GetChild(0).localScale.z);
+            transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x, nodeG.GetComponent<TrussNodeProperty>().y + 2.25f);
+            Debug.Log("+y: "+load);
+        }
+        if (axis == 'y' && load < 0)
+        {
+            transform.localScale = new Vector3(transform.localScale.x, 0.4724374f, transform.localScale.z);
+            transform.GetChild(0).localScale = new Vector3(transform.GetChild(0).localScale.x, transform.GetChild(0).localScale.y, transform.GetChild(0).localScale.z);
+            transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x, nodeG.GetComponent<TrussNodeProperty>().y - 2.25f);
+            Debug.Log("-y: " + load);
         }
         if (axis == 'x' && load > 0)
         {
-            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-            transform.GetChild(0).localScale = new Vector3(transform.GetChild(0).localScale.x * -1, transform.GetChild(0).localScale.y, transform.GetChild(0).localScale.z);
-            transform.position = new Vector3(transform.position.x + 4f, transform.position.y);
-            transform.Rotate(new Vector3(0, 0, 180));
+            transform.localScale = new Vector3(0.4724374f, -0.4724374f, transform.localScale.z);
+            transform.GetChild(0).localScale = new Vector3(transform.GetChild(0).localScale.x , -1, -1);
+            transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x + 2.25f, nodeG.GetComponent<TrussNodeProperty>().y);
+            //transform.Rotate(new Vector3(0, 0, 180));
+            Debug.Log("x: " + load);
+        }
+        if (axis == 'x' && load < 0)
+        {
+            transform.localScale = new Vector3(-0.4724374f, transform.localScale.y, transform.localScale.z);
+            transform.GetChild(0).localScale = new Vector3(1 ,-1, -1);
+            transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x - 2.25f, nodeG.GetComponent<TrussNodeProperty>().y);
+            //transform.Rotate(new Vector3(0, 0, 180));
+            Debug.Log("x: " + load);
         }
     }
 }

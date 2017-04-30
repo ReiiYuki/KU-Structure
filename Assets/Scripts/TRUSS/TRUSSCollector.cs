@@ -52,24 +52,30 @@ public class TRUSSCollector : MonoBehaviour {
         //AddPointLoad(1, 80, -120);
 
         //3
-        AddNode(0, 28.8f);
-        AddNode(19.2f, 28.8f);
-        AddNode(0, 0);
-        AddNode(19.2f, 14.4f);
-        AddMember(0, 1, 4);
-        AddMember(0, 3, 4);
-        AddMember(2, 1, 4);
-        AddMember(2, 3, 4);
-        AddMember(1, 3, 4);
-        AddSupport(1, 2);
-        AddSupport(1, 0);
-        AddSupport(3, 3);
-        AddPointLoad(1, 75, -150);
-        AddPointLoad(3, 75, 0);
-
+        //AddNode(0, 28.8f);
+        //AddNode(19.2f, 28.8f);
         //AddNode(0, 0);
-        //AddForce(0, -100, -1000);
-        //AddForce(0, 154, 354);
+        //AddNode(19.2f, 14.4f);
+        //AddMember(0, 1, 4);
+        //AddMember(0, 3, 4);
+        //AddMember(2, 1, 4);
+        //AddMember(2, 3, 4);
+        //AddMember(1, 3, 4);
+        //AddSupport(1, 2);
+        //AddSupport(1, 0);
+        //AddSupport(3, 3);
+        //AddPointLoad(1, 75, -150);
+        //AddPointLoad(3, 75, 0);
+
+        AddNode(0, 0);
+        AddNode(0, 0);
+        ////AddPointLoad(0, 100, 100);
+        ////AddPointLoad(0, -100, -100);
+        ////AddForce(0, -100, -1000);
+        AddForce(0, 154, 354);
+        AddForce(0, -1154, -1354);
+        AddForce(1, -154, -354);
+        AddForce(1, 1154, 1354);
     }
     public void ResetAll()
     {
@@ -80,6 +86,8 @@ public class TRUSSCollector : MonoBehaviour {
         members.Clear();
         nodes.Clear();
         history.Clear();
+        pointLoads.Clear();
+        forces.Clear();
     }
     public void Undo()
     {
@@ -122,6 +130,7 @@ public class TRUSSCollector : MonoBehaviour {
                 if (temp.GetComponent<TrussMemberProperty>().node2.number == node.GetComponent<TrussNodeProperty>().number)
                     node.GetComponent<TrussNodeProperty>().members.Remove(temp.GetComponent<TrussMemberProperty>());
             }
+            members.Remove(temp);
         }
         else if (temp.GetComponent<TrussNodeProperty>())
         {
@@ -331,7 +340,7 @@ public class TRUSSCollector : MonoBehaviour {
             pointLoadX.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadX.transform.SetParent (selectNode.transform);
-            history.Add(pointLoadPrefabX);
+            history.Add(pointLoadX);
         }
 
 		// add Load Y
@@ -348,7 +357,7 @@ public class TRUSSCollector : MonoBehaviour {
 			pointLoadY.GetComponent<TrussPointLoadProperty> ().Inverse ();
 
 			pointLoadY.transform.SetParent (selectNode.transform);
-            history.Add(pointLoadPrefabY);
+            history.Add(pointLoadY);
         }
     }
 
@@ -364,12 +373,12 @@ public class TRUSSCollector : MonoBehaviour {
             {
                 selectNode.GetComponent<TrussNodeProperty>().forceX.load += loadX;
                 selectNode.GetComponent<TrussNodeProperty>().forceX.text.text = selectNode.GetComponent<TrussNodeProperty>().forceX.load + " N.";
-                Debug.Log(selectNode.GetComponent<TrussNodeProperty>().forceX.text);
+                Debug.Log(selectNode.GetComponent<TrussNodeProperty>().forceX.text.text+ "  "+ selectNode.GetComponent<TrussNodeProperty>().forceX.axis);
                 selectNode.GetComponent<TrussNodeProperty>().forceX.InverseForce();
             }
             else
             {
-                GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3((nodes[node].transform.position.x - 2.0f), (nodes[node].transform.position.y)), Quaternion.identity);
+                GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3(0, 0, 0), Quaternion.identity);
                 //Material newMaterial = new Material(Shader.Find("Specular"));
                 //newMaterial.color = new Color(255, 182, 0, 1);
                 //pointLoadX.GetComponent<MeshRenderer>().material = newMaterial;
@@ -380,6 +389,7 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadX.GetComponent<TrussPointLoadProperty>().load = loadX;
                 pointLoadX.GetComponent<TrussPointLoadProperty>().axis = 'x';
                 pointLoadX.GetComponent<TrussPointLoadProperty>().node = node;
+                pointLoadX.GetComponent<TrussPointLoadProperty>().nodeG = nodes[node];
                 selectNode.GetComponent<TrussNodeProperty>().forceX = pointLoadX.GetComponent<TrussPointLoadProperty>();
                 pointLoadX.GetComponent<TrussPointLoadProperty>().InverseForce();
 
@@ -397,18 +407,19 @@ public class TRUSSCollector : MonoBehaviour {
             {
                 selectNode.GetComponent<TrussNodeProperty>().forceY.load += loadY;
                 selectNode.GetComponent<TrussNodeProperty>().forceY.text.text = selectNode.GetComponent<TrussNodeProperty>().forceY.load + " N.";
-                Debug.Log(selectNode.GetComponent<TrussNodeProperty>().forceY.text);
+                Debug.Log(selectNode.GetComponent<TrussNodeProperty>().forceY.text.text + "  "+ selectNode.GetComponent<TrussNodeProperty>().forceY.axis);
                 selectNode.GetComponent<TrussNodeProperty>().forceY.InverseForce();
             }
             else
             {
-                GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3((nodes[node].transform.position.x), (nodes[node].transform.position.y - 2.0f)), Quaternion.identity);
+                GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3(0,0,0), Quaternion.identity);
                 pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
                 pointLoadY.GetComponentInChildren<TextMesh>().text = loadY + " N.";
                 pointLoadY.GetComponent<TrussPointLoadProperty>().text = pointLoadY.GetComponentInChildren<TextMesh>();
                 pointLoadY.GetComponent<TrussPointLoadProperty>().load = loadY;
                 pointLoadY.GetComponent<TrussPointLoadProperty>().axis = 'y';
                 pointLoadY.GetComponent<TrussPointLoadProperty>().node = node;
+                pointLoadY.GetComponent<TrussPointLoadProperty>().nodeG = nodes[node];
                 selectNode.GetComponent<TrussNodeProperty>().forceY = pointLoadY.GetComponent<TrussPointLoadProperty>();
 
                 pointLoadY.GetComponent<TrussPointLoadProperty>().InverseForce();
