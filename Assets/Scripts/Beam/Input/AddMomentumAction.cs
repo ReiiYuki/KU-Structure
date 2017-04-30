@@ -10,7 +10,7 @@ public class AddMomentumAction : MonoBehaviour {
     public void AddMomentum()
     {
         int node = nodeInput.GetComponent<LoadInputValue>().index;
-        float momentum = float.Parse(momentumText.GetComponent<Text>().text);
+        float momentum = float.Parse(momentumText.GetComponent<InputField>().text);
         GameObject.FindObjectOfType<BeamCollector>().AddMomentum(node, momentum);
     }
 }
