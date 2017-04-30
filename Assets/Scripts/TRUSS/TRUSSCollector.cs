@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TRUSSCollector : MonoBehaviour {
 	
 	public GameObject memberPrefab,textPrefab,nodePrefab,pointLoadPrefabX,pointLoadPrefabY,momentumPrefab,uniformLoadPrefab;
-    public List<GameObject> nodes,members;
+    public List<GameObject> nodes,members,pointLoads,forces;
 	public GameObject[] supportPrefabs;
 
     public List<GameObject> history;
@@ -51,24 +52,121 @@ public class TRUSSCollector : MonoBehaviour {
         //AddPointLoad(1, 80, -120);
 
         //3
-        //AddNode(0, 28.8f);
-        //AddNode(19.2f, 28.8f);
-        //AddNode(0, 0);
-        //AddNode(19.2f, 14.4f);
-        //AddMember(0, 1, 4);
-        //AddMember(0, 3, 4);
-        //AddMember(2, 1, 4);
-        //AddMember(2, 3, 4);
-        //AddMember(1, 3, 4);
-        //AddSupport(1, 2);
-        //AddSupport(1, 0);
-        //AddSupport(3, 3);
-        //AddPointLoad(1,75,-150);
-        //AddPointLoad(3,75,0);
-
+        AddNode(0, 28.8f);
+        AddNode(19.2f, 28.8f);
         AddNode(0, 0);
+        AddNode(19.2f, 14.4f);
+        AddMember(0, 1, 4);
+        AddMember(0, 3, 4);
+        AddMember(2, 1, 4);
+        AddMember(2, 3, 4);
+        AddMember(1, 3, 4);
+        AddSupport(1, 2);
+        AddSupport(1, 0);
+        AddSupport(3, 3);
+        AddPointLoad(1, 75, -150);
+        AddPointLoad(3, 75, 0);
+
+        //AddNode(0, 0);
         //AddForce(0, -100, -1000);
-        AddForce(0, 154, 354);
+        //AddForce(0, 154, 354);
+    }
+    public void ResetAll()
+    {
+        foreach(GameObject g in history)
+        {
+            DestroyImmediate(g,true);
+        }
+        members.Clear();
+        nodes.Clear();
+        history.Clear();
+    }
+    public void Undo()
+    {
+        if (history.Count == 0) return;
+        GameObject temp = history[history.Count-1];
+        if (temp.GetComponent<TrussPointLoadProperty>())
+        {
+            if (pointLoads.Contains(temp))
+            {
+                foreach (GameObject node in nodes)
+                {
+                    if (node.GetComponent<TrussNodeProperty>().number == temp.GetComponent<TrussPointLoadProperty>().node)
+                    {
+                        if (temp.GetComponent<TrussPointLoadProperty>().axis == 'x')
+                        {
+                            node.GetComponent<TrussNodeProperty>().pointLoadX = null;
+                        }
+                        if (temp.GetComponent<TrussPointLoadProperty>().axis == 'y')
+                        {
+                            node.GetComponent<TrussNodeProperty>().pointLoadY = null;
+                        }
+                    }
+
+                }
+
+                pointLoads.Remove(temp);
+            }
+            if (forces.Contains(temp))
+            {
+                forces.Remove(temp);
+            }
+        }
+
+        else if (temp.GetComponent<TrussMemberProperty>())
+        {
+            foreach (GameObject node in nodes)
+            {
+                if(temp.GetComponent<TrussMemberProperty>().node1.number == node.GetComponent<TrussNodeProperty>().number)
+                   node.GetComponent<TrussNodeProperty>().members.Remove(temp.GetComponent<TrussMemberProperty>());
+                if (temp.GetComponent<TrussMemberProperty>().node2.number == node.GetComponent<TrussNodeProperty>().number)
+                    node.GetComponent<TrussNodeProperty>().members.Remove(temp.GetComponent<TrussMemberProperty>());
+            }
+        }
+        else if (temp.GetComponent<TrussNodeProperty>())
+        {
+            //foreach(TrussMemberProperty m in temp.GetComponent<TrussNodeProperty>().members)
+            //{
+            //    if(temp.GetComponent<TrussNodeProperty>().Equals(m.node1))
+            //    {
+            //        m.node1 = null;
+            //    }
+            //    if (temp.GetComponent<TrussNodeProperty>().Equals(m.node2))
+            //    {
+            //        m.node1 = null;
+            //    }
+            //}
+            //temp.GetComponent<TrussNodeProperty>().support.node = null;
+            //foreach(GameObject pointLoad in pointLoads)
+            //{
+            //    if(temp.GetComponent<TrussNodeProperty>().pointLoadX.Equals(pointLoad.GetComponent<TrussPointLoadProperty>()))
+            //    {
+            //        pointLoads.Remove(pointLoad);
+            //        DestroyImmediate(pointLoad, true);
+            //    }
+            //    if (temp.GetComponent<TrussNodeProperty>().pointLoadY.Equals(pointLoad.GetComponent<TrussPointLoadProperty>()))
+            //    {
+            //        pointLoads.Remove(pointLoad);
+            //        DestroyImmediate(pointLoad, true);
+            //    }
+            //}
+            //foreach (GameObject force in forces)
+            //{
+            //    if (force.GetComponent<TrussPointLoadProperty>().Equals(temp.GetComponent<TrussNodeProperty>().forceX))
+            //    {
+            //        forces.Remove(force);
+            //        DestroyImmediate(force, true);
+            //    }
+            //    if (force.GetComponent<TrussPointLoadProperty>().Equals(temp.GetComponent<TrussNodeProperty>().forceY))
+            //    {
+            //        forces.Remove(force);
+            //        DestroyImmediate(force, true);
+            //    }
+            //}
+            nodes.Remove(temp);
+        }
+        history.Remove(temp);
+        DestroyImmediate(temp,true);
     }
     public void AddNode(float x,float y)
     {
@@ -142,8 +240,18 @@ public class TRUSSCollector : MonoBehaviour {
         GameObject lengthText = Instantiate(textPrefab, new Vector3(newX,newY), Quaternion.identity);
 		lengthText.GetComponent<TextMesh>().text = memberProperty.lenght() + " m.";
         lengthText.GetComponent<TextMesh>().fontSize = 40;
+        float result = (float)Math.Atan(slope);
+        if (float.IsPositiveInfinity(result))
+        {
+            result = float.MaxValue;
+        }
+        else if (float.IsNegativeInfinity(result))
+        {
+            result = float.MinValue;
+        }
+        lengthText.GetComponent<TextMesh>().transform.eulerAngles = new Vector3(result,0,0);
 
-        lengthText.transform.SetParent(member.transform);
+       lengthText.transform.SetParent(member.transform);
 
         // draw a number of the member
 		GameObject numberText = Instantiate(textPrefab, new Vector3((node1X+node2X) / 2f, (node1Y+node2Y)/2f), Quaternion.identity);
@@ -277,6 +385,7 @@ public class TRUSSCollector : MonoBehaviour {
 
                 pointLoadX.transform.SetParent(selectNode.transform);
                 history.Add(pointLoadX);
+                pointLoads.Add(pointLoadX);
             }
           
         }
@@ -286,10 +395,10 @@ public class TRUSSCollector : MonoBehaviour {
         {
             if (selectNode.GetComponent<TrussNodeProperty>().forceY != null)
             {
-                selectNode.GetComponent<TrussNodeProperty>().forceY.load += loadX;
+                selectNode.GetComponent<TrussNodeProperty>().forceY.load += loadY;
                 selectNode.GetComponent<TrussNodeProperty>().forceY.text.text = selectNode.GetComponent<TrussNodeProperty>().forceY.load + " N.";
                 Debug.Log(selectNode.GetComponent<TrussNodeProperty>().forceY.text);
-                selectNode.GetComponent<TrussNodeProperty>().forceX.InverseForce();
+                selectNode.GetComponent<TrussNodeProperty>().forceY.InverseForce();
             }
             else
             {
@@ -305,7 +414,8 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadY.GetComponent<TrussPointLoadProperty>().InverseForce();
 
                 pointLoadY.transform.SetParent(selectNode.transform);
-                history.Add(pointLoadPrefabY);
+                history.Add(pointLoadY);
+                pointLoads.Add(pointLoadY);
             }
            
         }
