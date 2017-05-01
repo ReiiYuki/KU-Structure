@@ -611,6 +611,17 @@ public class TrussAnalyzer : MonoBehaviour
 
         for(int i =0;i<members.Count;i++)
         {
+            if(Q[i].array[0, 0]< 0)
+            {
+                collector.AddQ(members[i], members[i].node1.number, Q[i].array[0, 0],true);
+                collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],true);
+            }
+            else
+            {
+                collector.AddQ(members[i], members[i].node1.number, Q[i].array[0, 0],false);
+                collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],false);
+            }
+            
             collector.AddForce(members[i].node1.number, F[i].array[0, 0],F[i].array[1,0]);
             collector.AddForce(members[i].node2.number, F[i].array[2, 0], F[i].array[3, 0]);
         }

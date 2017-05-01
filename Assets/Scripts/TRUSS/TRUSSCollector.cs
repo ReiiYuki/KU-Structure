@@ -37,19 +37,19 @@ public class TRUSSCollector : MonoBehaviour {
         //AddPointLoad(3, 150, -300);
 
         // 2
-        //AddNode(0, 0);
-        //AddNode(4, 8);
-        //AddNode(4, 4);
-        //AddNode(8, 0);
-        //AddMember(0, 1, 3);
-        //AddMember(0, 2, 3);
-        //AddMember(1, 2, 3);
-        //AddMember(2, 3, 3);
-        //AddMember(1, 3, 3);
-        //AddMember(0, 3, 3);
-        //AddSupport(1, 0);
-        //AddSupport(3, 3);
-        //AddPointLoad(1, 80, -120);
+        AddNode(0, 0);
+        AddNode(4, 8);
+        AddNode(4, 4);
+        AddNode(8, 0);
+        AddMember(0, 1, 3);
+        AddMember(0, 2, 3);
+        AddMember(1, 2, 3);
+        AddMember(2, 3, 3);
+        AddMember(1, 3, 3);
+        AddMember(0, 3, 3);
+        AddSupport(1, 0);
+        AddSupport(3, 3);
+        AddPointLoad(1, 80, -120);
 
         //3
         //AddNode(0, 28.8f);
@@ -67,15 +67,23 @@ public class TRUSSCollector : MonoBehaviour {
         //AddPointLoad(1, 75, -150);
         //AddPointLoad(3, 75, 0);
 
-        AddNode(0, 0);
-        AddNode(0, 0);
-        ////AddPointLoad(0, 100, 100);
-        ////AddPointLoad(0, -100, -100);
-        ////AddForce(0, -100, -1000);
-        AddForce(0, 154, 354);
-        AddForce(0, -1154, -1354);
-        AddForce(1, -154, -354);
-        AddForce(1, 1154, 1354);
+        //AddNode(0, 0);
+        //AddNode(0, 0);
+        //////AddPointLoad(0, 100, 100);
+        //////AddPointLoad(0, -100, -100);
+        //////AddForce(0, -100, -1000);
+        //AddForce(0, 154, 354);
+        //AddForce(0, -1154, -1354);
+        //AddForce(1, -154, -354);
+        //AddForce(1, 1154, 1354);
+
+        //for(int i=0;i<5;i++)
+        //{
+        //    AddNode(i*2, 0);
+        //    AddSupport(i, i);
+        //}
+
+
     }
     public void ResetAll()
     {
@@ -249,16 +257,8 @@ public class TRUSSCollector : MonoBehaviour {
         GameObject lengthText = Instantiate(textPrefab, new Vector3(newX,newY), Quaternion.identity);
 		lengthText.GetComponent<TextMesh>().text = memberProperty.lenght() + " m.";
         lengthText.GetComponent<TextMesh>().fontSize = 40;
-        float result = (float)Math.Atan(slope);
-        if (float.IsPositiveInfinity(result))
-        {
-            result = float.MaxValue;
-        }
-        else if (float.IsNegativeInfinity(result))
-        {
-            result = float.MinValue;
-        }
-        lengthText.GetComponent<TextMesh>().transform.eulerAngles = new Vector3(result,0,0);
+        float result = (float)(Math.Atan2((node1Y - node2Y) ,(node1X - node2X))*180/Math.PI);
+        lengthText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180,-180,result));
 
        lengthText.transform.SetParent(member.transform);
 
@@ -283,21 +283,27 @@ public class TRUSSCollector : MonoBehaviour {
 		GameObject support;
 		if (type == 0)
 		{
-			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.25f, 0.75f), Quaternion.identity);
+			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
 			support.transform.Rotate(new Vector3(0, 0,-90f));
 		}
         else if (type == 1)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
         }
+        else if (type == 2)
+        {
+            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
+            support.transform.Rotate(new Vector3(1, 1,-90));
+        }
         else if (type == 3)
 		{
-			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
+			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
 		}
 		else
 		{
-			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 1.35f), Quaternion.identity);
-		}
+			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
+            support.transform.Rotate(new Vector3(1, 1, -90));
+        }
 
         // init support variable
 		support.GetComponent<TrussSupportProperty>().node = nodes[node].GetComponent<TrussNodeProperty>();
@@ -361,6 +367,90 @@ public class TRUSSCollector : MonoBehaviour {
         }
     }
 
+    public void AddQ(TrussMemberProperty m,int node, float q,bool invert)
+    {
+        
+        float slope = (m.node1.y - m.node2.y) / (m.node1.x - m.node2.x);
+
+
+        GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3(nodes[node].GetComponent<TrussNodeProperty>().x, nodes[node].GetComponent<TrussNodeProperty>().y, 0), Quaternion.identity);
+        pointLoadX.GetComponent<SpriteRenderer>().color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
+        pointLoadX.GetComponentInChildren<TextMesh>().color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
+        float result = (float)System.Math.Atan(slope) * 180 / (float)Math.PI;
+        Debug.Log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        Debug.Log("Member: " + m.number + ", Node: " + node + ", q= " + q + ", slope: " + slope + ", atan: "+ result+" "+(float)Math.Atan(slope)+" ,degree: " +result+", rad="+180/(float)Math.PI);
+        if (m.node1.GetComponent<TrussNodeProperty>().Equals(nodes[node].GetComponent<TrussNodeProperty>()))
+        {
+            if (m.node2.GetComponent<TrussNodeProperty>().x < nodes[node].GetComponent<TrussNodeProperty>().x)
+            {
+                //result += 180;
+                pointLoadX.transform.position += new Vector3(1, 0);
+            }
+            if (m.node2.GetComponent<TrussNodeProperty>().x > nodes[node].GetComponent<TrussNodeProperty>().x)
+            {
+                //result += 180;
+                pointLoadX.transform.position += new Vector3(1, 0);
+            }
+            if (m.node2.GetComponent<TrussNodeProperty>().y < nodes[node].GetComponent<TrussNodeProperty>().y)
+            {
+                if (float.IsPositiveInfinity(slope))
+                {
+                    result += 180;
+                    pointLoadX.transform.position += new Vector3(0, -1);
+                }
+                else
+                {
+                    pointLoadX.transform.position += new Vector3(0, slope);
+                }
+            }
+            if (m.node2.GetComponent<TrussNodeProperty>().y > nodes[node].GetComponent<TrussNodeProperty>().y)
+            {
+                if (!float.IsPositiveInfinity(slope))
+                {
+                    pointLoadX.transform.position += new Vector3(0, slope);
+                }
+            }
+
+        }
+        if (m.node2.GetComponent<TrussNodeProperty>().Equals(nodes[node].GetComponent<TrussNodeProperty>()))
+        {
+            if (m.node1.GetComponent<TrussNodeProperty>().x < nodes[node].GetComponent<TrussNodeProperty>().x)
+            {
+                //n1-------n2
+                result += 180;
+                pointLoadX.transform.position += new Vector3(-1, 0);
+            }
+            if (m.node1.GetComponent<TrussNodeProperty>().x > nodes[node].GetComponent<TrussNodeProperty>().x)
+            {
+                //n1-------n2
+                result += 180;
+                pointLoadX.transform.position += new Vector3(1, 0);
+            }
+            if (m.node1.GetComponent<TrussNodeProperty>().y < nodes[node].GetComponent<TrussNodeProperty>().y)
+            {
+                pointLoadX.transform.position += new Vector3(0, -slope);
+            }
+            if (! float.IsPositiveInfinity(slope) && m.node1.GetComponent<TrussNodeProperty>().y > nodes[node].GetComponent<TrussNodeProperty>().y)
+            {
+                pointLoadX.transform.position += new Vector3(0, -slope);
+            }
+            if (float.IsPositiveInfinity(slope) && m.node1.GetComponent<TrussNodeProperty>().x == nodes[node].GetComponent<TrussNodeProperty>().x)
+            {
+                pointLoadX.transform.position += new Vector3(0, 1);
+            }
+
+        }
+        if (invert)
+            result += 180;
+        pointLoadX.transform.Rotate(new Vector3(1, 1, result+90));
+        pointLoadX.GetComponentInChildren<TextMesh>().text = q + " N.";
+        pointLoadX.GetComponent<TrussPointLoadProperty>().text = pointLoadX.GetComponentInChildren<TextMesh>();
+        pointLoadX.GetComponent<TrussPointLoadProperty>().load = q;
+        pointLoadX.GetComponent<TrussPointLoadProperty>().axis = 'x';
+        pointLoadX.GetComponent<TrussPointLoadProperty>().node = node;
+        pointLoadX.GetComponent<TrussPointLoadProperty>().nodeG = nodes[node];
+        //pointLoadX.transform.eulerAngles =new Vector3(slope,0,0);
+    }
     public void AddForce(int node, float loadX, float loadY)
     {
         Debug.Log("Add Point Load { node : " + node + " loadX : " + loadX + " loadY : " + loadY + " }");
@@ -385,6 +475,7 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadX.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
                 pointLoadX.transform.Rotate(new Vector3(0, 0, -90));
                 pointLoadX.GetComponentInChildren<TextMesh>().text = loadX + " N.";
+                pointLoadX.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f); 
                 pointLoadX.GetComponent<TrussPointLoadProperty>().text = pointLoadX.GetComponentInChildren<TextMesh>();
                 pointLoadX.GetComponent<TrussPointLoadProperty>().load = loadX;
                 pointLoadX.GetComponent<TrussPointLoadProperty>().axis = 'x';
@@ -415,6 +506,7 @@ public class TRUSSCollector : MonoBehaviour {
                 GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3(0,0,0), Quaternion.identity);
                 pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
                 pointLoadY.GetComponentInChildren<TextMesh>().text = loadY + " N.";
+                pointLoadY.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
                 pointLoadY.GetComponent<TrussPointLoadProperty>().text = pointLoadY.GetComponentInChildren<TextMesh>();
                 pointLoadY.GetComponent<TrussPointLoadProperty>().load = loadY;
                 pointLoadY.GetComponent<TrussPointLoadProperty>().axis = 'y';
@@ -437,5 +529,14 @@ public class TRUSSCollector : MonoBehaviour {
 		if (x % 2 == 0) return new Color(169 / 255f, 169 / 255f, 169 / 255f);
 		return new Color(112 / 255f, 128 / 255f, 144 / 255f);
 	}
-    
+    public float slope(List<TrussMemberProperty> list )
+    {
+        float slope = 0;
+        foreach(TrussMemberProperty m in list)
+        {
+            slope += (m.node1.y - m.node2.y) / (m.node1.x - m.node2.x);
+        }
+
+        return slope ; 
+    }
 }
