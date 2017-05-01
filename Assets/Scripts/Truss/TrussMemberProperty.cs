@@ -6,8 +6,8 @@ public class TrussMemberProperty : MonoBehaviour {
     public int number, type;
     public TrussNodeProperty node1, node2;
 
-    float[] E = { 29000, 29000, 29000 };
-    float[] I = { 6, 8, 8 };
+    float[] E = { 29000, 29000, 29000 , 200000,10000 };
+    float[] I = { 6, 8, 8 , .002f,6};
 
     public float GetI()
     {
