@@ -315,6 +315,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
 
         float max = FindMaxPoint(points);
+        Debug.Log("Max = " + max);
         float currentX = 0;
         float currentY = 0;
         float offset = -21;
@@ -386,8 +387,8 @@ public class BeamGraphGenerator : MonoBehaviour {
     {
         float max = int.MinValue;
         foreach (Point point in points)
-            if (point.y > max)
-                max = point.y;
+            if (Mathf.Abs(point.y) > max)
+                max = Mathf.Abs(point.y);
         return max;
     }
 
