@@ -6,6 +6,8 @@ public class ElementStore : MonoBehaviour {
 
     public static List<Element> H_BEAM,I_BEAM;
     public static List<UElement> U_PROP;
+    public static List<PElement> PIPE;
+    public static List<AElement> UT_PROP; 
     public struct UElement
     {
         public float E, I;
@@ -48,11 +50,43 @@ public class ElementStore : MonoBehaviour {
         }
     }
 
+    public struct PElement
+    {
+        public string name;
+        public float outsideDiameter, thickness, weight, area, i, r, z, fb, fy, k;
+        public PElement(string name,float outsideDiameter,float thickness,float weight,float area,float i,float r,float z,float fb,float fy,float k)
+        {
+            this.name = name;
+            this.outsideDiameter = outsideDiameter;
+            this.thickness = thickness;
+            this.weight = weight;
+            this.area = area;
+            this.i = i;
+            this.r = r;
+            this.z = z;
+            this.fb = fb;
+            this.fy = fy;
+            this.k = k;
+        }
+    }
+
+    public struct AElement
+    {
+        public float E, A;
+        public AElement(float E,float A)
+        {
+            this.E = E;
+            this.A = A;
+        }
+    }
+
     // Use this for initialization
     void Start () {
         GenerateH();
         GenerateI();
         GenerateU();
+        GeneratePIPE();
+        GenerateUT();
     }
 
     void GenerateH()
@@ -132,6 +166,58 @@ public class ElementStore : MonoBehaviour {
                     float E = float.Parse(eStr[0]);
                     float I = float.Parse(eStr[1]);
                     U_PROP.Add(new UElement(E, I));
+                }
+            }
+        }
+    }
+
+    public static void GeneratePIPE()
+    {
+        PIPE = new List<PElement>();
+        PIPE.Add(new PElement("15 mm x 0.972 kg", 21.7f, 2f, 0.972f, 1.238f, 0.607f, 0.00700219213309808f, 0.56f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("20 mm x 1.41 kg", 27.2f, 2.3f, 1.41f, 1.799f, 1.41f, 0.00885307155976081f, 1.03f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("25 mm x 1.8 kg", 34f, 2.3f, 1.8f, 2.291f, 2.89f, 0.011231464190637f, 1.7f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("32 mm x 2.29 kg", 42.7f, 2.3f, 2.29f, 2.919f, 5.97f, 0.0143011222150021f, 2.8f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("40 mm x 2.63 kg", 48.6f, 2.3f, 2.63f, 3.345f, 8.99f, 0.0163938812458168f, 3.7f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("40 mm x 3.58 kg", 48.6f, 3.2f, 3.58f, 4.654f, 11.8f, 0.0159231070254589f, 4.86f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("50 mm x 4.52 kg", 60.5f, 3.2f, 4.52f, 5.76f, 23.7f, 0.0202844357410635f, 7.84f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("50 mm x 5.57 kg", 60.5f, 4f, 5.57f, 7.1f, 28.5f, 0.0200351803262218f, 9.41f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("65 mm x 5.77 kg", 76.3f, 3.2f, 5.77f, 7.349f, 49.2f, 0.0258742891817069f, 12.9f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("65 mm x 7.13 kg", 76.3f, 4f, 7.13f, 9.085f, 59.5f, 0.0255915162056903f, 15.6f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("80 mm x 6.78 kg", 89.1f, 3.2f, 6.78f, 8.636f, 79.8f, 0.0303980082719467f, 17.9f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("80 mm x 8.39 kg", 89.1f, 4f, 8.39f, 10.69f, 97f, 0.0301229162630518f, 21.8f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("90 mm x 7.76 kg", 101.6f, 3.2f, 7.76f, 9.892f, 120f, 0.0348296066035566f, 23.6f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("90 mm x 9.63 kg", 101.6f, 4f, 9.63f, 12.26f, 146f, 0.0345089061015597f, 28.8f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("100 mm x 8.77 kg", 114.3f, 3.2f, 8.77f, 11.17f, 172f, 0.0392407804977604f, 30.2f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("100 mm x 12.2 kg", 114.3f, 4.5f, 12.2f, 15.52f, 234f, 0.0388295243180094f, 41f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("100 mm x 15 kg", 114.3f, 5.6f, 15f, 19.12f, 283f, 0.0384723994964254f, 49.6f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("125 mm x 15 kg", 139.8f, 4.5f, 15f, 19.3f, 438f, 0.0476385353659563f, 62.7f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("125 mm x 19.8 kg", 139.8f, 6f, 19.8f, 25.22f, 566f, 0.0473735220852963f, 80.9f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("150 mm x 17.8 kg", 165.2f, 4.5f, 17.8f, 22.72f, 734f, 0.0568386646818598f, 88.9f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("150 mm x 23.6 kg", 165.2f, 6f, 23.6f, 30.01f, 952f, 0.0563229607534144f, 115f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("175 mm x 22.9 kg", 190.7f, 5f, 22.9f, 29.17f, 1260f, 0.0657229514106931f, 132f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("175 mm x 31.7 kg", 190.7f, 7f, 31.7f, 40.4f, 1710f, 0.06505899835785f, 179f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("200 mm x 31.1 kg", 216.3f, 6f, 31.1f, 39.61f, 2190f, 0.0743566193536705f, 203f, 14700000f, 24500000f, 1f));
+        PIPE.Add(new PElement("200 mm x 41.1 kg", 216.3f, 8f, 41.1f, 52.35f, 2840f, 0.0736547614058042f, 263f, 14700000f, 24500000f, 1f));
+
+    }
+
+    public static void GenerateUT()
+    {
+        UT_PROP = new List<AElement>();
+        string savedData = PlayerPrefs.GetString("UTPROP");
+        Debug.Log(savedData);
+        if (savedData != "")
+        {
+            string[] elementStr = savedData.Split(null);
+            foreach (string e in elementStr)
+            {
+                if (!string.IsNullOrEmpty(e))
+                {
+                    string[] eStr = e.Split(',');
+                    float E = float.Parse(eStr[0]);
+                    float A = float.Parse(eStr[1]);
+                    UT_PROP.Add(new AElement(E,A));
                 }
             }
         }
