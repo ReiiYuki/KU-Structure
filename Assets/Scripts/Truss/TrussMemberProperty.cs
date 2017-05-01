@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TrussMemberProperty : MonoBehaviour {
-	public float length,origin;
-	public int number,type;
-	public UniformLoadProperty uniformLoad;
-	public NodeProperty node1,node2;
+    public int number, type;
+    public TrussNodeProperty node1, node2;
 
-	float[] E = { 1 , 30 ,29000};
-	float[] I = { 1 , 4.8f*Mathf.Pow(10,-3),510};
+    float[] E = { 29000, 29000, 29000 , 200000,10000 };
+    float[] I = { 6, 8, 8 , .002f,6};
 
-	public float GetI()
-	{
-		return I[type];
-	}
+    public float GetI()
+    {
+        return I[type];
+    }
 
-	public float GetE()
-	{
-		return E[type];
-	}
+    public float GetE()
+    {
+        return E[type];
+    }
+    public float lenght()
+    {
+        return Mathf.Sqrt(Mathf.Pow(node1.transform.position.x - node2.transform.position.x, 2) + Mathf.Pow(node1.transform.position.y - node2.transform.position.y, 2)) ;
+    }
+    public float lenghtIn()
+    {
+        return Mathf.Sqrt(Mathf.Pow(node1.transform.position.x - node2.transform.position.x,2) + Mathf.Pow(node1.transform.position.y - node2.transform.position.y,2))*12;
+    }
 }
