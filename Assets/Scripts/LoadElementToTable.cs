@@ -50,10 +50,9 @@ public class LoadElementToTable : MonoBehaviour {
             content.transform.GetChild(21).GetComponentInChildren<Text>().text = e.bf+"";
 
         }
-        //HBeamTable.SetActive(false);
         HBeamTable.GetComponent<LayoutElement>().preferredHeight = HBeamTable.transform.childCount * 49;
         HBeamTable.GetComponent<LayoutElement>().preferredWidth = HBeamTable.transform.GetChild(1).childCount * 200;
-        //HBeamTable.SetActive(true);
+        Debug.Log("Set up");
     }
 
     void LoadIBeam()
@@ -85,10 +84,9 @@ public class LoadElementToTable : MonoBehaviour {
             content.transform.GetChild(21).GetComponentInChildren<Text>().text = e.bf + "";
 
         }
-        //HBeamTable.SetActive(false);
         HBeamTable.GetComponent<LayoutElement>().preferredHeight = IBeamTable.transform.childCount * 49;
         HBeamTable.GetComponent<LayoutElement>().preferredWidth = IBeamTable.transform.GetChild(1).childCount * 200;
-        //HBeamTable.SetActive(true);
+        Debug.Log("Set up");
     }
 
     void LoadPIPE()
@@ -109,9 +107,9 @@ public class LoadElementToTable : MonoBehaviour {
             content.transform.GetChild(10).GetComponentInChildren<Text>().text = e.k + "";
 
         }
-        //HBeamTable.SetActive(false);
         PIPETable.GetComponent<LayoutElement>().preferredHeight = PIPETable.transform.childCount * 49;
         PIPETable.GetComponent<LayoutElement>().preferredWidth = 4400;
+        Debug.Log("Set up");
     }
 
     void LoadBU()
@@ -122,9 +120,9 @@ public class LoadElementToTable : MonoBehaviour {
             content.transform.GetChild(0).GetComponentInChildren<Text>().text = e.E+"";
             content.transform.GetChild(1).GetComponentInChildren<Text>().text = e.I + "";
         }
-        //HBeamTable.SetActive(false);
         BUTable.GetComponent<LayoutElement>().preferredHeight = BUTable.transform.childCount * 49;
         BUTable.GetComponent<LayoutElement>().preferredWidth = 4400;
+        Debug.Log("Set up");
     }
     void LoadTU()
     {
@@ -134,9 +132,9 @@ public class LoadElementToTable : MonoBehaviour {
             content.transform.GetChild(0).GetComponentInChildren<Text>().text = e.E + "";
             content.transform.GetChild(1).GetComponentInChildren<Text>().text = e.A + "";
         }
-        //HBeamTable.SetActive(false);
         TUTable.GetComponent<LayoutElement>().preferredHeight = TUTable.transform.childCount * 49;
         TUTable.GetComponent<LayoutElement>().preferredWidth = 4400;
+        Debug.Log("Set up");
     }
 
 }
