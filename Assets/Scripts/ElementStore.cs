@@ -72,10 +72,10 @@ public class ElementStore : MonoBehaviour {
 
     public struct AElement
     {
-        public float I, A;
-        public AElement(float I,float A)
+        public float E, A;
+        public AElement(float E,float A)
         {
-            this.I = I;
+            this.E = E;
             this.A = A;
         }
     }
@@ -215,9 +215,9 @@ public class ElementStore : MonoBehaviour {
                 if (!string.IsNullOrEmpty(e))
                 {
                     string[] eStr = e.Split(',');
-                    float A = float.Parse(eStr[0]);
-                    float I = float.Parse(eStr[1]);
-                    UT_PROP.Add(new AElement(I,A));
+                    float E = float.Parse(eStr[0]);
+                    float A = float.Parse(eStr[1]);
+                    UT_PROP.Add(new AElement(E,A));
                 }
             }
         }
