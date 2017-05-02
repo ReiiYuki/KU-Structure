@@ -15,6 +15,8 @@ public class LoadCheckStatus : MonoBehaviour {
     void CheckAndUpdate()
     {
         float load;
+        loadText.GetComponent<Text>().resizeTextForBestFit = false;
+        loadText.GetComponent<Text>().resizeTextForBestFit = true;
         if (float.TryParse(loadText.GetComponent<Text>().text, out load) && nodeSelector.GetComponent<LoadInputValue>().list.Length >= 0)
             addButton.GetComponent<Button>().interactable = true;
         else
