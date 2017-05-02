@@ -44,12 +44,12 @@ public class TRUSSCollector : MonoBehaviour {
         AddNode(4, 8);
         AddNode(4, 4);
         AddNode(8, 0);
-        AddMember(0, 1, 3);
-        AddMember(0, 2, 3);
-        AddMember(1, 2, 3);
-        AddMember(2, 3, 3);
-        AddMember(1, 3, 3);
-        AddMember(0, 3, 3);
+        AddMember(0, 1, 3,default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(2, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
         AddSupport(1, 0);
         AddSupport(3, 3);
         AddPointLoad(1, 80, -120);
@@ -213,7 +213,7 @@ public class TRUSSCollector : MonoBehaviour {
         history.Add(node);
     }
 
-    public void AddMember(int node1, int node2, int property)
+    public void AddMember(int node1, int node2, int property,ElementStore.AElement aprop,ElementStore.Element prop,ElementStore.PElement pprop,ElementStore.UElement uprop)
     {
         // get all the position of the node
         float node1X = nodes[node1].transform.position.x;
@@ -237,6 +237,10 @@ public class TRUSSCollector : MonoBehaviour {
         memberProperty.number = members.Count;
         memberProperty.node1 = nodes[node1].GetComponent<TrussNodeProperty>();
         memberProperty.node2 = nodes[node2].GetComponent<TrussNodeProperty>();
+        memberProperty.aprop = aprop;
+        memberProperty.prop = prop;
+        memberProperty.pprop = pprop;
+        memberProperty.uprop = uprop;
 
         // add member to node
         nodes[node1].GetComponent<TrussNodeProperty>().members.Add(memberProperty);

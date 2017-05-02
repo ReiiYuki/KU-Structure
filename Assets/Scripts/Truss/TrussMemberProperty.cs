@@ -16,13 +16,13 @@ public class TrussMemberProperty : MonoBehaviour {
 
     public float GetI()
     {
-        if (prop.Equals(default(ElementStore.Element)))
+        if (!prop.Equals(default(ElementStore.Element)))
         {
             return prop.area/ 10000f;
-        }else if (pprop.Equals(default(ElementStore.PElement)))
+        }else if (!pprop.Equals(default(ElementStore.PElement)))
         {
             return pprop.area/ 10000f;
-        }else if (aprop.Equals(default(ElementStore.AElement)))
+        }else if (!aprop.Equals(default(ElementStore.AElement)))
         {
             return prop.area;
         }
@@ -31,15 +31,15 @@ public class TrussMemberProperty : MonoBehaviour {
 
     public float GetE()
     {
-        if (prop.Equals(default(ElementStore.Element)))
+        if (!prop.Equals(default(ElementStore.Element)))
         {
             return prop.e;
         }
-        else if (pprop.Equals(default(ElementStore.PElement)))
+        else if (!pprop.Equals(default(ElementStore.PElement)))
         {
             return 2.07f*Mathf.Pow(10,10);
         }
-        else if (aprop.Equals(default(ElementStore.AElement)))
+        else if (!aprop.Equals(default(ElementStore.AElement)))
         {
             return prop.e;
         }
