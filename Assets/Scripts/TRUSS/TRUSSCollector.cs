@@ -268,19 +268,20 @@ public class TRUSSCollector : MonoBehaviour {
         Debug.Log(invSlope);
         Debug.Log(newX);
         Debug.Log(newY);
-        GameObject lengthText = Instantiate(textPrefab, new Vector3(newX, newY), Quaternion.identity);
-        lengthText.GetComponent<TextMesh>().text = Math.Round(memberProperty.lenght(),2) + " m.";
+        //GameObject lengthText = Instantiate(textPrefab, new Vector3(newX, newY), Quaternion.identity);
+        //lengthText.GetComponent<TextMesh>().text = Math.Round(memberProperty.lenght(),2) + " m.";
 
         float result = (float)(Math.Atan2((node1Y - node2Y), (node1X - node2X)) * 180 / Math.PI);
-        lengthText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
+        //lengthText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
 
-        lengthText.transform.SetParent(member.transform);
+        //lengthText.transform.SetParent(member.transform);
 
         // draw a number of the member
         GameObject numberText = Instantiate(textPrefab, new Vector3((node1X + node2X) / 2f, (node1Y + node2Y) / 2f), Quaternion.identity);
-        numberText.GetComponent<TextMesh>().text = members.Count + "";
+        numberText.GetComponent<TextMesh>().text = "("+members.Count + ") " + Math.Round(memberProperty.lenght(), 2) + " m.";
         numberText.GetComponent<TextMesh>().color = Color.white;
         numberText.transform.SetParent(member.transform);
+        numberText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
 
 
 

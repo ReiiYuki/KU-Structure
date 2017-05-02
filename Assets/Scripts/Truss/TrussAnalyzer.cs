@@ -700,4 +700,19 @@ public class TrussAnalyzer : MonoBehaviour
         return (x2 - x1) /lenght;
     }
 
+    private bool tension(Matrix2D T,float A)
+    {
+        Matrix2D stressRatio = (T / A) /1111111;
+        return true;
+    }
+    private bool compression(float length,float E,float Fy,float o,float A,float C)
+    {
+        float cc = (float)Math.Sqrt((2 * Math.PI * Math.PI * E) / Fy);
+        float KLo = length / o;
+        float Fa = (float)(12f * Math.PI * Math.PI * E) / (23f * KLo * KLo);
+        if (cc>KLo)
+            Fa = (float)(1f- (1f/2f)* (KLo* KLo)/cc) / ((5f/3f)+(3f/8f)*(KLo/cc)-(1f/8f)*(KLo/cc)* (KLo / cc)* (KLo / cc));
+        float streeRatio = C / A / Fa;
+        return true;
+    }
 }
