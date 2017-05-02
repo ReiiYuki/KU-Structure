@@ -10,6 +10,12 @@ public class SelectButtonValueStore : MonoBehaviour {
     public ElementStore.PElement pprop;
     public ElementStore.AElement aprop;
     public int state;
+
+    private void Start()
+    {
+        state = -1;
+    }
+
     public void SetProp(ElementStore.Element prop)
     {
         this.prop = prop;
