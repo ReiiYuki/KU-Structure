@@ -190,7 +190,7 @@ public class TRUSSCollector : MonoBehaviour {
         Debug.Log("Add Node { x:" + x + " y : " + y + " }");
         // create a new node
 		GameObject node = Instantiate(nodePrefab, new Vector3(x, y), Quaternion.identity);
-
+        Camera.main.transform.position = new Vector3(x, y, Camera.main.transform.position.z);
         // init node vriable
         node.GetComponent<TrussNodeProperty>().x = x;
         node.GetComponent<TrussNodeProperty>().y = y;
@@ -220,9 +220,10 @@ public class TRUSSCollector : MonoBehaviour {
 		line.startColor = GetColor(members.Count);
 		line.endColor = GetColor(members.Count);
 		line.SetPositions(new Vector3[] { new Vector3(node1X, node1Y), new Vector3(node2X, node2Y) });
+        Camera.main.transform.position = new Vector3((node1X + node2X)/2, (node1Y+node2Y)/2, Camera.main.transform.position.z);
 
         // init member variable
-		TrussMemberProperty memberProperty = member.GetComponent<TrussMemberProperty>();
+        TrussMemberProperty memberProperty = member.GetComponent<TrussMemberProperty>();
 		memberProperty.type = property;
 		memberProperty.number = members.Count;
         memberProperty.node1 = nodes[node1].GetComponent<TrussNodeProperty>();
@@ -304,7 +305,7 @@ public class TRUSSCollector : MonoBehaviour {
 			support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
             support.transform.Rotate(new Vector3(1, 1, -90));
         }
-
+        Camera.main.transform.position = new Vector3(selectedNode.transform.position.x, selectedNode.transform.position.y, Camera.main.transform.position.z);
         // init support variable
 		support.GetComponent<TrussSupportProperty>().node = nodes[node].GetComponent<TrussNodeProperty>();
 
@@ -333,9 +334,10 @@ public class TRUSSCollector : MonoBehaviour {
     {
         Debug.Log("Add Point Load { node : " + node + " loadX : " + loadX + " loadY : " + loadY + " }");
 		GameObject selectNode = nodes [node];
+        Camera.main.transform.position = new Vector3(selectNode.transform.position.x, selectNode.transform.position.y, Camera.main.transform.position.z);
 
-		// add load X
-		if (loadX != 0) {
+        // add load X
+        if (loadX != 0) {
 			GameObject pointLoadX = Instantiate (pointLoadPrefabX,  new Vector3 ((nodes [node].transform.position.x+1.25f), (nodes [node].transform.position.y)), Quaternion.identity);
 			pointLoadX.transform.Rotate (new Vector3 (0, 0, -90));
 			pointLoadX.GetComponentInChildren<TextMesh> ().text = loadX + " N.";
@@ -374,6 +376,8 @@ public class TRUSSCollector : MonoBehaviour {
 
 
         GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3(nodes[node].GetComponent<TrussNodeProperty>().x, nodes[node].GetComponent<TrussNodeProperty>().y, 0), Quaternion.identity);
+        Camera.main.transform.position = new Vector3(nodes[node].GetComponent<TrussNodeProperty>().transform.position.x, nodes[node].GetComponent<TrussNodeProperty>().transform.position.y, Camera.main.transform.position.z);
+
         pointLoadX.GetComponent<SpriteRenderer>().color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
         pointLoadX.GetComponentInChildren<TextMesh>().color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
         float result = (float)System.Math.Atan(slope) * 180 / (float)Math.PI;
@@ -455,6 +459,7 @@ public class TRUSSCollector : MonoBehaviour {
     {
         Debug.Log("Add Point Load { node : " + node + " loadX : " + loadX + " loadY : " + loadY + " }");
         GameObject selectNode = nodes[node];
+        Camera.main.transform.position = new Vector3(selectNode.transform.position.x, selectNode.transform.position.y, Camera.main.transform.position.z);
 
         // add load X
         if (loadX != 0 && selectNode.GetComponent<TrussNodeProperty>().pointLoadX ==null)

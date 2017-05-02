@@ -84,7 +84,7 @@ public class LoadElementTypeAction : MonoBehaviour {
                 }
                 button.GetComponent<Button>().colors = colorBlock;
                 button.GetComponentInChildren<Text>().text = e.name;
-                //button.GetComponent<SelectElementPropertyAction>().prop = e;
+                button.GetComponent<SelectElementPropertyAction>().pprop = e;
                 i++;
             }
         }else if (type == "A")
@@ -112,7 +112,7 @@ public class LoadElementTypeAction : MonoBehaviour {
                 }
                 button.GetComponent<Button>().colors = colorBlock;
                 button.GetComponentInChildren<Text>().text = "E = " + e.E + " A = " + e.A;
-                //button.GetComponent<SelectElementPropertyAction>().uprop = e;
+                button.GetComponent<SelectElementPropertyAction>().aprop = e;
                 i++;
             }
         }
