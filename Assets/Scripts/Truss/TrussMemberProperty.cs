@@ -18,7 +18,7 @@ public class TrussMemberProperty : MonoBehaviour {
     {
         if (!prop.Equals(default(ElementStore.Element)))
         {
-            return prop.area/ 10000f;
+            return prop.area;
         }else if (!pprop.Equals(default(ElementStore.PElement)))
         {
             return pprop.area/ 10000f;
@@ -44,6 +44,34 @@ public class TrussMemberProperty : MonoBehaviour {
             return prop.e;
         }
         return E[type];
+    }
+    public float GetFy()
+    {
+        if (!prop.Equals(default(ElementStore.Element)))
+        {
+            return prop.fy;
+        }
+        else if (!pprop.Equals(default(ElementStore.PElement)))
+        {
+            return pprop.fy;
+        }
+        return 0;
+    }
+    public float GetR()
+    {
+        if (!prop.Equals(default(ElementStore.Element)))
+        {
+            return prop.r;
+        }
+        else if (!pprop.Equals(default(ElementStore.PElement)))
+        {
+            return pprop.r;
+        }
+        return 0;
+    }
+    public bool CanDesignCheck()
+    {
+        return !prop.Equals(default(ElementStore.Element)) || !pprop.Equals(default(ElementStore.PElement));
     }
     public float lenght()
     {
