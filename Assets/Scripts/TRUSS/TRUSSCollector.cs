@@ -159,7 +159,7 @@ public class TRUSSCollector : MonoBehaviour {
                     node.GetComponent<TrussNodeProperty>().members.Remove(temp.GetComponent<TrussMemberProperty>());
             }
             members.Remove(temp);
-            memberColors.RemoveAt(memberColors.Count-1);
+            //memberColors.RemoveAt(memberColors.Count-1);
         }
         else if (temp.GetComponent<TrussNodeProperty>())
         {
