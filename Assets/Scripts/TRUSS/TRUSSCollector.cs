@@ -514,23 +514,28 @@ public class TRUSSCollector : MonoBehaviour {
         // node 1 == node 
         if (m.node1.GetComponent<TrussNodeProperty>().Equals(nodes[node].GetComponent<TrussNodeProperty>()))
         {
+            // x: node < node2
             if (m.node2.GetComponent<TrussNodeProperty>().x < nodes[node].GetComponent<TrussNodeProperty>().x)
             {
                 //result += 180;
                 pointLoadX.transform.position += new Vector3(-1, 0);
             }
+            // x: node > node2
             if (m.node2.GetComponent<TrussNodeProperty>().x > nodes[node].GetComponent<TrussNodeProperty>().x)
             {
                 //result += 180;
                 pointLoadX.transform.position += new Vector3(1, 0);
             }
+            // y: node > node2
             if (m.node2.GetComponent<TrussNodeProperty>().y < nodes[node].GetComponent<TrussNodeProperty>().y)
             {
+                // infinit slope
                 if (float.IsPositiveInfinity(slope))
                 {
                     result += 180;
-                    pointLoadX.transform.position += new Vector3(0, -1);
+                    pointLoadX.transform.position += new Vector3(0, 1);
                 }
+                //  -infinit slope
                 else if (float.IsNegativeInfinity(slope))
                 {
                     result += 180;
@@ -538,14 +543,27 @@ public class TRUSSCollector : MonoBehaviour {
                 }
                 else
                 {
-                    pointLoadX.transform.position += new Vector3(0, slope);
+                    pointLoadX.transform.position += new Vector3(0, -Math.Abs(slope));
                 }
             }
+            // y: node < node2
             if (m.node2.GetComponent<TrussNodeProperty>().y > nodes[node].GetComponent<TrussNodeProperty>().y)
             {
-                if (!float.IsPositiveInfinity(slope)&& !float.IsNegativeInfinity(slope))
+                // infinit slope
+                if (float.IsPositiveInfinity(slope))
                 {
-                    pointLoadX.transform.position += new Vector3(0, slope);
+                    result += 180;
+                    pointLoadX.transform.position += new Vector3(0, -1);
+                }
+                //  -infinit slope
+                else if (float.IsNegativeInfinity(slope))
+                {
+                    result += 180;
+                    pointLoadX.transform.position += new Vector3(0, 1);
+                }
+                else
+                {
+                    pointLoadX.transform.position += new Vector3(0,  Math.Abs(slope));
                 }
             }
 
@@ -565,18 +583,63 @@ public class TRUSSCollector : MonoBehaviour {
                 result += 180;
                 pointLoadX.transform.position += new Vector3(1, 0);
             }
+
+            // y: node > node1
+            Debug.Log(m.number+" " + Math.Round(q, 2) + " kg." + " "+m.node1.GetComponent<TrussNodeProperty>().x+" " + nodes[node].GetComponent<TrussNodeProperty>().x+",  "+m.node1.GetComponent<TrussNodeProperty>().y+" "+nodes[node].GetComponent<TrussNodeProperty>().y);
             if (m.node1.GetComponent<TrussNodeProperty>().y < nodes[node].GetComponent<TrussNodeProperty>().y)
             {
-                pointLoadX.transform.position += new Vector3(0, -slope);
+                // infinit slope
+                if (float.IsPositiveInfinity(slope))
+                {
+                    result += 180;
+                    pointLoadX.transform.position += new Vector3(0, -1);
+                }
+                //  -infinit slope
+                else if (float.IsNegativeInfinity(slope))
+                {
+                    result += 180;
+                    pointLoadX.transform.position += new Vector3(0, -1);
+                    Debug.Log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                }
+                else
+                {
+                    pointLoadX.transform.position += new Vector3(0, - Math.Abs(slope));
+
+                }
             }
-            if (!float.IsPositiveInfinity(slope) && m.node1.GetComponent<TrussNodeProperty>().y > nodes[node].GetComponent<TrussNodeProperty>().y)
+            // y: node < node1
+            if (m.node1.GetComponent<TrussNodeProperty>().y > nodes[node].GetComponent<TrussNodeProperty>().y)
             {
-                pointLoadX.transform.position += new Vector3(0, -slope);
+                // infinit slope
+                if (float.IsPositiveInfinity(slope))
+                {
+                    result += 180;
+                    pointLoadX.transform.position += new Vector3(0, -1);
+                }
+                //  -infinit slope
+                else if (float.IsNegativeInfinity(slope))
+                {
+                    result += 180;
+                    pointLoadX.transform.position += new Vector3(0, 1);
+                }
+                else
+                {
+                    pointLoadX.transform.position += new Vector3(0, Math.Abs(slope));
+                    Debug.Log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                }
             }
-            if (float.IsPositiveInfinity(slope) && m.node1.GetComponent<TrussNodeProperty>().x == nodes[node].GetComponent<TrussNodeProperty>().x)
-            {
-                pointLoadX.transform.position += new Vector3(0, 1);
-            }
+            //if (m.node1.GetComponent<TrussNodeProperty>().y < nodes[node].GetComponent<TrussNodeProperty>().y)
+            //{
+            //    pointLoadX.transform.position += new Vector3(0, -slope);
+            //}
+            //if (!float.IsPositiveInfinity(slope) && m.node1.GetComponent<TrussNodeProperty>().y > nodes[node].GetComponent<TrussNodeProperty>().y)
+            //{
+            //    pointLoadX.transform.position += new Vector3(0, -slope);
+            //}
+            //if (float.IsPositiveInfinity(slope) && m.node1.GetComponent<TrussNodeProperty>().x == nodes[node].GetComponent<TrussNodeProperty>().x)
+            //{
+            //    pointLoadX.transform.position += new Vector3(0, 1);
+            //}
 
         }
         if (invert)
