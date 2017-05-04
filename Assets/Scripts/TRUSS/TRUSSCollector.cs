@@ -8,8 +8,9 @@ public class TRUSSCollector : MonoBehaviour {
     public GameObject memberPrefab, textPrefab, nodePrefab, pointLoadPrefabX, pointLoadPrefabY, momentumPrefab, uniformLoadPrefab;
     public List<GameObject> nodes, members, pointLoads, forces, innerForces;
     public GameObject[] supportPrefabs;
-    public bool visibleInputForce = true, visibleOuterForce = true, visibleInnerForce = true;
+    public bool visibleInputForce = true, visibleOuterForce = true, visibleInnerForce = true, visibleStressRatio = true;
     public List<GameObject> history;
+    public List<char> memberColors;
     // Use this for initialization
     void Start() {
         this.nodes = new List<GameObject>();
@@ -18,6 +19,7 @@ public class TRUSSCollector : MonoBehaviour {
         this.forces = new List<GameObject>();
         this.innerForces = new List<GameObject>();
         this.history = new List<GameObject>();
+        this.memberColors = new List<char>();
     }
 
     // Update is called once per frame
@@ -99,7 +101,7 @@ public class TRUSSCollector : MonoBehaviour {
         history.Clear();
         pointLoads.Clear();
         innerForces.Clear();
-
+        memberColors.Clear();
         forces.Clear();
     }
     public void Undo()
@@ -148,6 +150,7 @@ public class TRUSSCollector : MonoBehaviour {
                     node.GetComponent<TrussNodeProperty>().members.Remove(temp.GetComponent<TrussMemberProperty>());
             }
             members.Remove(temp);
+            memberColors.RemoveAt(memberColors.Count-1);
         }
         else if (temp.GetComponent<TrussNodeProperty>())
         {
@@ -268,19 +271,20 @@ public class TRUSSCollector : MonoBehaviour {
         Debug.Log(invSlope);
         Debug.Log(newX);
         Debug.Log(newY);
-        GameObject lengthText = Instantiate(textPrefab, new Vector3(newX, newY), Quaternion.identity);
-        lengthText.GetComponent<TextMesh>().text = Math.Round(memberProperty.lenght(),2) + " m.";
+        //GameObject lengthText = Instantiate(textPrefab, new Vector3(newX, newY), Quaternion.identity);
+        //lengthText.GetComponent<TextMesh>().text = Math.Round(memberProperty.lenght(),2) + " m.";
 
         float result = (float)(Math.Atan2((node1Y - node2Y), (node1X - node2X)) * 180 / Math.PI);
-        lengthText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
+        //lengthText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
 
-        lengthText.transform.SetParent(member.transform);
+        //lengthText.transform.SetParent(member.transform);
 
         // draw a number of the member
         GameObject numberText = Instantiate(textPrefab, new Vector3((node1X + node2X) / 2f, (node1Y + node2Y) / 2f), Quaternion.identity);
-        numberText.GetComponent<TextMesh>().text = members.Count + "";
+        numberText.GetComponent<TextMesh>().text = "("+members.Count + ") " + Math.Round(memberProperty.lenght(), 2) + " m.";
         numberText.GetComponent<TextMesh>().color = Color.white;
         numberText.transform.SetParent(member.transform);
+        numberText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
 
 
 
@@ -607,6 +611,61 @@ public class TRUSSCollector : MonoBehaviour {
                 g.SetActive(true);
             visibleInnerForce = true;
 
+        }
+    }
+    public void toggleStress()
+    {
+        if (visibleStressRatio)
+        {
+            for (int i = 0; i < memberColors.Count; i++)
+                streeRatio(members[i].GetComponent<TrussMemberProperty>(), 'c', false);
+            visibleStressRatio = false;
+        }
+        else
+        {
+            for (int i = 0; i < memberColors.Count; i++)
+            {
+                Debug.Log(members.Count);
+                Debug.Log(memberColors.Count);
+                Debug.Log(members[i].GetComponent<TrussMemberProperty>());
+                Debug.Log(memberColors[i]);
+                Debug.Log(i);
+                streeRatio(members[i].GetComponent<TrussMemberProperty>(), memberColors[i], false);
+
+            }
+            visibleStressRatio = true;
+        }
+    }
+
+    public void streeRatio(TrussMemberProperty m,char ratio,bool newMember)
+    {
+        foreach(GameObject g in members)
+        {
+            if(g.GetComponent<TrussMemberProperty>().Equals(m))
+            {
+                if(ratio == 'l')
+                {
+                    g.GetComponent<LineRenderer>().startColor= new Color(188 / 255f, 255 / 255f, 3 / 255f);
+                    g.GetComponent<LineRenderer>().endColor = new Color(188 / 255f, 255 / 255f, 3 / 255f);
+                }
+                else if (ratio == 'm')
+                {
+                    g.GetComponent<LineRenderer>().startColor = new Color(199 / 255f, 255 / 255f, 0 / 255f);
+                    g.GetComponent<LineRenderer>().endColor = new Color(199 / 255f, 255 / 255f, 0 / 255f);
+                }
+                else if (ratio == 'h')
+                {
+                    g.GetComponent<LineRenderer>().startColor = new Color(238 / 255f, 255 / 255f, 65 / 255f);
+                    g.GetComponent<LineRenderer>().endColor = new Color(238 / 255f, 255 / 255f, 65 / 255f);
+                }
+                else if (ratio == 'c')
+                {
+                    g.GetComponent<LineRenderer>().startColor = GetColor(m.number);
+                    g.GetComponent<LineRenderer>().endColor = GetColor(m.number);
+                }
+                if(newMember)
+                    memberColors.Add(ratio); 
+            }
         }
     }
 

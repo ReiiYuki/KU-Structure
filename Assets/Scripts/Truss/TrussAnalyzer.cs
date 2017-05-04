@@ -615,11 +615,13 @@ public class TrussAnalyzer : MonoBehaviour
             {
                 collector.AddQ(members[i], members[i].node1.number, Q[i].array[0, 0],true);
                 collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],true);
+                collector.streeRatio(members[i], tension(Q[i].array[0, 0], members[i].GetI(), members[i].GetFy()),true);
             }
             else
             {
                 collector.AddQ(members[i], members[i].node1.number, Q[i].array[0, 0],false);
                 collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],false);
+                collector.streeRatio(members[i],compression(members[i].lenght(), members[i].GetE(), members[i].GetFy(), members[i].GetR(), members[i].GetI(), Q[i].array[0, 0]),true);
             }
             
             collector.AddForce(members[i].node1.number, F[i].array[0, 0],F[i].array[1,0]);
@@ -700,4 +702,27 @@ public class TrussAnalyzer : MonoBehaviour
         return (x2 - x1) /lenght;
     }
 
+    private char tension(float T,float A,float fy)
+    {
+        float stressRatio = (T / A) / (fy * 0.6f);
+        if (stressRatio >= 0 && stressRatio < 0.5)
+            return 'l';
+        if (stressRatio >= 0.5 && stressRatio <= 1)
+            return 'm';
+        return 'h';
+    }
+    private char compression(float length,float E,float Fy,float r,float A,float C)
+    {
+        float cc = (float)Math.Sqrt((2 * Math.PI * Math.PI * E) / Fy);
+        float KLr = length / r;
+        float Fa = (float)(12f * Math.PI * Math.PI * E) / (23f * KLr * KLr);
+        if (cc>KLr)
+            Fa = (float)(1f- (1f/2f)* (KLr* KLr)/cc) / ((5f/3f)+(3f/8f)*(KLr/cc)-(1f/8f)*(KLr/cc)* (KLr / cc)* (KLr / cc));
+        float stressRatio = C / A / Fa;
+        if (stressRatio >= 0 && stressRatio < 0.5)
+            return 'l';
+        if (stressRatio >= 0.5 && stressRatio <= 1)
+            return 'm';
+        return 'h';
+    }
 }
