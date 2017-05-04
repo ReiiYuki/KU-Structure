@@ -63,9 +63,9 @@ public class TRUSSCollector : MonoBehaviour {
         AddMember(2, 1, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
         AddMember(2, 0, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
         AddPointLoad(1, 50, -50);
-        AddSupport(3, 2);
-        AddSupport(3, 0);
-        AddSupport(3, 1);
+        AddSupport(5, 2);
+        AddSupport(5, 0);
+        AddSupport(5, 1);
         //3
         //AddNode(0, 28.8f);
         //AddNode(19.2f, 28.8f);
@@ -387,7 +387,7 @@ public class TRUSSCollector : MonoBehaviour {
             else
             {
                 support.transform.Rotate(new Vector3(0, 0, 90));
-                support.transform.position += new Vector3(0, 0.6f * 2);
+                support.transform.position += new Vector3(0.6f * 2,0 );
             }
         }
                
@@ -410,7 +410,7 @@ public class TRUSSCollector : MonoBehaviour {
             else
             {
                 support.transform.Rotate(new Vector3(0, 0, 90));
-                support.transform.position += new Vector3(0, 0.6f * 2);
+                support.transform.position += new Vector3(0.6f * 2, 0);
             }
         }
         Camera.main.transform.position = new Vector3(selectedNode.transform.position.x, selectedNode.transform.position.y, Camera.main.transform.position.z);
