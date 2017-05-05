@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TRUSSCollector : MonoBehaviour {
 
-    public GameObject memberPrefab, textPrefab, nodePrefab, pointLoadPrefabX, pointLoadPrefabY, momentumPrefab, uniformLoadPrefab;
+    public GameObject memberPrefab, textPrefab, nodePrefab, pointLoadPrefabX, pointLoadPrefabY, momentumPrefab, uniformLoadPrefab,togglePanel;
     public List<GameObject> nodes, members, pointLoads, forces, innerForces;
     public GameObject[] supportPrefabs;
     public bool visibleInputForce = true, visibleOuterForce = true, visibleInnerForce = true, visibleStressRatio = true;
@@ -133,6 +133,7 @@ public class TRUSSCollector : MonoBehaviour {
         innerForces.Clear();
         memberColors.Clear();
         forces.Clear();
+        togglePanel.SetActive(false);
     }
     public void Undo()
     {
