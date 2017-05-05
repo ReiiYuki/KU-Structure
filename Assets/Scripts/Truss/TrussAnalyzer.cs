@@ -542,7 +542,8 @@ public class TrussAnalyzer : MonoBehaviour
                             sArray[i, j] += matrixs[k].array[3, 3];
                     }
                 }
-        Debug.Log(dfi.Length);
+        Debug.Log(sArray.GetLength(0));
+        Debug.Log(sArray.GetLength(1));
         Debug.Log(new Matrix2D(sArray));
         Matrix2D sArrayI = Matrix2D.inverse(new Matrix2D(sArray));
         Matrix2D fnodes = getForce(nodes);
