@@ -29,32 +29,32 @@ public class TRUSSCollector : MonoBehaviour {
     public void helpper()
     {
         // one
-        AddNode(0, 0);
-        AddNode(12, 0);
-        AddNode(24, 0);
-        AddNode(12, 16);
-        AddMember(0, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(1, 3, 0, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(2, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddSupport(1, 0);
-        AddSupport(1, 1);
-        AddSupport(1, 2);
-        AddPointLoad(3, 150, -300);
+        //AddNode(0, 0);
+        //AddNode(12, 0);
+        //AddNode(24, 0);
+        //AddNode(12, 16);
+        //AddMember(0, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //AddMember(1, 3, 0, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //AddMember(2, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //AddSupport(1, 0);
+        //AddSupport(1, 1);
+        //AddSupport(1, 2);
+        //AddPointLoad(3, 150, -300);
 
         // 2
-        //AddNode(0, 0);
-        //AddNode(4, 8);
-        //AddNode(4, 4);
-        //AddNode(8, 0);
-        //AddMember(0, 1, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(0, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(1, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(2, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(1, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(0, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddSupport(1, 0);
-        //AddSupport(3, 3);
-        //AddPointLoad(1, 80, -120);
+        AddNode(0, 0);
+        AddNode(4, 8);
+        AddNode(4, 4);
+        AddNode(8, 0);
+        AddMember(0, 1, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(2, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddSupport(1, 0);
+        AddSupport(3, 3);
+        AddPointLoad(1, 80, -120);
 
         //AddNode(10, 10);
         //AddNode(15, 15);
@@ -339,16 +339,16 @@ public class TRUSSCollector : MonoBehaviour {
             foreach (TrussMemberProperty member in nodes[node].GetComponent<TrussNodeProperty>().members)
                 if (member.node1.Equals(nodes[node].GetComponent<TrussNodeProperty>()))
                 {
-                    if (Math.Abs(node1x - node2x) < Math.Abs(node1y - node2y))
-                    {
-                        node2x += member.node2.x;
-                        node2y += member.node2.y;
-                    }
+                    //if (Math.Abs(node1x - node2x) < Math.Abs(node1y - node2y))
+                    //{
+                        node2x += member.node2.x -node1x;
+                        node2y += member.node2.y-node1y;
+                    //}
                 }
                 else
                 {
-                    node2x += member.node1.x;
-                    node2y += member.node1.y;
+                    node2x += member.node1.x-node1x;
+                    node2y += member.node1.y-node1y;
                 }
             Debug.Log(node1x + " " + node1y + " " + node2x + " " + node2y);
         }
@@ -370,7 +370,7 @@ public class TRUSSCollector : MonoBehaviour {
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
             //support.transform.Rotate(new Vector3(0, 0, -90f));
-            if (node1y < node2y)
+            if (0 < node2y)
                 support.transform.Rotate(new Vector3(0, 0, 0));
             else
                 support.transform.Rotate(new Vector3(0, 0, 180f));                
@@ -379,7 +379,9 @@ public class TRUSSCollector : MonoBehaviour {
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
             //support.transform.Rotate(new Vector3(0, 0, -90f));
-            if (node1x < node2x)
+            Debug.Log("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
+            Debug.Log(node1x + " " + node2x);
+            if (0 < node2x)
                 support.transform.Rotate(new Vector3(0, 0, -90));
             else
                 support.transform.Rotate(new Vector3(0, 0, 90));
@@ -388,7 +390,7 @@ public class TRUSSCollector : MonoBehaviour {
         else if (type == 2)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
-            if (node1y < node2y)
+            if (0 < node2y)
                 support.transform.Rotate(new Vector3(0, 0, 0));
             else
             {
@@ -401,7 +403,7 @@ public class TRUSSCollector : MonoBehaviour {
         else if (type == 3)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
-            if (node1x < node2x)
+            if (0 < node2x)
                 support.transform.Rotate(new Vector3(0, 0, -90));
             else
             {
@@ -413,7 +415,7 @@ public class TRUSSCollector : MonoBehaviour {
         else if (type == 4)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
-            if (node1y < node2y)
+            if (0 < node2y)
                 support.transform.Rotate(new Vector3(0, 0, 0));
             else
             {
@@ -424,7 +426,7 @@ public class TRUSSCollector : MonoBehaviour {
         else
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
-            if (node1x < node2x)
+            if (0 < node2x)
                 support.transform.Rotate(new Vector3(0, 0, -90));
             else
             {
@@ -678,10 +680,11 @@ public class TRUSSCollector : MonoBehaviour {
                 //Material newMaterial = new Material(Shader.Find("Specular"));
                 //newMaterial.color = new Color(255, 182, 0, 1);
                 //pointLoadX.GetComponent<MeshRenderer>().material = newMaterial;
-                pointLoadX.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
+                pointLoadX.transform.localScale = new Vector3(0.2779045f, 0.2779045f, 0.2779045f);
+                pointLoadX.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
                 pointLoadX.transform.Rotate(new Vector3(0, 0, -90));
                 pointLoadX.GetComponentInChildren<TextMesh>().text = Math.Round(loadX,2) + " kg.";
-                pointLoadX.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
+                pointLoadX.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
                 pointLoadX.GetComponent<TrussPointLoadProperty>().text = pointLoadX.GetComponentInChildren<TextMesh>();
                 pointLoadX.GetComponent<TrussPointLoadProperty>().load = loadX;
                 pointLoadX.GetComponent<TrussPointLoadProperty>().axis = 'x';
@@ -710,9 +713,10 @@ public class TRUSSCollector : MonoBehaviour {
             else
             {
                 GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3(0, 0, 0), Quaternion.identity);
-                pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
+                pointLoadY.transform.localScale = new Vector3(0.2779045f, 0.2779045f, 0.2779045f);
+                pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
                 pointLoadY.GetComponentInChildren<TextMesh>().text = Math.Round(loadY,2) + " kg.";
-                pointLoadY.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 179 / 255f, 0 / 255f);
+                pointLoadY.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
                 pointLoadY.GetComponent<TrussPointLoadProperty>().text = pointLoadY.GetComponentInChildren<TextMesh>();
                 pointLoadY.GetComponent<TrussPointLoadProperty>().load = loadY;
                 pointLoadY.GetComponent<TrussPointLoadProperty>().axis = 'y';

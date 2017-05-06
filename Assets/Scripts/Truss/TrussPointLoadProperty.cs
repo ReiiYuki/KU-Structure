@@ -27,26 +27,28 @@ public class TrussPointLoadProperty : MonoBehaviour {
 	}
     public void InverseForce()
     {
+
+        Debug.Log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         Debug.Log(transform.localScale.y);
         Debug.Log(transform.localScale.x);
         if (axis == 'y' && load > 0)
         {
             
-            transform.localScale = new Vector3(0.4724374f, -0.4724374f, 0.4724374f);
+            transform.localScale = new Vector3(0.2779045f, -0.2779045f, 0.2779045f);
             transform.GetChild(0).localScale = new Vector3(1, -1,1);
             transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x, nodeG.GetComponent<TrussNodeProperty>().y + 2.25f);
             Debug.Log("+y: "+load);
         }
         if (axis == 'y' && load < 0)
         {
-            transform.localScale = new Vector3(0.4724374f, 0.4724374f, 0.4724374f);
+            transform.localScale = new Vector3(0.2779045f, 0.2779045f, 0.2779045f);
             transform.GetChild(0).localScale = new Vector3(1, 1, 1);
             transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x, nodeG.GetComponent<TrussNodeProperty>().y - 2.25f);
             Debug.Log("-y: " + load);
         }
         if (axis == 'x' && load > 0)
         {
-            transform.localScale = new Vector3(0.4724374f, -0.4724374f, 0.4724374f);
+            transform.localScale = new Vector3(0.2779045f, -0.2779045f, 0.2779045f);
             transform.GetChild(0).localScale = new Vector3(1 , -1, -1);
             transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x + 2.25f, nodeG.GetComponent<TrussNodeProperty>().y);
             //transform.Rotate(new Vector3(0, 0, 180));
@@ -54,11 +56,15 @@ public class TrussPointLoadProperty : MonoBehaviour {
         }
         if (axis == 'x' && load < 0)
         {
-            transform.localScale = new Vector3(-0.4724374f, 0.4724374f, 0.4724374f);
+            transform.localScale = new Vector3(-0.2779045f, 0.2779045f, 0.2779045f);
             transform.GetChild(0).localScale = new Vector3(1 ,-1, -1);
             transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x - 2.25f, nodeG.GetComponent<TrussNodeProperty>().y);
             //transform.Rotate(new Vector3(0, 0, 180));
             Debug.Log("x: " + load);
+        }
+        if(load == 0)
+        {
+            transform.localScale = new Vector3(0, 0, 0);
         }
     }
 
