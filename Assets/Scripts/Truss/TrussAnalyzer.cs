@@ -8,6 +8,7 @@ using System.Linq;
 public class TrussAnalyzer : MonoBehaviour
 {
     TRUSSCollector collector;
+    public GameObject togglePanel;
     // Use this for initialization
     void Start()
     {
@@ -394,7 +395,7 @@ public class TrussAnalyzer : MonoBehaviour
 
     public void analyze()
     {
-
+        togglePanel.SetActive(false);
         // init members
         List<TrussMemberProperty> members = new List<TrussMemberProperty>();
         foreach (GameObject g in collector.members)
@@ -629,7 +630,7 @@ public class TrussAnalyzer : MonoBehaviour
             collector.AddForce(members[i].node1.number, F[i].array[0, 0],F[i].array[1,0]);
             collector.AddForce(members[i].node2.number, F[i].array[2, 0], F[i].array[3, 0]);
         }
-
+        togglePanel.SetActive(true);
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)
