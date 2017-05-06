@@ -9,8 +9,8 @@ public class AddNodeAction : MonoBehaviour {
 
 	public void AddNode()
     {
-        int x = int.Parse(textX.GetComponent<Text>().text);
-        int y = int.Parse(textY.GetComponent<Text>().text);
+        float x = float.Parse(textX.GetComponent<Text>().text);
+        float y = float.Parse(textY.GetComponent<Text>().text);
         GameObject.FindObjectOfType<TRUSSCollector>().AddNode(x, y);
     }
 }
