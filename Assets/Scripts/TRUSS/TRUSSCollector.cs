@@ -339,16 +339,16 @@ public class TRUSSCollector : MonoBehaviour {
             foreach (TrussMemberProperty member in nodes[node].GetComponent<TrussNodeProperty>().members)
                 if (member.node1.Equals(nodes[node].GetComponent<TrussNodeProperty>()))
                 {
-                    if (Math.Abs(node1x - node2x) < Math.Abs(node1y - node2y))
-                    {
-                        node2x += member.node2.x;
-                        node2y += member.node2.y;
-                    }
+                    //if (Math.Abs(node1x - node2x) < Math.Abs(node1y - node2y))
+                    //{
+                        node2x += member.node2.x -node1x;
+                        node2y += member.node2.y-node1y;
+                    //}
                 }
                 else
                 {
-                    node2x += member.node1.x;
-                    node2y += member.node1.y;
+                    node2x += member.node1.x-node1x;
+                    node2y += member.node1.y-node1y;
                 }
             Debug.Log(node1x + " " + node1y + " " + node2x + " " + node2y);
         }
@@ -370,7 +370,7 @@ public class TRUSSCollector : MonoBehaviour {
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
             //support.transform.Rotate(new Vector3(0, 0, -90f));
-            if (node1y < node2y)
+            if (0 < node2y)
                 support.transform.Rotate(new Vector3(0, 0, 0));
             else
                 support.transform.Rotate(new Vector3(0, 0, 180f));                
@@ -379,7 +379,9 @@ public class TRUSSCollector : MonoBehaviour {
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
             //support.transform.Rotate(new Vector3(0, 0, -90f));
-            if (node1x < node2x)
+            Debug.Log("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
+            Debug.Log(node1x + " " + node2x);
+            if (0 < node2x)
                 support.transform.Rotate(new Vector3(0, 0, -90));
             else
                 support.transform.Rotate(new Vector3(0, 0, 90));
@@ -388,7 +390,7 @@ public class TRUSSCollector : MonoBehaviour {
         else if (type == 2)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
-            if (node1y < node2y)
+            if (0 < node2y)
                 support.transform.Rotate(new Vector3(0, 0, 0));
             else
             {
@@ -401,7 +403,7 @@ public class TRUSSCollector : MonoBehaviour {
         else if (type == 3)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
-            if (node1x < node2x)
+            if (0 < node2x)
                 support.transform.Rotate(new Vector3(0, 0, -90));
             else
             {
@@ -413,7 +415,7 @@ public class TRUSSCollector : MonoBehaviour {
         else if (type == 4)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
-            if (node1y < node2y)
+            if (0 < node2y)
                 support.transform.Rotate(new Vector3(0, 0, 0));
             else
             {
@@ -424,7 +426,7 @@ public class TRUSSCollector : MonoBehaviour {
         else
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
-            if (node1x < node2x)
+            if (0 < node2x)
                 support.transform.Rotate(new Vector3(0, 0, -90));
             else
             {

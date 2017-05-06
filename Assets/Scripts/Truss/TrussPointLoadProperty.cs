@@ -27,7 +27,7 @@ public class TrussPointLoadProperty : MonoBehaviour {
 	}
     public void InverseForce()
     {
-        transform.localScale = new Vector3(0.2779045f, 0.2779045f, 0.2779045f);
+
         Debug.Log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         Debug.Log(transform.localScale.y);
         Debug.Log(transform.localScale.x);
@@ -61,6 +61,10 @@ public class TrussPointLoadProperty : MonoBehaviour {
             transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x - 2.25f, nodeG.GetComponent<TrussNodeProperty>().y);
             //transform.Rotate(new Vector3(0, 0, 180));
             Debug.Log("x: " + load);
+        }
+        if(load == 0)
+        {
+            transform.localScale = new Vector3(0, 0, 0);
         }
     }
 
