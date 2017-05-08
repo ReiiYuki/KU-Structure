@@ -184,32 +184,32 @@ public class BeamGraphGenerator : MonoBehaviour {
             line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
             line.SetPositions(new Vector3[]
             {
-                    new Vector3(currentX,currentY/max*3-9),
-                    new Vector3(p.x,p.y/max*3-9)
+                    new Vector3(currentX,currentY/max*3-11),
+                    new Vector3(p.x,p.y/max*3-11)
             });
             currentX = p.x;
             currentY = p.y;
             line.transform.SetParent(transform.GetChild(1));
             if (System.Math.Round(p.y, 2) !=0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(currentX, p.y / max * 3 - 8.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(currentX, p.y / max * 3 - 10.5f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 text.text = System.Math.Round(p.y, 2) + "";
                 text.characterSize = 0.2f;
                 if (System.Math.Round(p.y, 2) < 0)
-                    text.transform.position -= new Vector3(0, 0.4f);
+                    text.transform.position -= new Vector3(0, 0.9f);
                 text.transform.SetParent(line.transform);
             }
         }
         
-        lineL.SetPositions(new Vector3[] { new Vector3(0, -9), new Vector3(currentX, -9) });
+        lineL.SetPositions(new Vector3[] { new Vector3(0, -11), new Vector3(currentX, -11) });
 
-        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -9), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -11), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textStart.text = "SFD";
         textStart.transform.SetParent(lineL.transform);
 
-        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -9), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x+1f, -11), Quaternion.identity).GetComponent<TextMesh>();
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "SFD";
         textEnd.transform.SetParent(lineL.transform);
@@ -315,9 +315,10 @@ public class BeamGraphGenerator : MonoBehaviour {
 
 
         float max = FindMaxPoint(points);
+        Debug.Log("Max = " + max);
         float currentX = 0;
         float currentY = 0;
-        float offset = -19;
+        float offset = -21;
         float parabolaIndex = 0;
         float[] parabolaEquation = new float[3];
         foreach (Point point in points)
@@ -345,10 +346,10 @@ public class BeamGraphGenerator : MonoBehaviour {
 
             if (System.Math.Round(point.y, 2) != 0)
             {
-                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 18.8f), Quaternion.identity).GetComponent<TextMesh>();
+                TextMesh text = Instantiate(textPrefab, new Vector3(point.x, point.y / max * 3 - 20.5f), Quaternion.identity).GetComponent<TextMesh>();
                 text.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 if (System.Math.Round(point.y, 2) < 0)
-                    text.transform.position -= new Vector3(0, 0.4f);
+                    text.transform.position -= new Vector3(0, 0.9f);
                 text.text = System.Math.Round(point.y, 2) + "";
                 text.characterSize = 0.2f;
                 text.transform.SetParent(line.transform);
@@ -359,14 +360,14 @@ public class BeamGraphGenerator : MonoBehaviour {
             currentY = point.y;
             line.transform.SetParent(transform.GetChild(2));
         }
-        lineM.SetPositions(new Vector3[] { new Vector3(0, -19), new Vector3(currentX, -19) });
+        lineM.SetPositions(new Vector3[] { new Vector3(0, -21), new Vector3(currentX, -21) });
 
-        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -19), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textStart = Instantiate(textPrefab, new Vector3(-1f, -21), Quaternion.identity).GetComponent<TextMesh>();
         textStart.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textStart.text = "BMD";
         textStart.transform.SetParent(lineM.transform);
 
-        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -19), Quaternion.identity).GetComponent<TextMesh>();
+        TextMesh textEnd = Instantiate(textPrefab, new Vector3(x + 1f, -21), Quaternion.identity).GetComponent<TextMesh>();
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "BMD";
         textEnd.transform.SetParent(lineM.transform);
@@ -386,8 +387,8 @@ public class BeamGraphGenerator : MonoBehaviour {
     {
         float max = int.MinValue;
         foreach (Point point in points)
-            if (point.y > max)
-                max = point.y;
+            if (Mathf.Abs(point.y) > max)
+                max = Mathf.Abs(point.y);
         return max;
     }
 
@@ -493,7 +494,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float l = 0;
         TextMesh ratioLab = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
         ratioLab.transform.position = new Vector3(-2, offset - 2);
-        ratioLab.text = "Stress Ratio ";
+        ratioLab.text = "Design Stress Ratio ";
         ratioLab.color = new Color(251/255f, 140/255f, 0/255f);
 
         foreach (GameObject member in collector.members)
@@ -528,7 +529,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         }
         TextMesh ltext = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
         ltext.transform.position = new Vector3(l / 2, offset - 3.5f);
-        ltext.text = "L = "+System.Math.Round(L,2);
+        ltext.text = "min. Required brace length = "+System.Math.Round(L,2);
         ltext.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
     } 
 

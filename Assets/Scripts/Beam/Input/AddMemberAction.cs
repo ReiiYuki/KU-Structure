@@ -9,8 +9,7 @@ public class AddMemberAction : MonoBehaviour {
 
 	public void AddMember()
     {
-        float span = float.Parse(spanText.GetComponent<Text>().text);
-        //int type = propertyInput.GetComponent<LoadInputValue>().index;
+        float span = float.Parse(spanText.GetComponent<InputField>().text);
         ElementStore.Element prop = propertyInput.GetComponent<SelectButtonValueStore>().prop;
         ElementStore.UElement uprop = propertyInput.GetComponent<SelectButtonValueStore>().uprop;
         GameObject.FindObjectOfType<BeamCollector>().AddMember(span, prop,uprop);
