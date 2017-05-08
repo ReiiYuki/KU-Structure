@@ -535,13 +535,13 @@ public class TRUSSCollector : MonoBehaviour {
                 // infinit slope
                 if (float.IsPositiveInfinity(slope))
                 {
-                    result += 180;
-                    pointLoadX.transform.position += new Vector3(0, 1);
+                    result += -180;
+                    pointLoadX.transform.position += new Vector3(0, -1);
                 }
                 //  -infinit slope
                 else if (float.IsNegativeInfinity(slope))
                 {
-                    result += 180;
+                    //result += 180;
                     pointLoadX.transform.position += new Vector3(0, 1);
                 }
                 else
@@ -561,7 +561,7 @@ public class TRUSSCollector : MonoBehaviour {
                 //  -infinit slope
                 else if (float.IsNegativeInfinity(slope))
                 {
-                    result += 180;
+                    //result += 180;
                     pointLoadX.transform.position += new Vector3(0, 1);
                 }
                 else
@@ -594,8 +594,8 @@ public class TRUSSCollector : MonoBehaviour {
                 // infinit slope
                 if (float.IsPositiveInfinity(slope))
                 {
-                    result += 180;
-                    pointLoadX.transform.position += new Vector3(0, -1);
+                    //result += -180;
+                    pointLoadX.transform.position += new Vector3(0, 1);
                 }
                 //  -infinit slope
                 else if (float.IsNegativeInfinity(slope))
@@ -616,14 +616,14 @@ public class TRUSSCollector : MonoBehaviour {
                 // infinit slope
                 if (float.IsPositiveInfinity(slope))
                 {
-                    result += 180;
-                    pointLoadX.transform.position += new Vector3(0, -1);
+                    //result += 180;
+                    pointLoadX.transform.position += new Vector3(0, 1);
                 }
                 //  -infinit slope
                 else if (float.IsNegativeInfinity(slope))
                 {
                     result += 180;
-                    pointLoadX.transform.position += new Vector3(0, 1);
+                    pointLoadX.transform.position += new Vector3(0, -1);
                 }
                 else
                 {
