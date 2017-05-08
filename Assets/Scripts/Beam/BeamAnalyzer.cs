@@ -83,6 +83,19 @@ public class BeamAnalyzer : MonoBehaviour {
         }
         foreach (GameObject node in collector.nodes)
         {
+            if (node.GetComponent<NodeProperty>().leftMember&&node.GetComponent<NodeProperty>().rightMember)
+            {
+                if (node.GetComponent<NodeProperty>().leftMember.GetName()!= node.GetComponent<NodeProperty>().rightMember.GetName())
+                {
+                    GameObject support = Instantiate(collector.supportPrefabs[3], node.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
+                    node.GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
+                    node.GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+                    node.GetComponent<NodeProperty>().support = support.GetComponent<SupportProperty>();
+                    support.GetComponent<SupportProperty>().node = node.GetComponent<NodeProperty>().number;
+
+                    support.transform.SetParent(node.transform);
+                }
+            }
             df[index++] = node.GetComponent<NodeProperty>().dy;
             df[index++] = node.GetComponent<NodeProperty>().m;
         }
