@@ -14,12 +14,16 @@ public class AddUserPropertyAction : MonoBehaviour {
         if (type == "UT")
         {
             string savedData = PlayerPrefs.GetString("UTPROP");
+            if (PlayerPrefs.GetString("UTPROP").Split(null).Length > 10)
+                savedData = string.Join(" ",new List<string>(PlayerPrefs.GetString("UTPROP").Split(null)).GetRange(1, PlayerPrefs.GetString("UTPROP").Split(null).Length - 1).ToArray());
             savedData += " " + e + "," + i + " ";
             PlayerPrefs.SetString("UTPROP", savedData);
         }
         else
         {
             string savedData = PlayerPrefs.GetString("UPROP");
+            if (PlayerPrefs.GetString("UPROP").Split(null).Length > 10)
+                savedData = string.Join(" ", new List<string>(PlayerPrefs.GetString("UPROP").Split(null)).GetRange(1, PlayerPrefs.GetString("UPROP").Split(null).Length - 1).ToArray());
             savedData += " " + e + "," + i + " ";
             PlayerPrefs.SetString("UPROP", savedData);
         }
