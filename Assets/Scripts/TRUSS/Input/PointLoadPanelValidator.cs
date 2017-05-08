@@ -9,10 +9,22 @@ public class PointLoadPanelValidator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float x, y;
-        if (nodeSelector.GetComponent<LoadInputValue>().list.Length == 0||!float.TryParse(loadXText.GetComponent<InputField>().text,out x)||!float.TryParse(loadYText.GetComponent<InputField>().text, out y))
+        Debug.Log(Check());
+        if (nodeSelector.GetComponent<LoadInputValue>().list.Length == 0||!Check())
             addButton.GetComponent<Button>().interactable = false;
         else
             addButton.GetComponent<Button>().interactable = true;
+    }
+
+    bool Check()
+    {
+        float x, y;
+        if (float.TryParse(loadXText.GetComponent<InputField>().text, out x) && loadYText.GetComponent<InputField>().text == "")
+            return true;
+        else if (float.TryParse(loadYText.GetComponent<InputField>().text, out y) && loadXText.GetComponent<InputField>().text == "")
+            return true;
+        else if (float.TryParse(loadXText.GetComponent<InputField>().text, out x) && float.TryParse(loadYText.GetComponent<InputField>().text, out y))
+            return true;
+        return false;
     }
 }
