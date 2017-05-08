@@ -15,7 +15,7 @@ public class UserPropertyCheckStatus : MonoBehaviour {
     void Check()
     {
         float e,i;
-        if (float.TryParse(eText.GetComponent<Text>().text, out e) && float.TryParse(iText.GetComponent<Text>().text, out i))
+        if (float.TryParse(eText.GetComponent<InputField>().text, out e) && float.TryParse(iText.GetComponent<InputField>().text, out i))
             addButton.GetComponent<Button>().interactable = true;
         else
             addButton.GetComponent<Button>().interactable = false;

@@ -315,6 +315,7 @@ public class BeamGraphGenerator : MonoBehaviour {
 
 
         float max = FindMaxPoint(points);
+        Debug.Log("Max = " + max);
         float currentX = 0;
         float currentY = 0;
         float offset = -21;
@@ -386,8 +387,8 @@ public class BeamGraphGenerator : MonoBehaviour {
     {
         float max = int.MinValue;
         foreach (Point point in points)
-            if (point.y > max)
-                max = point.y;
+            if (Mathf.Abs(point.y) > max)
+                max = Mathf.Abs(point.y);
         return max;
     }
 
@@ -493,7 +494,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         float l = 0;
         TextMesh ratioLab = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
         ratioLab.transform.position = new Vector3(-2, offset - 2);
-        ratioLab.text = "Stress Ratio ";
+        ratioLab.text = "Design Stress Ratio ";
         ratioLab.color = new Color(251/255f, 140/255f, 0/255f);
 
         foreach (GameObject member in collector.members)
@@ -528,7 +529,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         }
         TextMesh ltext = Instantiate(textPrefab, transform.GetChild(3)).GetComponent<TextMesh>();
         ltext.transform.position = new Vector3(l / 2, offset - 3.5f);
-        ltext.text = "L = "+System.Math.Round(L,2);
+        ltext.text = "min. Required brace length = "+System.Math.Round(L,2);
         ltext.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
     } 
 
