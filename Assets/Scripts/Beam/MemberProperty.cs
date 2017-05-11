@@ -26,4 +26,10 @@ public class MemberProperty : MonoBehaviour {
         else return uprop.E;
      //   return E[type];
     }
+
+    public string GetName()
+    {
+        if (prop.name != null) return prop.name;
+        else return uprop.E+" "+uprop.I;
+    }
 }

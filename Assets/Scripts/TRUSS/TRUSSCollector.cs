@@ -690,6 +690,7 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadX.GetComponent<TrussPointLoadProperty>().axis = 'x';
                 pointLoadX.GetComponent<TrussPointLoadProperty>().node = node;
                 pointLoadX.GetComponent<TrussPointLoadProperty>().nodeG = nodes[node];
+                pointLoadX.GetComponent<TrussPointLoadProperty>().forceG = pointLoadX;
                 selectNode.GetComponent<TrussNodeProperty>().forceX = pointLoadX.GetComponent<TrussPointLoadProperty>();
                 pointLoadX.GetComponent<TrussPointLoadProperty>().InverseForce();
 
@@ -722,6 +723,7 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadY.GetComponent<TrussPointLoadProperty>().axis = 'y';
                 pointLoadY.GetComponent<TrussPointLoadProperty>().node = node;
                 pointLoadY.GetComponent<TrussPointLoadProperty>().nodeG = nodes[node];
+                pointLoadY.GetComponent<TrussPointLoadProperty>().forceG = pointLoadY;
                 selectNode.GetComponent<TrussNodeProperty>().forceY = pointLoadY.GetComponent<TrussPointLoadProperty>();
 
                 pointLoadY.GetComponent<TrussPointLoadProperty>().InverseForce();

@@ -8,6 +8,7 @@ public class TrussPointLoadProperty : MonoBehaviour {
     public char axis; 
 	public int node;
     public GameObject nodeG;
+    public GameObject forceG;
     public TextMesh text;
 	public void Inverse()
 	{
@@ -24,6 +25,7 @@ public class TrussPointLoadProperty : MonoBehaviour {
 			transform.position = new Vector3(transform.position.x - 2.75f, transform.position.y );
 			transform.Rotate (new Vector3 (0, 0, 180));
 		}
+       
 	}
     public void InverseForce()
     {
@@ -62,9 +64,26 @@ public class TrussPointLoadProperty : MonoBehaviour {
             //transform.Rotate(new Vector3(0, 0, 180));
             Debug.Log("x: " + load);
         }
-        if(load == 0)
+        //if(load == 0)
+        //{
+        //    transform.localScale = new Vector3(0, 0, 0);
+        //}
+
+        Debug.Log("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+        Debug.Log(axis + " " + load);
+        Debug.Log("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+        if (System.Math.Abs(load) < 0.01f)
         {
-            transform.localScale = new Vector3(0, 0, 0);
+            Debug.Log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+            if (axis == 'x')
+                nodeG.GetComponent<TrussNodeProperty>().forceX = null;
+            else
+                nodeG.GetComponent<TrussNodeProperty>().forceY = null;
+            nodeG = null;
+            Debug.Log(forceG);
+            DestroyImmediate(forceG, true);
+            DestroyImmediate(this, true);
+
         }
     }
 
