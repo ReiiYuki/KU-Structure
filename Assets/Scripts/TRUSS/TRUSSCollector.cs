@@ -366,28 +366,28 @@ public class TRUSSCollector : MonoBehaviour {
         //    else
         //        support.transform.Rotate(new Vector3(0, 0, 90));
         //}
-        if (type == 0)
-        {
-            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
-            //support.transform.Rotate(new Vector3(0, 0, -90f));
-            if (0 < node2y)
-                support.transform.Rotate(new Vector3(0, 0, 0));
-            else
-                support.transform.Rotate(new Vector3(0, 0, 180f));                
-        }
-        else if (type == 1)
-        {
-            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
-            //support.transform.Rotate(new Vector3(0, 0, -90f));
-            Debug.Log("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
-            Debug.Log(node1x + " " + node2x);
-            if (0 < node2x)
-                support.transform.Rotate(new Vector3(0, 0, -90));
-            else
-                support.transform.Rotate(new Vector3(0, 0, 90));
+        //if (type == 0)
+        //{
+        //    support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
+        //    //support.transform.Rotate(new Vector3(0, 0, -90f));
+        //    if (0 < node2y)
+        //        support.transform.Rotate(new Vector3(0, 0, 0));
+        //    else
+        //        support.transform.Rotate(new Vector3(0, 0, 180f));                
+        //}
+        //else if (type == 1)
+        //{
+        //    support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
+        //    //support.transform.Rotate(new Vector3(0, 0, -90f));
+        //    Debug.Log("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
+        //    Debug.Log(node1x + " " + node2x);
+        //    if (0 < node2x)
+        //        support.transform.Rotate(new Vector3(0, 0, -90));
+        //    else
+        //        support.transform.Rotate(new Vector3(0, 0, 90));
 
-        }
-        else if (type == 2)
+        //}
+        if (type == 0)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
             if (0 < node2y)
@@ -400,7 +400,7 @@ public class TRUSSCollector : MonoBehaviour {
                 
 
         }
-        else if (type == 3)
+        else if (type == 0)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
             if (0 < node2x)
@@ -412,7 +412,7 @@ public class TRUSSCollector : MonoBehaviour {
             }
         }
                
-        else if (type == 4)
+        else if (type == 1)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
             if (0 < node2y)
