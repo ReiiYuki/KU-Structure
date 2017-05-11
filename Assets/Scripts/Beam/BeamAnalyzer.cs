@@ -61,8 +61,41 @@ public class BeamAnalyzer : MonoBehaviour {
     {
         df = new float[collector.nodes.Count*2];
         int index = 0;
+        if (!collector.nodes[0].GetComponent<NodeProperty>().support)
+        {
+            GameObject support = Instantiate(collector.supportPrefabs[4], collector.nodes[0].transform.position - new Vector3(0, 0.4f), Quaternion.identity);
+            collector.nodes[0].GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
+            collector.nodes[0].GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+            collector.nodes[0].GetComponent<NodeProperty>().support = support.GetComponent<SupportProperty>();
+            support.GetComponent<SupportProperty>().node = 0;
+
+            support.transform.SetParent(collector.nodes[0].transform);
+        }
+        if (!collector.nodes[collector.nodes.Count-1].GetComponent<NodeProperty>().support)
+        {
+            GameObject support = Instantiate(collector.supportPrefabs[4], collector.nodes[collector.nodes.Count - 1].transform.position - new Vector3(0, 0.4f), Quaternion.identity);
+            collector.nodes[collector.nodes.Count - 1].GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
+            collector.nodes[collector.nodes.Count - 1].GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+            collector.nodes[collector.nodes.Count - 1].GetComponent<NodeProperty>().support = support.GetComponent<SupportProperty>();
+            support.GetComponent<SupportProperty>().node = collector.nodes.Count - 1;
+
+            support.transform.SetParent(collector.nodes[collector.nodes.Count - 1].transform);
+        }
         foreach (GameObject node in collector.nodes)
         {
+            if (node.GetComponent<NodeProperty>().leftMember&&node.GetComponent<NodeProperty>().rightMember)
+            {
+                if (node.GetComponent<NodeProperty>().leftMember.GetName()!= node.GetComponent<NodeProperty>().rightMember.GetName())
+                {
+                    GameObject support = Instantiate(collector.supportPrefabs[3], node.transform.position - new Vector3(0, 0.4f), Quaternion.identity);
+                    node.GetComponent<NodeProperty>().dy = support.GetComponent<SupportProperty>().dy;
+                    node.GetComponent<NodeProperty>().m = support.GetComponent<SupportProperty>().m;
+                    node.GetComponent<NodeProperty>().support = support.GetComponent<SupportProperty>();
+                    support.GetComponent<SupportProperty>().node = node.GetComponent<NodeProperty>().number;
+
+                    support.transform.SetParent(node.transform);
+                }
+            }
             df[index++] = node.GetComponent<NodeProperty>().dy;
             df[index++] = node.GetComponent<NodeProperty>().m;
         }
