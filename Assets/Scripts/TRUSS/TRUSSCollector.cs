@@ -26,6 +26,14 @@ public class TRUSSCollector : MonoBehaviour {
     void Update() {
 
     }
+    public void addCustom(float e, float i)
+    {
+        string savedData = PlayerPrefs.GetString("UTPROP");
+        if (PlayerPrefs.GetString("UTPROP").Split(null).Length > 10)
+            savedData = string.Join(" ", new List<string>(PlayerPrefs.GetString("UTPROP").Split(null)).GetRange(1, PlayerPrefs.GetString("UTPROP").Split(null).Length - 1).ToArray());
+        savedData += " " + e + "," + i + " ";
+        PlayerPrefs.SetString("UTPROP", savedData);
+    }
     public void helpper()
     {
         // one
@@ -46,14 +54,16 @@ public class TRUSSCollector : MonoBehaviour {
         AddNode(4, 8);
         AddNode(4, 4);
         AddNode(8, 0);
-        AddMember(0, 1, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(0, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(1, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(2, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(1, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(0, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        addCustom(200000000, 0.002f);
+        ElementStore.GenerateUT();
+        AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
         AddSupport(0, 0);
-        AddSupport(0, 3);
+        AddSupport(1, 3);
         AddPointLoad(1, 80, -120);
 
         //AddNode(10, 10);
@@ -440,18 +450,19 @@ public class TRUSSCollector : MonoBehaviour {
         support.GetComponent<TrussSupportProperty>().node = nodes[node].GetComponent<TrussNodeProperty>();
 
         // add degree of freedom to node
-        if (type == 0 || type == 1 || type == 2 || type == 3)
+        if (type == 1)
+        {
+            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
+
+        }
+        else if (type == 2)
         {
             nodes[node].GetComponent<TrussNodeProperty>().dx = 0;
-            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
-        }
-        else if (type == 4)
-        {
-            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
         }
         else
         {
             nodes[node].GetComponent<TrussNodeProperty>().dx = 0;
+            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
         }
         // add support to node
         nodes[node].GetComponent<TrussNodeProperty>().support = support.GetComponent<TrussSupportProperty>();

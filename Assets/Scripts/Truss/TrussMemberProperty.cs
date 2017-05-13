@@ -24,7 +24,7 @@ public class TrussMemberProperty : MonoBehaviour {
             return pprop.area/ 10000f;
         }else if (!aprop.Equals(default(ElementStore.AElement)))
         {
-            return prop.area;
+            return aprop.A;
         }
         return I[type];
     }
@@ -41,7 +41,7 @@ public class TrussMemberProperty : MonoBehaviour {
         }
         else if (!aprop.Equals(default(ElementStore.AElement)))
         {
-            return prop.e;
+            return aprop.E;
         }
         return E[type];
     }

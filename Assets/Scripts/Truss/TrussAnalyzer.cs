@@ -427,7 +427,7 @@ public class TrussAnalyzer : MonoBehaviour
             Debug.Log("sin2: "+sin2);
             Debug.Log("cossin: "+cos);
             Matrix2D matrix = new Matrix2D(new float[,] {
-                    {cos2,cossin,cos2,-cossin},
+                    {cos2,cossin,-cos2,-cossin},
                     {cossin,sin2,-cossin,-sin2},
                     {-cos2,-cossin,cos2,cossin},
                     {-cossin,-sin2,cossin,sin2}
@@ -543,8 +543,10 @@ public class TrussAnalyzer : MonoBehaviour
                             sArray[i, j] += matrixs[k].array[3, 3];
                     }
                 }
+        Debug.Log("5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555");
         Debug.Log(sArray.GetLength(0));
         Debug.Log(sArray.GetLength(1));
+        Debug.Log(dfi.Length);
         Debug.Log(new Matrix2D(sArray));
         Matrix2D sArrayI = Matrix2D.inverse(new Matrix2D(sArray));
         Matrix2D fnodes = getForce(nodes);
@@ -698,6 +700,8 @@ public class TrussAnalyzer : MonoBehaviour
                 il.Add(n.number*2);
             if (n.dy == 1)
                 il.Add(n.number * 2 + 1);
+            Debug.Log(n.dx+" "+n.dy);
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
         return il.ToArray();
     }
