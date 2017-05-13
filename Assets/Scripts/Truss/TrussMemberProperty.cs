@@ -10,7 +10,7 @@ public class TrussMemberProperty : MonoBehaviour {
     public ElementStore.UElement uprop;
     public ElementStore.PElement pprop;
     public ElementStore.AElement aprop;
-
+    public GameObject text;
     float[] E = { 29000, 29000, 29000 , 200000,10000 };
     float[] I = { 6, 8, 8 , .002f,6};
 
