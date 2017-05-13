@@ -26,6 +26,14 @@ public class TRUSSCollector : MonoBehaviour {
     void Update() {
 
     }
+    public void addCustom(float e, float i)
+    {
+        string savedData = PlayerPrefs.GetString("UTPROP");
+        if (PlayerPrefs.GetString("UTPROP").Split(null).Length > 10)
+            savedData = string.Join(" ", new List<string>(PlayerPrefs.GetString("UTPROP").Split(null)).GetRange(1, PlayerPrefs.GetString("UTPROP").Split(null).Length - 1).ToArray());
+        savedData += " " + e + "," + i + " ";
+        PlayerPrefs.SetString("UTPROP", savedData);
+    }
     public void helpper()
     {
         // one
@@ -46,14 +54,16 @@ public class TRUSSCollector : MonoBehaviour {
         AddNode(4, 8);
         AddNode(4, 4);
         AddNode(8, 0);
-        AddMember(0, 1, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(0, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(1, 2, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(2, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(1, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(0, 3, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddSupport(1, 0);
-        AddSupport(3, 3);
+        addCustom(200000000, 0.002f);
+        ElementStore.GenerateUT();
+        AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddSupport(0, 0);
+        AddSupport(1, 3);
         AddPointLoad(1, 80, -120);
 
         //AddNode(10, 10);
@@ -366,53 +376,53 @@ public class TRUSSCollector : MonoBehaviour {
         //    else
         //        support.transform.Rotate(new Vector3(0, 0, 90));
         //}
+        //if (type == 0)
+        //{
+        //    support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
+        //    //support.transform.Rotate(new Vector3(0, 0, -90f));
+        //    if (0 < node2y)
+        //        support.transform.Rotate(new Vector3(0, 0, 0));
+        //    else
+        //        support.transform.Rotate(new Vector3(0, 0, 180f));                
+        //}
+        //else if (type == 1)
+        //{
+        //    support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
+        //    //support.transform.Rotate(new Vector3(0, 0, -90f));
+        //    Debug.Log("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
+        //    Debug.Log(node1x + " " + node2x);
+        //    if (0 < node2x)
+        //        support.transform.Rotate(new Vector3(0, 0, -90));
+        //    else
+        //        support.transform.Rotate(new Vector3(0, 0, 90));
+
+        //}
         if (type == 0)
         {
-            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
-            //support.transform.Rotate(new Vector3(0, 0, -90f));
-            if (0 < node2y)
-                support.transform.Rotate(new Vector3(0, 0, 0));
+            if(node2x<node2y)
+            {
+                support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
+                if (0 < node2y)
+                    support.transform.Rotate(new Vector3(0, 0, 0));
+                else
+                {
+                    support.transform.Rotate(new Vector3(0, 0, 180f));
+                    support.transform.position += new Vector3(0, 0.55f * 2);
+                }
+            }
             else
-                support.transform.Rotate(new Vector3(0, 0, 180f));                
-        }
+            {
+                support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
+                if (0 < node2x)
+                    support.transform.Rotate(new Vector3(0, 0, -90));
+                else
+                {
+                    support.transform.Rotate(new Vector3(0, 0, 90));
+                    support.transform.position += new Vector3(0.6f * 2, 0);
+                }
+            }
+        }               
         else if (type == 1)
-        {
-            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(-0.0f, 0), Quaternion.identity);
-            //support.transform.Rotate(new Vector3(0, 0, -90f));
-            Debug.Log("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
-            Debug.Log(node1x + " " + node2x);
-            if (0 < node2x)
-                support.transform.Rotate(new Vector3(0, 0, -90));
-            else
-                support.transform.Rotate(new Vector3(0, 0, 90));
-
-        }
-        else if (type == 2)
-        {
-            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
-            if (0 < node2y)
-                support.transform.Rotate(new Vector3(0, 0, 0));
-            else
-            {
-                support.transform.Rotate(new Vector3(0, 0, 180f));
-                support.transform.position += new Vector3(0, 0.55f * 2);
-            }
-                
-
-        }
-        else if (type == 3)
-        {
-            support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
-            if (0 < node2x)
-                support.transform.Rotate(new Vector3(0, 0, -90));
-            else
-            {
-                support.transform.Rotate(new Vector3(0, 0, 90));
-                support.transform.position += new Vector3(0.6f * 2,0 );
-            }
-        }
-               
-        else if (type == 4)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
             if (0 < node2y)
@@ -425,6 +435,7 @@ public class TRUSSCollector : MonoBehaviour {
         }
         else
         {
+            Debug.Log(type);
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0.6f, 0), Quaternion.identity);
             if (0 < node2x)
                 support.transform.Rotate(new Vector3(0, 0, -90));
@@ -439,18 +450,19 @@ public class TRUSSCollector : MonoBehaviour {
         support.GetComponent<TrussSupportProperty>().node = nodes[node].GetComponent<TrussNodeProperty>();
 
         // add degree of freedom to node
-        if (type == 0 || type == 1 || type == 2 || type == 3)
+        if (type == 1)
+        {
+            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
+
+        }
+        else if (type == 2)
         {
             nodes[node].GetComponent<TrussNodeProperty>().dx = 0;
-            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
-        }
-        else if (type == 4)
-        {
-            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
         }
         else
         {
             nodes[node].GetComponent<TrussNodeProperty>().dx = 0;
+            nodes[node].GetComponent<TrussNodeProperty>().dy = 0;
         }
         // add support to node
         nodes[node].GetComponent<TrussNodeProperty>().support = support.GetComponent<TrussSupportProperty>();
