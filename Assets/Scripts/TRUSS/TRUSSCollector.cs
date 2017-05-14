@@ -720,7 +720,7 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadX.GetComponent<TrussPointLoadProperty>().forceG = pointLoadX;
                 selectNode.GetComponent<TrussNodeProperty>().forceX = pointLoadX.GetComponent<TrussPointLoadProperty>();
                 pointLoadX.GetComponent<TrussPointLoadProperty>().InverseForce();
-
+                
                 pointLoadX.transform.SetParent(selectNode.transform);
                 history.Add(pointLoadX);
                 forces.Add(pointLoadX);
@@ -741,7 +741,6 @@ public class TRUSSCollector : MonoBehaviour {
             else
             {
                 GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3(0, 0, 0), Quaternion.identity);
-                pointLoadY.transform.localScale = new Vector3(0.2779045f, 0.2779045f, 0.2779045f);
                 pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
                 pointLoadY.GetComponentInChildren<TextMesh>().text = Math.Round(loadY,2) + " kg.";
                 pointLoadY.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
