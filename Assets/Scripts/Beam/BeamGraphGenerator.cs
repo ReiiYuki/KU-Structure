@@ -55,7 +55,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 else
                     reactionPointLoad.GetComponent<PointLoadProperty>().ABitInverse();
                 reactionPointLoad.GetComponent<SpriteRenderer>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
-                reactionPointLoad.GetComponentInChildren<TextMesh>().text = val + " kg.";
+                reactionPointLoad.GetComponentInChildren<TextMesh>().text = Mathf.Abs(val) + " kg.";
                 reactionPointLoad.GetComponentInChildren<TextMesh>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionPointLoad.transform.SetParent(transform.GetChild(0));
                 if (val == 0)
@@ -65,7 +65,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             {
                 GameObject reactionMomentum = Instantiate(momentumPrefab, node.transform.position - new Vector3(0, 0.75f, 0f), Quaternion.identity);
                 reactionMomentum.GetComponent<MomentumProperty>().momentum = q[i+1];
-                reactionMomentum.GetComponentInChildren<TextMesh>().text = System.Math.Round(-1*q[i+1],2) + " kg.m";
+                reactionMomentum.GetComponentInChildren<TextMesh>().text = Mathf.Abs((float)System.Math.Round(-1*q[i+1],2)) + " kg.m";
                 reactionMomentum.GetComponentInChildren<TextMesh>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 reactionMomentum.GetComponentInChildren<TextMesh>().transform.position += new Vector3(0, 0.5f);
                 reactionMomentum.GetComponentInChildren<SpriteRenderer>().color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
