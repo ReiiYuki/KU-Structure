@@ -796,16 +796,29 @@ public class TRUSSCollector : MonoBehaviour {
     }
     public void toggleOuterForce()
     {
+        Debug.Log(forces.Count);
         if (visibleOuterForce)
         {
+            int i = 0;
             foreach (GameObject g in forces)
-                g.SetActive(false);
+            {
+                Debug.Log(g);
+                Debug.Log(i++);
+                if (g)
+                    g.SetActive(false);
+            }
             visibleOuterForce = false;
         }
         else
         {
+            int i = 0;
             foreach (GameObject g in forces)
-                g.SetActive(true);
+            {
+                Debug.Log(g);
+                Debug.Log(i++);
+                if (g)
+                    g.SetActive(true);
+            }
             visibleOuterForce = true;
 
         }
