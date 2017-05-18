@@ -41,37 +41,107 @@ public class TRUSSCollector : MonoBehaviour {
         //AddNode(12, 0);
         //AddNode(24, 0);
         //AddNode(12, 16);
-        //AddMember(0, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(1, 3, 0, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(2, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //AddMember(0, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(1, 3, 0, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 3, 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
         //AddSupport(1, 0);
         //AddSupport(1, 1);
         //AddSupport(1, 2);
         //AddPointLoad(3, 150, -300);
 
         // 2
-        AddNode(0, 0);
-        AddNode(4, 8);
-        AddNode(4, 4);
-        AddNode(8, 0);
+        //AddNode(0, 0);
+        //AddNode(4, 8);
+        //AddNode(4, 4);
+        //AddNode(8, 0);
+        //addCustom(200000000, 0.002f);
+        //ElementStore.GenerateUT();
+        //AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddSupport(0, 0);
+        //AddSupport(1, 3);
+        //AddPointLoad(1, 80, -120);
+        for(int i=0;i<9;i++)
+            AddNode(i*3, 0);
+        AddNode(3, 2.5f);
+        AddNode(6, 3.5f);
+        AddNode(9, 4);
+        AddNode(12, 4.2f);
+        AddNode(15, 4);
+        AddNode(18, 3.5f);
+        AddNode(21, 2.5f);
         addCustom(200000000, 0.002f);
         ElementStore.GenerateUT();
-        AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        AddMember(0, 1, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(1, 2, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(2, 3, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(3, 4, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(4, 5, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(5, 6, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(6, 7, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(7, 8, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        
+        AddMember(0, 9, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(9, 10, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(10, 11, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(11, 12, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(12, 13, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(13, 14, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(14, 15, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(15, 8, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+
+        AddMember(1, 9, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(2, 10, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(3, 11, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(4, 12, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(5, 13, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(6, 14, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(7, 15, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+
+        AddMember(9, 2, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(10, 3, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(11, 4, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(13, 4, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(14, 5, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        AddMember(15, 6, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+
         AddSupport(0, 0);
-        AddSupport(1, 3);
-        AddPointLoad(1, 80, -120);
+        AddSupport(0, 8);
+        for (int i = 9; i < 16; i++)
+            AddPointLoad(i, 0, -500);
+        //AddNode(0, 0);
+        //AddNode(5, 0);
+        //AddNode(10, 0);
+        //AddNode(15, 0);
+        //AddNode(5, 5);
+        //AddNode(10, 5);
+
+        //addCustom(200000000, 0.002f);
+        //ElementStore.GenerateUT();
+        //AddMember(0, 1, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(1, 2, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 3, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(0, 4, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(4, 5, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(3, 5, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(1, 4, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 5, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 4, ElementStore.UT_PROP.Count - 1, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+
+        //AddSupport(0, 0);
+        //AddSupport(1, 3);
+        //AddPointLoad(4, 5000, 0);
 
         //AddNode(10, 10);
         //AddNode(15, 15);
         //AddNode(5, 15);
-        //AddMember(1, 0, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(2, 1, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(2, 0, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //AddMember(1, 0, 3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 1, 3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 0, 3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
         //AddPointLoad(1, 50, -50);
         //AddSupport(5, 2);
         //AddSupport(5, 0);
@@ -81,11 +151,11 @@ public class TRUSSCollector : MonoBehaviour {
         //AddNode(19.2f, 28.8f);
         //AddNode(0, 0);
         //AddNode(19.2f, 14.4f);
-        //AddMember(0, 1,3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(0, 3,3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(2, 1,3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(2, 3,3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
-        //AddMember(1, 3,3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //AddMember(0, 1,3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(0, 3,3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 1,3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(2, 3,3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+        //AddMember(1, 3,3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
         //AddSupport(1, 2);
         //AddSupport(1, 0);
         //AddSupport(3, 3);
@@ -106,7 +176,7 @@ public class TRUSSCollector : MonoBehaviour {
         //{
         //    AddNode(i * 2, 0);
         //    AddNode(i * 2, 1);
-        //    AddMember(i*2, i*2+1, i, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //    AddMember(i*2, i*2+1, i, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
         //    AddSupport(i, i*2);
         //}
 
@@ -121,7 +191,7 @@ public class TRUSSCollector : MonoBehaviour {
         //AddNode(-5, -5);
         //AddNode(0, -5);
         //for(int i =1;i<=8;i++)
-        //    AddMember(0, i, 3, default(ElementStore.AElement), default(ElementStore.Element), default(ElementStore.PElement), default(ElementStore.UElement));
+        //    AddMember(0, i, 3, default(ElementStore.AElement), default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
         //AddPointLoad(0, 50, -50);
         //AddSupport(5, 2);
         //AddSupport(5, 5);
@@ -252,7 +322,7 @@ public class TRUSSCollector : MonoBehaviour {
         Debug.Log(node.GetComponent<TrussNodeProperty>().dx);
         Debug.Log(node.GetComponent<TrussNodeProperty>().dy);
         node.GetComponent<TrussNodeProperty>().number = nodes.Count;
-        node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
+        node.GetComponentInChildren<TextMesh>().text = (nodes.Count+1) + "";
         nodes.Add(node);
         history.Add(node);
     }
@@ -322,7 +392,7 @@ public class TRUSSCollector : MonoBehaviour {
 
         // draw a number of the member
         GameObject numberText = Instantiate(textPrefab, new Vector3((node1X + node2X) / 2f, (node1Y + node2Y) / 2f), Quaternion.identity);
-        numberText.GetComponent<TextMesh>().text = "("+members.Count + ") " + Math.Round(memberProperty.lenght(), 2) + " m.";
+        numberText.GetComponent<TextMesh>().text = "("+(members.Count+1) + ") " + Math.Round(memberProperty.lenght(), 2) + " m.";
         numberText.GetComponent<TextMesh>().color = Color.white;
         numberText.transform.SetParent(member.transform);
         numberText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
@@ -424,13 +494,13 @@ public class TRUSSCollector : MonoBehaviour {
         else if (type == 1)
         {
             support = Instantiate(supportPrefabs[type], selectedNode.transform.position - new Vector3(0, 0.55f), Quaternion.identity);
-            if (0 < node2y)
-                support.transform.Rotate(new Vector3(0, 0, 0));
-            else
-            {
-                support.transform.Rotate(new Vector3(0, 0, 180f));
-                support.transform.position += new Vector3(0, 0.55f * 2);
-            }
+            //if (0 < node2y)
+            //    support.transform.Rotate(new Vector3(0, 0, 0));
+            //else
+            //{
+            //    support.transform.Rotate(new Vector3(0, 0, 180f));
+            //    support.transform.position += new Vector3(0, 0.55f * 2);
+            //}
         }
         else
         {
@@ -522,14 +592,38 @@ public class TRUSSCollector : MonoBehaviour {
         float node1Y = nodes[m.node1.number].transform.position.y;
         float node2X = nodes[m.node2.number].transform.position.x;
         float node2Y = nodes[m.node2.number].transform.position.y;
+        float slope = (node1Y - node2Y) / (node1X - node2X);
+        float b = node2Y - node2X * slope;
+        float invSlope = -1 / slope;
+        float invB = (node2Y + node1Y) / 2 - (node2X + node1X) / 2 * invSlope;
+        float newX = ((node1Y + node2Y) / 2f + .5f - invB) / invSlope;
+        float newY = ((node1X + node2X) / 2f + .5f) * invSlope + invB;
         GameObject numberText = Instantiate(textPrefab, new Vector3((node1X + node2X) / 2f, (node1Y + node2Y) / 2f), Quaternion.identity);
         numberText.GetComponent<TextMesh>().text = Math.Round(q, 2)+" Kg.";
         numberText.GetComponent<TextMesh>().color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
-        numberText.transform.SetParent(mm.transform);
-        if (invert)
-           numberText.GetComponent<TextMesh>().text =" "+ Math.Round(q, 2) + " Kg.";
+        numberText.transform.rotation = m.text.transform.rotation;
+        if (slope == 0)
+            numberText.transform.position += new Vector3(0, .55f);
+        else if (float.IsInfinity(slope) || float.IsNegativeInfinity(slope))
+            numberText.transform.position += new Vector3(.55f, 0);
+        else if (slope>0)
+            numberText.transform.position += new Vector3(-.5f, .5f);
         else
-           numberText.GetComponent<TextMesh>().text ="+ "+ Math.Round(q, 2) + " Kg.";
+            numberText.transform.position = new Vector3(newX,newY);
+        Debug.Log(")O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)");
+        Debug.Log(numberText.transform.position.x+" "+ numberText.transform.position.y);
+        Debug.Log(newX+" "+newY+" "+ numberText.GetComponent<TextMesh>().text);
+        numberText.transform.SetParent(mm.transform);
+        String s = "";
+        if (invert)
+            s = " " + Math.Round(q, 2) + " Kg.";
+        else
+           s = "+ " + Math.Round(q, 2) + " Kg.";
+        //m.text.GetComponent<TextMesh>().text +=s;
+        //if (invert)
+        //   numberText.GetComponent<TextMesh>().text =" "+ Math.Round(q, 2) + " Kg.";
+        //else
+        //   numberText.GetComponent<TextMesh>().text ="+ "+ Math.Round(q, 2) + " Kg.";
         //float slope = (m.node1.y - m.node2.y) / (m.node1.x - m.node2.x);
 
 
@@ -691,9 +785,35 @@ public class TRUSSCollector : MonoBehaviour {
         GameObject selectNode = nodes[node];
         Camera.main.transform.position = new Vector3(selectNode.transform.position.x, selectNode.transform.position.y, Camera.main.transform.position.z);
 
+        GameObject selectedNode = nodes[node];
+        GameObject support;
+        float node1x = nodes[node].GetComponent<TrussNodeProperty>().x;
+        float node2x = 0;
+        float node1y = nodes[node].GetComponent<TrussNodeProperty>().y;
+        float node2y = 0;
+        if (nodes[node].GetComponent<TrussNodeProperty>().members.Count > 0)
+        {
+            foreach (TrussMemberProperty member in nodes[node].GetComponent<TrussNodeProperty>().members)
+                if (member.node1.Equals(nodes[node].GetComponent<TrussNodeProperty>()))
+                {
+                    //if (Math.Abs(node1x - node2x) < Math.Abs(node1y - node2y))
+                    //{
+                    node2x += member.node2.x - node1x;
+                    node2y += member.node2.y - node1y;
+                    //}
+                }
+                else
+                {
+                    node2x += member.node1.x - node1x;
+                    node2y += member.node1.y - node1y;
+                }
+            Debug.Log(node1x + " " + node1y + " " + node2x + " " + node2y);
+        }
+
         // add load X
         if (loadX != 0 && selectNode.GetComponent<TrussNodeProperty>().pointLoadX == null)
         {
+
             if (selectNode.GetComponent<TrussNodeProperty>().forceX != null)
             {
                 selectNode.GetComponent<TrussNodeProperty>().forceX.load += loadX;
@@ -703,7 +823,19 @@ public class TRUSSCollector : MonoBehaviour {
             }
             else
             {
-                GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3(0, 0, 0), Quaternion.identity);
+                GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3(nodes[node].transform.position.x, nodes[node].transform.position.y, -1), Quaternion.identity);
+                if (node1x < node2x)
+                {
+                    pointLoadX.transform.position += new Vector3(-2.25f, 0);
+                    Debug.Log("INININININININININININININININXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                }
+                    
+                else
+                {
+                    pointLoadX.transform.position += new Vector3(2.25f, 0);
+                    Debug.Log("OUTOUTOUTOUTOTUUTXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                }
+                   
                 //Material newMaterial = new Material(Shader.Find("Specular"));
                 //newMaterial.color = new Color(255, 182, 0, 1);
                 //pointLoadX.GetComponent<MeshRenderer>().material = newMaterial;
@@ -719,9 +851,8 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadX.GetComponent<TrussPointLoadProperty>().nodeG = nodes[node];
                 pointLoadX.GetComponent<TrussPointLoadProperty>().forceG = pointLoadX;
                 selectNode.GetComponent<TrussNodeProperty>().forceX = pointLoadX.GetComponent<TrussPointLoadProperty>();
-                pointLoadX.GetComponent<TrussPointLoadProperty>().InverseForce();
-                
                 pointLoadX.transform.SetParent(selectNode.transform);
+                pointLoadX.GetComponent<TrussPointLoadProperty>().InverseForce();
                 history.Add(pointLoadX);
                 forces.Add(pointLoadX);
             }
@@ -740,7 +871,17 @@ public class TRUSSCollector : MonoBehaviour {
             }
             else
             {
-                GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3(0, 0, 0), Quaternion.identity);
+                GameObject pointLoadY = Instantiate(pointLoadPrefabY, new Vector3(nodes[node].transform.position.x, nodes[node].transform.position.y, -1), Quaternion.identity);
+                if(node1y<node2y)
+                {
+                    pointLoadY.transform.position += new Vector3(0, -1.75f);
+                    Debug.Log("INININININININNINININYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+                }
+                else
+                {
+                    pointLoadY.transform.position += new Vector3(0, 1.75f);
+                    Debug.Log("OUTOUTOUTOUTOUTOUTOTOTOOTOTYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+                }
                 pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
                 pointLoadY.GetComponentInChildren<TextMesh>().text = Mathf.Abs((float)Math.Round(loadY,2)) + " kg.";
                 pointLoadY.GetComponentInChildren<TextMesh>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);
@@ -752,9 +893,10 @@ public class TRUSSCollector : MonoBehaviour {
                 pointLoadY.GetComponent<TrussPointLoadProperty>().forceG = pointLoadY;
                 selectNode.GetComponent<TrussNodeProperty>().forceY = pointLoadY.GetComponent<TrussPointLoadProperty>();
 
-                pointLoadY.GetComponent<TrussPointLoadProperty>().InverseForce();
+
 
                 pointLoadY.transform.SetParent(selectNode.transform);
+                pointLoadY.GetComponent<TrussPointLoadProperty>().InverseForce();
                 history.Add(pointLoadY);
                 forces.Add(pointLoadY);
             }
@@ -870,25 +1012,29 @@ public class TRUSSCollector : MonoBehaviour {
             {
                 if(ratio == 'l')
                 {
-                    g.GetComponent<LineRenderer>().startColor= new Color(205 / 255f, 220 / 255f, 57 / 255f);
-                    g.GetComponent<LineRenderer>().endColor = new Color(205 / 255f, 220 / 255f, 57 / 255f);
+                    g.GetComponent<LineRenderer>().startColor = new Color(124 / 255f, 179 / 255f, 66 / 255f);
+                    g.GetComponent<LineRenderer>().endColor = new Color(124 / 255f, 179 / 255f, 66 / 255f);
                 }
                 else if (ratio == 'm')
                 {
-                    g.GetComponent<LineRenderer>().startColor = new Color(76 / 255f, 176 / 255f, 80 / 255f);
-                    g.GetComponent<LineRenderer>().endColor = new Color(76 / 255f, 176 / 255f, 80 / 255f);
+                    g.GetComponent<LineRenderer>().startColor = new Color(192 / 255f, 202 / 255f, 91 / 255f);
+                    g.GetComponent<LineRenderer>().endColor = new Color(192 / 255f, 202 / 255f, 91 / 255f);
                 }
                 else if (ratio == 'h')
                 {
-                    g.GetComponent<LineRenderer>().startColor = new Color(255 / 255f, 193 / 255f, 7 / 255f);
-                    g.GetComponent<LineRenderer>().endColor = new Color(255 / 255f, 193 / 255f, 7 / 255f);
+                    g.GetComponent<LineRenderer>().startColor = new Color(244 / 255f, 81 / 255f, 30 / 255f);
+                    g.GetComponent<LineRenderer>().endColor = new Color(244 / 255f, 81 / 255f, 30 / 255f);
                 }
                 else if (ratio == 'c')
                 {
                     g.GetComponent<LineRenderer>().startColor = GetColor(m.number);
                     g.GetComponent<LineRenderer>().endColor = GetColor(m.number);
                 }
-                if(newMember)
+                else if (ratio == 'n')
+                {
+
+                }
+                if (newMember)
                     memberColors.Add(ratio); 
             }
         }

@@ -53,7 +53,7 @@ public class BeamCollector : Collector {
         lengthText.transform.SetParent(member.transform);
 
         GameObject numberText = Instantiate(textPrefab, new Vector3(currentPoint + span / 2f, 0,-1f), Quaternion.identity);
-        numberText.GetComponent<TextMesh>().text = members.Count + "";
+        numberText.GetComponent<TextMesh>().text = (members.Count+1) + "";
         numberText.GetComponent<TextMesh>().color = Color.white;
         numberText.transform.SetParent(member.transform);
 
@@ -208,7 +208,7 @@ public class BeamCollector : Collector {
     {
         GameObject node = Instantiate(nodePrefab, new Vector3(position, 0.75f), Quaternion.identity);
         node.GetComponent<NodeProperty>().number = nodes.Count;
-        node.GetComponentInChildren<TextMesh>().text = nodes.Count + "";
+        node.GetComponentInChildren<TextMesh>().text = (nodes.Count+1) + "";
         node.transform.SetParent(parent);
         nodes.Add(node);
     }

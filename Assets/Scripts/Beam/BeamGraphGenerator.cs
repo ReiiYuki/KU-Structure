@@ -505,8 +505,8 @@ public class BeamGraphGenerator : MonoBehaviour {
             TextMesh ratioText = Instantiate(textPrefab, line.transform).GetComponent<TextMesh>();
             ratioText.transform.position = new Vector3(l + property.length / 2, offset - 2);
             ratioText.text = System.Math.Round(ratio[i],2) + "";
-
-            if (ratio[i] > 1 || ratio[i] < 0) {
+            ratioText.transform.SetParent(transform.GetChild(3));
+            if (ratio[i] > 1) {
                 line.startColor = new Color(244/255f, 81/255f, 30/255f);
                 line.endColor = new Color(244 / 255f, 81 / 255f, 30 / 255f);
                 ratioText.color = new Color(244 / 255f, 81 / 255f, 30 / 255f);
@@ -517,7 +517,7 @@ public class BeamGraphGenerator : MonoBehaviour {
                 line.endColor = new Color(192 / 255f, 202 / 255f, 51 / 255f);
                 ratioText.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
             }
-            else
+            else if (ratio[i]>0)
             {
                 line.startColor = new Color(124/255f, 179/255f, 66/255f);
                 line.endColor = new Color(124 / 255f, 179 / 255f, 66 / 255f);
