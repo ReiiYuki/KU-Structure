@@ -19,7 +19,7 @@ public class TrussMemberProperty : MonoBehaviour {
         if (!prop.Equals(default(ElementStore.Element)))
         {
             return prop.area;
-        }else if (!pprop.Equals(default(ElementStore.PElement)))
+        }else if (!pprop.Equals(ElementStore.PIPE[0]))
         {
             return pprop.area/ 10000f;
         }else if (!aprop.Equals(default(ElementStore.AElement)))
@@ -35,7 +35,7 @@ public class TrussMemberProperty : MonoBehaviour {
         {
             return prop.e;
         }
-        else if (!pprop.Equals(default(ElementStore.PElement)))
+        else if (!pprop.Equals(ElementStore.PIPE[0]))
         {
             return 2.07f*Mathf.Pow(10,10);
         }
@@ -51,7 +51,7 @@ public class TrussMemberProperty : MonoBehaviour {
         {
             return prop.fy;
         }
-        else if (!pprop.Equals(default(ElementStore.PElement)))
+        else if (!pprop.Equals(ElementStore.PIPE[0]))
         {
             return pprop.fy;
         }
@@ -63,7 +63,7 @@ public class TrussMemberProperty : MonoBehaviour {
         {
             return prop.r;
         }
-        else if (!pprop.Equals(default(ElementStore.PElement)))
+        else if (!pprop.Equals(ElementStore.PIPE[0]))
         {
             return pprop.r;
         }
@@ -71,7 +71,7 @@ public class TrussMemberProperty : MonoBehaviour {
     }
     public bool CanDesignCheck()
     {
-        return !prop.Equals(default(ElementStore.Element)) || !pprop.Equals(default(ElementStore.PElement));
+        return !prop.Equals(default(ElementStore.Element)) || !pprop.Equals(ElementStore.PIPE[0]);
     }
     public float lenght()
     {

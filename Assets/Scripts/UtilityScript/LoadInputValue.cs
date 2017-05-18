@@ -11,7 +11,14 @@ public class LoadInputValue : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         if (list.Length == 0) GetComponent<Text>().text = "None";
-        else GetComponent<Text>().text = list[index];
+        else
+        {
+            int num;
+            string show = list[index];
+            if (int.TryParse(show,out num))
+                show = (num + 1)+"";
+            GetComponent<Text>().text = show;
+        }
 	}
 	
 	// Update is called once per frame
@@ -33,7 +40,11 @@ public class LoadInputValue : MonoBehaviour {
                 if (index - 1 < 0) index = list.Length - 1;
                 else index--;
             }
-            GetComponent<Text>().text = list[index];
+            int num;
+            string show = list[index];
+            if (int.TryParse(show,out num))
+                show = (num + 1) + "";
+            GetComponent<Text>().text = show;
         }
     }
 
@@ -42,6 +53,13 @@ public class LoadInputValue : MonoBehaviour {
         list = data;
         index = 0;
         if (list.Length == 0) GetComponent<Text>().text = "None";
-        else GetComponent<Text>().text = list[index];
+        else
+        {
+            int num;
+            string show = list[index];
+            if (int.TryParse(show,out num))
+                show = (num + 1) + "";
+            GetComponent<Text>().text = show;
+        }
     }
 }
