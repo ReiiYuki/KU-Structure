@@ -718,6 +718,8 @@ public class TrussAnalyzer : MonoBehaviour
             return 'l';
         if (stressRatio >= 0.5 && stressRatio <= 1)
             return 'm';
+        if (stressRatio < 0)
+            return 'n';
         return 'h';
     }
     private char compression(float length,float E,float Fy,float r,float A,float C)
@@ -732,6 +734,8 @@ public class TrussAnalyzer : MonoBehaviour
             return 'l';
         if (stressRatio >= 0.5 && stressRatio <= 1)
             return 'm';
+        if (stressRatio < 0)
+            return 'n';
         return 'h';
     }
 }
