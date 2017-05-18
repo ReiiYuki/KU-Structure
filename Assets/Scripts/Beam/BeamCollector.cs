@@ -123,7 +123,7 @@ public class BeamCollector : Collector {
         }
         GameObject pointLoad = Instantiate(pointLoadPrefab, selectNode.transform.position + new Vector3(0, 1), Quaternion.identity);
 
-        pointLoad.GetComponentInChildren<TextMesh>().text = System.Math.Round(load,2) + " kg.";
+        pointLoad.GetComponentInChildren<TextMesh>().text = Mathf.Abs((float)System.Math.Round(load,2)) + " kg.";
         pointLoad.GetComponent<PointLoadProperty>().load = load;
         pointLoad.GetComponent<PointLoadProperty>().node = node;
         selectNode.GetComponent<NodeProperty>().pointLoad = pointLoad.GetComponent<PointLoadProperty>();
@@ -156,7 +156,7 @@ public class BeamCollector : Collector {
 
         uniformLoad.GetComponent<UniformLoadProperty>().load = load;
         uniformLoad.GetComponent<UniformLoadProperty>().element = element;
-        uniformLoad.GetComponentInChildren<TextMesh>().text = System.Math.Round(load,2) + " kg/m.";
+        uniformLoad.GetComponentInChildren<TextMesh>().text = Mathf.Abs((float)System.Math.Round(load,2)) + " kg/m.";
         selectedElement.GetComponent<MemberProperty>().uniformLoad = uniformLoad.GetComponent< UniformLoadProperty>();
 
         uniformLoad.GetComponent<UniformLoadProperty>().Inverse();
@@ -185,7 +185,7 @@ public class BeamCollector : Collector {
         }
         GameObject momentumObj = Instantiate(momentumPrefab, selectNode.transform.position-new Vector3(0,0.75f,0f), Quaternion.identity);
 
-        momentumObj.GetComponentInChildren<TextMesh>().text = System.Math.Round(momentum,2) + " kg.m";
+        momentumObj.GetComponentInChildren<TextMesh>().text = Mathf.Abs((float)System.Math.Round(momentum,2)) + " kg.m";
         momentumObj.GetComponent<MomentumProperty>().node = node;
         momentumObj.GetComponent<MomentumProperty>().momentum = momentum;
         momentumObj.GetComponent<MomentumProperty>().UpdateDirection();
