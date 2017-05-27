@@ -401,11 +401,19 @@ public class TrussAnalyzer : MonoBehaviour
         foreach (GameObject g in collector.members)
             members.Add(g.GetComponent<TrussMemberProperty>());
 
-
+		string ss = "";
         List<TrussNodeProperty> nodes = new List<TrussNodeProperty>();
-        foreach (GameObject g in collector.nodes)
-            nodes.Add(g.GetComponent<TrussNodeProperty>());
-
+		foreach (GameObject g in collector.nodes) {
+			nodes.Add(g.GetComponent<TrussNodeProperty>());
+			ss += g.GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (ss);
+		Debug.Log ("STARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTART");
+		string s = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			s += ", " + collector.nodes[i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (s);
         float[][] array = new float[members.Count][];
         Matrix2D[] matrixs = new Matrix2D[members.Count];
         Matrix2D[] T = new Matrix2D[members.Count];
@@ -618,14 +626,14 @@ public class TrussAnalyzer : MonoBehaviour
         {
             if(Q[i].array[0, 0]< 0)
             {
-                //collector.AddQ(members[i], members[i].node1.number, Q[i].array[2, 0],true);
+                collector.AddQ(members[i], members[i].node1.number, Q[i].array[2, 0],true);
                 //collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],true);
                 if(members[i].CanDesignCheck())
                     collector.streeRatio(members[i], tension(Q[i].array[0, 0], members[i].GetI(), members[i].GetFy()),true);
             }
             else
             {
-                //collector.AddQ(members[i], members[i].node1.number, Q[i].array[2, 0],false);
+                collector.AddQ(members[i], members[i].node1.number, Q[i].array[2, 0],false);
                 //collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],false);
                 if(members[i].CanDesignCheck())
                     collector.streeRatio(members[i],compression(members[i].lenght(), members[i].GetE(), members[i].GetFy(), members[i].GetR(), members[i].GetI(), Q[i].array[0, 0]),true);
@@ -635,6 +643,12 @@ public class TrussAnalyzer : MonoBehaviour
             collector.AddForce(members[i].node2.number, F[i].array[2, 0], F[i].array[3, 0]);
         }
         togglePanel.SetActive(true);
+		Debug.Log ("ENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDEND");
+		 s = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			s += ", " + collector.nodes[i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (s);
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)

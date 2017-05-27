@@ -50,21 +50,22 @@ public class TRUSSCollector : MonoBehaviour {
         //AddPointLoad(3, 150, -300);
 
         // 2
-        //AddNode(0, 0);
-        //AddNode(4, 8);
-        //AddNode(4, 4);
-        //AddNode(8, 0);
-        //addCustom(200000000, 0.002f);
-        //ElementStore.GenerateUT();
-        //AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddSupport(0, 0);
-        //AddSupport(1, 3);
-        //AddPointLoad(1, 80, -120);
+		AddNode(0, 0);
+		AddNode(4, 8);
+		AddNode(4, 4);
+		AddNode(8, 0);
+		addCustom(200000000, 0.002f);
+		ElementStore.GenerateUT();
+		AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddSupport(0, 0);
+		AddSupport(1, 3);
+		AddPointLoad(1, 80, -120); 	
+		/*
         for(int i=0;i<9;i++)
             AddNode(i*3, 0);
         AddNode(3, 2.5f);
@@ -113,6 +114,7 @@ public class TRUSSCollector : MonoBehaviour {
         AddSupport(0, 8);
         for (int i = 9; i < 16; i++)
             AddPointLoad(i, 0, -500);
+		*/
         //AddNode(0, 0);
         //AddNode(5, 0);
         //AddNode(10, 0);
@@ -360,6 +362,14 @@ public class TRUSSCollector : MonoBehaviour {
         nodes[node1].GetComponent<TrussNodeProperty>().members.Add(memberProperty);
         nodes[node2].GetComponent<TrussNodeProperty>().members.Add(memberProperty);
 
+		Debug.Log ("OKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOK");
+		string ss = "";
+		foreach (GameObject g in nodes) {
+			ss += g.GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (ss);
+		Debug.Log (nodes[node1].GetComponent<TrussNodeProperty>().members.Count);	
+		Debug.Log (nodes[node2].GetComponent<TrussNodeProperty>().members.Count);	
         // draw the length of the member
         float slope = (node1Y - node2Y) / (node1X - node2X);
         float b = node2Y - node2X * slope;
@@ -398,9 +408,11 @@ public class TRUSSCollector : MonoBehaviour {
         numberText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
         memberProperty.text = numberText;
 
-        member.transform.SetParent(transform);
+    //    member.transform.SetParent(transform);
         members.Add(member);
         history.Add(member);
+
+
     }
 
     public void AddSupport(int type, int node)
@@ -538,7 +550,14 @@ public class TRUSSCollector : MonoBehaviour {
 
         support.transform.SetParent(selectedNode.transform);
         history.Add(support);
-    }
+		Debug.Log ("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
+		string sa = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			sa += ", " + nodes [i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (sa);
+
+	}
 
     public void AddPointLoad(int node, float loadX, float loadY)
     {
@@ -617,6 +636,12 @@ public class TRUSSCollector : MonoBehaviour {
 			numberText.transform.SetParent(mm.transform);
 			String s = "";
 		}
+		Debug.Log ("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+		string sa = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			sa += ", " + nodes [i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (sa);
         //m.text.GetComponent<TextMesh>().text +=s;
         //if (invert)
         //   numberText.GetComponent<TextMesh>().text =" "+ Math.Round(q, 2) + " Kg.";
@@ -789,10 +814,14 @@ public class TRUSSCollector : MonoBehaviour {
         float node2x = 0;
         float node1y = nodes[node].GetComponent<TrussNodeProperty>().y;
         float node2y = 0;
-		Debug.Log ("_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+"+nodes[node].GetComponent<TrussNodeProperty>().members.Count);
-        if (nodes[node].GetComponent<TrussNodeProperty>().members.Count > 0)
+		Debug.Log ("POPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPO");
+		string s = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			s += ", " + nodes [i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (s);
+		if (nodes[node].GetComponent<TrussNodeProperty>().members.Count > 0)
         {
-			Debug.Log ("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             foreach (TrussMemberProperty member in nodes[node].GetComponent<TrussNodeProperty>().members)
                 if (member.node1.Equals(nodes[node].GetComponent<TrussNodeProperty>()))
                 {
@@ -801,13 +830,12 @@ public class TRUSSCollector : MonoBehaviour {
                     node2x += member.node2.x - node1x;
                     node2y += member.node2.y - node1y;
                     //}
-					Debug.Log("nd1x: "+node1x+" nd2x:"+node2x);
+					Debug.Log("");
                 }
                 else
                 {
                     node2x += member.node1.x - node1x;
                     node2y += member.node1.y - node1y;
-					Debug.Log("nd1x: "+node1x+" nd2x:"+node2x);
                 }
             Debug.Log(node1x + " " + node1y + " " + node2x + " " + node2y);
         }
