@@ -5,7 +5,7 @@ using UnityEngine;
 public class BeamAnalyzer : MonoBehaviour {
 
     BeamCollector collector;
-
+    public GameObject analyzePanel;
     float[] df,pi,q;
     List<IndexMatrix> k;
     IndexMatrix s;
@@ -41,6 +41,7 @@ public class BeamAnalyzer : MonoBehaviour {
 
     public void Analyze()
     {
+        analyzePanel.SetActive(true);
         GenerateDegreeOfFreedom();
         GenerateAllK();
         GenerateS();
