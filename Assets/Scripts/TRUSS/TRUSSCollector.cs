@@ -50,21 +50,22 @@ public class TRUSSCollector : MonoBehaviour {
         //AddPointLoad(3, 150, -300);
 
         // 2
-        //AddNode(0, 0);
-        //AddNode(4, 8);
-        //AddNode(4, 4);
-        //AddNode(8, 0);
-        //addCustom(200000000, 0.002f);
-        //ElementStore.GenerateUT();
-        //AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
-        //AddSupport(0, 0);
-        //AddSupport(1, 3);
-        //AddPointLoad(1, 80, -120);
+		AddNode(0, 0);
+		AddNode(4, 8);
+		AddNode(4, 4);
+		AddNode(8, 0);
+		addCustom(200000000, 0.002f);
+		ElementStore.GenerateUT();
+		AddMember(0, 1, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(0, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(1, 2, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(2, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(1, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddMember(0, 3, ElementStore.UT_PROP.Count - 1, ElementStore.UT_PROP[ElementStore.UT_PROP.Count - 1], default(ElementStore.Element), ElementStore.PIPE[0], default(ElementStore.UElement));
+		AddSupport(0, 0);
+		AddSupport(1, 3);
+		AddPointLoad(1, 80, -120); 	
+		/*
         for(int i=0;i<9;i++)
             AddNode(i*3, 0);
         AddNode(3, 2.5f);
@@ -113,6 +114,7 @@ public class TRUSSCollector : MonoBehaviour {
         AddSupport(0, 8);
         for (int i = 9; i < 16; i++)
             AddPointLoad(i, 0, -500);
+		*/
         //AddNode(0, 0);
         //AddNode(5, 0);
         //AddNode(10, 0);
@@ -360,6 +362,14 @@ public class TRUSSCollector : MonoBehaviour {
         nodes[node1].GetComponent<TrussNodeProperty>().members.Add(memberProperty);
         nodes[node2].GetComponent<TrussNodeProperty>().members.Add(memberProperty);
 
+		Debug.Log ("OKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOK");
+		string ss = "";
+		foreach (GameObject g in nodes) {
+			ss += g.GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (ss);
+		Debug.Log (nodes[node1].GetComponent<TrussNodeProperty>().members.Count);	
+		Debug.Log (nodes[node2].GetComponent<TrussNodeProperty>().members.Count);	
         // draw the length of the member
         float slope = (node1Y - node2Y) / (node1X - node2X);
         float b = node2Y - node2X * slope;
@@ -398,9 +408,11 @@ public class TRUSSCollector : MonoBehaviour {
         numberText.GetComponent<TextMesh>().transform.Rotate(new Vector3(-180, -180, result));
         memberProperty.text = numberText;
 
-        member.transform.SetParent(transform);
+    //    member.transform.SetParent(transform);
         members.Add(member);
         history.Add(member);
+
+
     }
 
     public void AddSupport(int type, int node)
@@ -538,7 +550,14 @@ public class TRUSSCollector : MonoBehaviour {
 
         support.transform.SetParent(selectedNode.transform);
         history.Add(support);
-    }
+		Debug.Log ("SUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORTSUPPORT");
+		string sa = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			sa += ", " + nodes [i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (sa);
+
+	}
 
     public void AddPointLoad(int node, float loadX, float loadY)
     {
@@ -598,27 +617,31 @@ public class TRUSSCollector : MonoBehaviour {
         float invB = (node2Y + node1Y) / 2 - (node2X + node1X) / 2 * invSlope;
         float newX = ((node1Y + node2Y) / 2f + .5f - invB) / invSlope;
         float newY = ((node1X + node2X) / 2f + .5f) * invSlope + invB;
-        GameObject numberText = Instantiate(textPrefab, new Vector3((node1X + node2X) / 2f, (node1Y + node2Y) / 2f), Quaternion.identity);
-        numberText.GetComponent<TextMesh>().text = Math.Round(q, 2)+" Kg.";
-        numberText.GetComponent<TextMesh>().color = new Color(33 / 255f, 150 / 255f, 243 / 255f);
-        numberText.transform.rotation = m.text.transform.rotation;
-        if (slope == 0)
-            numberText.transform.position += new Vector3(0, .55f);
-        else if (float.IsInfinity(slope) || float.IsNegativeInfinity(slope))
-            numberText.transform.position += new Vector3(.55f, 0);
-        else if (slope>0)
-            numberText.transform.position += new Vector3(-.5f, .5f);
-        else
-            numberText.transform.position = new Vector3(newX,newY);
-        Debug.Log(")O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)");
-        Debug.Log(numberText.transform.position.x+" "+ numberText.transform.position.y);
-        Debug.Log(newX+" "+newY+" "+ numberText.GetComponent<TextMesh>().text);
-        numberText.transform.SetParent(mm.transform);
-        String s = "";
-        if (invert)
-            s = " " + Math.Round(q, 2) + " Kg.";
-        else
-           s = "+ " + Math.Round(q, 2) + " Kg.";
+		if (Math.Round (q, 2) != 0) {
+			GameObject numberText = Instantiate (textPrefab, new Vector3 ((node1X + node2X) / 2f, (node1Y + node2Y) / 2f), Quaternion.identity);
+			numberText.GetComponent<TextMesh> ().text = Math.Round (q, 2) + " Kg.";
+			numberText.GetComponent<TextMesh> ().color = new Color (33 / 255f, 150 / 255f, 243 / 255f);
+			numberText.transform.rotation = m.text.transform.rotation;
+			if (slope == 0)
+				numberText.transform.position += new Vector3 (0, .55f);
+			else if (float.IsInfinity (slope) || float.IsNegativeInfinity (slope))
+				numberText.transform.position += new Vector3 (.55f, 0);
+			else if (slope > 0)
+				numberText.transform.position += new Vector3 (-.5f, .5f);
+			else
+				numberText.transform.position += new Vector3 (0.5f, 0.5f);
+			Debug.Log(")O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)");
+			Debug.Log(numberText.transform.position.x+" "+ numberText.transform.position.y);
+			Debug.Log(newX+" "+newY+" "+ numberText.GetComponent<TextMesh>().text);
+			numberText.transform.SetParent(mm.transform);
+			String s = "";
+		}
+		Debug.Log ("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+		string sa = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			sa += ", " + nodes [i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (sa);
         //m.text.GetComponent<TextMesh>().text +=s;
         //if (invert)
         //   numberText.GetComponent<TextMesh>().text =" "+ Math.Round(q, 2) + " Kg.";
@@ -791,7 +814,13 @@ public class TRUSSCollector : MonoBehaviour {
         float node2x = 0;
         float node1y = nodes[node].GetComponent<TrussNodeProperty>().y;
         float node2y = 0;
-        if (nodes[node].GetComponent<TrussNodeProperty>().members.Count > 0)
+		Debug.Log ("POPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPOPO");
+		string s = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			s += ", " + nodes [i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (s);
+		if (nodes[node].GetComponent<TrussNodeProperty>().members.Count > 0)
         {
             foreach (TrussMemberProperty member in nodes[node].GetComponent<TrussNodeProperty>().members)
                 if (member.node1.Equals(nodes[node].GetComponent<TrussNodeProperty>()))
@@ -801,6 +830,7 @@ public class TRUSSCollector : MonoBehaviour {
                     node2x += member.node2.x - node1x;
                     node2y += member.node2.y - node1y;
                     //}
+					Debug.Log("");
                 }
                 else
                 {
@@ -824,15 +854,17 @@ public class TRUSSCollector : MonoBehaviour {
             else
             {
                 GameObject pointLoadX = Instantiate(pointLoadPrefabX, new Vector3(nodes[node].transform.position.x, nodes[node].transform.position.y, -1), Quaternion.identity);
-                if (node1x < node2x)
+				Debug.Log ("node1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1xnode1x");
+				Debug.Log(node1x+" "+node2x);
+				if (node1x < node2x)
                 {
-                    pointLoadX.transform.position += new Vector3(-2.25f, 0);
+                    pointLoadX.transform.position += new Vector3(-1.75f, 0);
                     Debug.Log("INININININININININININININININXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                 }
                     
                 else
                 {
-                    pointLoadX.transform.position += new Vector3(2.25f, 0);
+                    pointLoadX.transform.position += new Vector3(1.75f, 0);
                     Debug.Log("OUTOUTOUTOUTOTUUTXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                 }
                    
@@ -879,7 +911,7 @@ public class TRUSSCollector : MonoBehaviour {
                 }
                 else
                 {
-                    pointLoadY.transform.position += new Vector3(0, 1.75f);
+                    pointLoadY.transform.position += new Vector3(0, -1.75f);
                     Debug.Log("OUTOUTOUTOUTOUTOUTOTOTOOTOTYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
                 }
                 pointLoadY.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 87 / 255f, 34 / 255f);

@@ -37,7 +37,7 @@ public class TrussPointLoadProperty : MonoBehaviour {
         {
             
             transform.localScale = new Vector3(0.2779045f, -0.2779045f, 0.2779045f);
-            transform.GetChild(0).localScale = new Vector3(1, -1,1);
+            transform.GetChild(0).localScale = new Vector3(1, -1,-1);
             //transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x, nodeG.GetComponent<TrussNodeProperty>().y - 1.75f,-1);
             Debug.Log("+y: "+load);
         }
@@ -45,7 +45,7 @@ public class TrussPointLoadProperty : MonoBehaviour {
         {
             transform.localScale = new Vector3(0.2779045f, 0.2779045f, 0.2779045f);
             transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-            transform.GetChild(0).transform.position = new Vector3(0,-1);
+            transform.GetChild(0).transform.position = new Vector3(0,-1,-1);
             //transform.position = new Vector3(nodeG.GetComponent<TrussNodeProperty>().x, nodeG.GetComponent<TrussNodeProperty>().y - 1.75f,-1);
             Debug.Log("-y: " + load);
         }

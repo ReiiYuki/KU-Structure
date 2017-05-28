@@ -3,12 +3,13 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 using System.Linq;
 
 public class TrussAnalyzer : MonoBehaviour
 {
     TRUSSCollector collector;
-    public GameObject togglePanel;
+    public GameObject togglePanel,analyzePanel,table,trussContent;
     // Use this for initialization
     void Start()
     {
@@ -395,17 +396,26 @@ public class TrussAnalyzer : MonoBehaviour
 
     public void analyze()
     {
+        analyzePanel.SetActive(true);
         togglePanel.SetActive(false);
         // init members
         List<TrussMemberProperty> members = new List<TrussMemberProperty>();
         foreach (GameObject g in collector.members)
             members.Add(g.GetComponent<TrussMemberProperty>());
 
-
+		string ss = "";
         List<TrussNodeProperty> nodes = new List<TrussNodeProperty>();
-        foreach (GameObject g in collector.nodes)
-            nodes.Add(g.GetComponent<TrussNodeProperty>());
-
+		foreach (GameObject g in collector.nodes) {
+			nodes.Add(g.GetComponent<TrussNodeProperty>());
+			ss += g.GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (ss);
+		Debug.Log ("STARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTARTSTART");
+		string s = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			s += ", " + collector.nodes[i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (s);
         float[][] array = new float[members.Count][];
         Matrix2D[] matrixs = new Matrix2D[members.Count];
         Matrix2D[] T = new Matrix2D[members.Count];
@@ -621,20 +631,42 @@ public class TrussAnalyzer : MonoBehaviour
                 collector.AddQ(members[i], members[i].node1.number, Q[i].array[2, 0],true);
                 //collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],true);
                 if(members[i].CanDesignCheck())
-                    collector.streeRatio(members[i], tension(Q[i].array[0, 0], members[i].GetI(), members[i].GetFy()),true);
+                    collector.streeRatio(members[i], tension(members[i],Q[i].array[0, 0], members[i].GetI(), members[i].GetFy()),true);
             }
             else
             {
                 collector.AddQ(members[i], members[i].node1.number, Q[i].array[2, 0],false);
                 //collector.AddQ(members[i], members[i].node2.number, Q[i].array[2, 0],false);
                 if(members[i].CanDesignCheck())
-                    collector.streeRatio(members[i],compression(members[i].lenght(), members[i].GetE(), members[i].GetFy(), members[i].GetR(), members[i].GetI(), Q[i].array[0, 0]),true);
+                    collector.streeRatio(members[i],compression(members[i], members[i].lenght(), members[i].GetE(), members[i].GetFy(), members[i].GetR(), members[i].GetI(), Q[i].array[0, 0]),true);
             }
             
             collector.AddForce(members[i].node1.number, F[i].array[0, 0],F[i].array[1,0]);
             collector.AddForce(members[i].node2.number, F[i].array[2, 0], F[i].array[3, 0]);
         }
         togglePanel.SetActive(true);
+		Debug.Log ("ENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDEND");
+		 s = "";
+		for (int i = 0; i < nodes.Count; i++) {
+			s += ", " + collector.nodes[i].GetComponent<TrussNodeProperty> ().members.Count;
+		}
+		Debug.Log (s);
+        UpdateTable();
+        analyzePanel.SetActive(false);
+    }
+
+    void UpdateTable()
+    {
+        foreach (GameObject member in collector.members)
+        {
+            GameObject content = Instantiate(trussContent, table.transform);
+            content.transform.GetChild(0).GetComponentInChildren<Text>().text = "" + (member.GetComponent<TrussMemberProperty>().number + 1);
+            content.transform.GetChild(1).GetComponentInChildren<Text>().text = "" + (member.GetComponent<TrussMemberProperty>().node1.GetComponent<TrussNodeProperty>().number + 1);
+            content.transform.GetChild(2).GetComponentInChildren<Text>().text = "" + (member.GetComponent<TrussMemberProperty>().node2.GetComponent<TrussNodeProperty>().number + 1);
+            content.transform.GetChild(3).GetComponentInChildren<Text>().text = "" + (member.GetComponent<TrussMemberProperty>().lenght());
+            content.transform.GetChild(4).GetComponentInChildren<Text>().text = "" + (member.GetComponent<TrussMemberProperty>().GetName());
+            content.transform.GetChild(5).GetComponentInChildren<Text>().text = "" + (System.Math.Round(member.GetComponent<TrussMemberProperty>().stress, 2));
+        }
     }
 
     public int[] getForceIndex(List<TrussNodeProperty> nodes)
@@ -711,9 +743,10 @@ public class TrussAnalyzer : MonoBehaviour
         return (x2 - x1) /lenght;
     }
 
-    private char tension(float T,float A,float fy)
+    private char tension(TrussMemberProperty m,float T,float A,float fy)
     {
         float stressRatio = (T / A) / (fy * 0.6f);
+        m.stress = stressRatio;
         if (stressRatio >= 0 && stressRatio < 0.5)
             return 'l';
         if (stressRatio >= 0.5 && stressRatio <= 1)
@@ -722,7 +755,7 @@ public class TrussAnalyzer : MonoBehaviour
             return 'n';
         return 'h';
     }
-    private char compression(float length,float E,float Fy,float r,float A,float C)
+    private char compression(TrussMemberProperty m, float length,float E,float Fy,float r,float A,float C)
     {
         float cc = (float)Math.Sqrt((2 * Math.PI * Math.PI * E) / Fy);
         float KLr = length / r;
@@ -730,6 +763,7 @@ public class TrussAnalyzer : MonoBehaviour
         if (cc>KLr)
             Fa = (float)(1f- (1f/2f)* (KLr* KLr)/cc) / ((5f/3f)+(3f/8f)*(KLr/cc)-(1f/8f)*(KLr/cc)* (KLr / cc)* (KLr / cc));
         float stressRatio = C / A / Fa;
+        m.stress = stressRatio;
         if (stressRatio >= 0 && stressRatio < 0.5)
             return 'l';
         if (stressRatio >= 0.5 && stressRatio <= 1)
