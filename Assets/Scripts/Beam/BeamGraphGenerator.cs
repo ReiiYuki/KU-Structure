@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BeamGraphGenerator : MonoBehaviour {
 
-    public GameObject originPrefabs, pointLoadPrefab, momentumPrefab, textPrefab, memberPrefab, analyzePanel;
+    public GameObject originPrefabs, pointLoadPrefab, momentumPrefab, textPrefab, memberPrefab, analyzePanel,beamContentPrefab,table;
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
@@ -500,6 +501,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         foreach (GameObject member in collector.members)
         {
             MemberProperty property = member.GetComponent<MemberProperty>();
+            property.stress = ratio[i];
             LineRenderer line = member.GetComponent<LineRenderer>();
 
             TextMesh ratioText = Instantiate(textPrefab, line.transform).GetComponent<TextMesh>();
@@ -531,7 +533,23 @@ public class BeamGraphGenerator : MonoBehaviour {
         ltext.transform.position = new Vector3(l / 2, offset - 3.5f);
         ltext.text = "min. Required brace length = "+System.Math.Round(L,2);
         ltext.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
+        UpdateTable();
     } 
+
+    void UpdateTable()
+    {
+        foreach (GameObject member in collector.members)
+        {
+            GameObject content = Instantiate(beamContentPrefab, table.transform);
+            content.transform.GetChild(0).GetComponentInChildren<Text>().text = ""+(member.GetComponent<MemberProperty>().number+1);
+            content.transform.GetChild(1).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().node1.GetComponent<NodeProperty>().number + 1);
+            content.transform.GetChild(2).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().node2.GetComponent<NodeProperty>().number + 1);
+            content.transform.GetChild(3).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().length);
+            content.transform.GetChild(4).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().GetName());
+            content.transform.GetChild(5).GetComponentInChildren<Text>().text = "" + (System.Math.Round(member.GetComponent<MemberProperty>().stress,2));
+            content.transform.GetChild(6).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().stress);
+        }
+    }
 
     float FindMaxBMD(List<Point> bmd,float l,float le)
     {
