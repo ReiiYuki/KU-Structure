@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BeamGraphGenerator : MonoBehaviour {
 
-    public GameObject originPrefabs,pointLoadPrefab,momentumPrefab,textPrefab,memberPrefab;
+    public GameObject originPrefabs, pointLoadPrefab, momentumPrefab, textPrefab, memberPrefab, analyzePanel;
     BeamAnalyzer.IndexArray sfd, bmd;
     BeamCollector collector;
     GameObject originL,originM;
@@ -371,7 +371,7 @@ public class BeamGraphGenerator : MonoBehaviour {
         textEnd.color = new Color(192 / 255f, 202 / 255f, 51 / 255f);
         textEnd.text = "BMD";
         textEnd.transform.SetParent(lineM.transform);
-
+        analyzePanel.SetActive(false);
         Debug.Log("BMD");
         foreach (Point b in points) Debug.Log("(" + b.x + "," + b.y + ")");
         FindStressRatio(points);
