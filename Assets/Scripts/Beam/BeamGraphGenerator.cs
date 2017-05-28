@@ -547,7 +547,7 @@ public class BeamGraphGenerator : MonoBehaviour {
             content.transform.GetChild(3).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().length);
             content.transform.GetChild(4).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().GetName());
             content.transform.GetChild(5).GetComponentInChildren<Text>().text = "" + (System.Math.Round(member.GetComponent<MemberProperty>().stress,2));
-            content.transform.GetChild(6).GetComponentInChildren<Text>().text = "" + (member.GetComponent<MemberProperty>().stress);
+            content.transform.GetChild(6).GetComponentInChildren<Text>().text = "" + (System.Math.Round(member.GetComponent<MemberProperty>().v,2)+" @ "+ System.Math.Round(member.GetComponent<MemberProperty>().pos,2));
         }
     }
 

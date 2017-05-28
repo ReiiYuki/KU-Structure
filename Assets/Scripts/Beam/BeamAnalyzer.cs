@@ -761,8 +761,51 @@ public class BeamAnalyzer : MonoBehaviour {
             uStr += "\n";
         }
         Debug.Log(uStr);
+        CalcualtateDeflection();
     }
     #endregion
+    IndexArray FindU(int node1,int node2,int node3,int node4)
+    {
+        foreach (IndexArray ui in u)
+        {
+            if (ui.index.IndexOf(node1) >= 0 && ui.index.IndexOf(node2) >= 0 && ui.index.IndexOf(node3) >= 0 && ui.index.IndexOf(node4) >= 0)
+                return ui;
+        }
+        return default(IndexArray);
+    }
+    void CalcualtateDeflection()
+    {
+        foreach (GameObject m in collector.members)
+        {
+            IndexArray d = FindU(m.GetComponent<MemberProperty>().node1.number * 2, m.GetComponent<MemberProperty>().node1.number * 2 + 1, m.GetComponent<MemberProperty>().node2.number * 2, m.GetComponent<MemberProperty>().node2.number * 2 + 1);
+            if (d.Equals(default(IndexArray)))
+            {
+                m.GetComponent<MemberProperty>().pos = 0;
+                m.GetComponent<MemberProperty>().v = 0;
+                continue;
+            }
+            float L = m.GetComponent<MemberProperty>().length;
+            float maxV = 0;
+            float maxPos = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                float x = i * L / 8;
+                float N1 = (1 / Mathf.Pow(L, 3)) * (2 * Mathf.Pow(x, 3) - 3 * Mathf.Pow(x, 2) * L + Mathf.Pow(L, 3));
+                float N2 = (1 / Mathf.Pow(L, 3)) * (Mathf.Pow(x, 3)*L - 2 * Mathf.Pow(x, 2) * Mathf.Pow(L,2) + x*Mathf.Pow(L, 3));
+                float N3 = (1 / Mathf.Pow(L, 3)) * (-2*Mathf.Pow(x,2)+3*Mathf.Pow(x,2)*L);
+                float N4 = (1 / Mathf.Pow(L, 3)) * (Mathf.Pow(x,3)*L-Mathf.Pow(x,2)*Mathf.Pow(L,2));
+                float v = N1 * d.val[0] + N2 * d.val[1] + N3 * d.val[2] + N4 * d.val[3];
+                if (v > maxV)
+                {
+                    maxV = v;
+                    maxPos = x;
+                }
+            }
+            m.GetComponent<MemberProperty>().pos = maxPos;
+            m.GetComponent<MemberProperty>().v = maxV;
+
+        }
+    }
     #region ku
     void GenerateKU()
     {
