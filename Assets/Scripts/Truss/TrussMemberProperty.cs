@@ -10,9 +10,25 @@ public class TrussMemberProperty : MonoBehaviour {
     public ElementStore.UElement uprop;
     public ElementStore.PElement pprop;
     public ElementStore.AElement aprop;
+    public float stress;
     public GameObject text;
     float[] E = { 29000, 29000, 29000 , 200000,10000 };
     float[] I = { 6, 8, 8 , .002f,6};
+
+    public string GetName()
+    {
+        if (!prop.Equals(default(ElementStore.Element)))
+        {
+            return prop.name;
+        }
+        else if (!pprop.Equals(default(ElementStore.PElement)))
+        {
+            return pprop.name;
+        }
+
+         return "E = "+aprop.E + " A = " + aprop.A;
+
+    }
 
     public float GetI()
     {
